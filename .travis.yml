@@ -13,6 +13,7 @@ deploy:
   app: hunt-develop
   on:
     repo: vladpereskokov/2017_1_Ananymous
+    branch: develop
   skip_cleanup: true
 script:
   - npm run eslint
