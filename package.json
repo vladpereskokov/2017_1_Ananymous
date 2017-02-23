@@ -6,7 +6,7 @@
   "scripts": {
     "webpack": "./node_modules/.bin/webpack",
     "webpackDEV": "./node_modules/.bin/webpack webpack.config.js --watch",
-    "eslint": "./node_modules/.bin/eslint public/components/block/*.js",
+    "eslint": "./node_modules/.bin/eslint public/*.js",
     "start": "node server.js"
   },
   "engines": {
