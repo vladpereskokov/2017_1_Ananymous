@@ -1,0 +1,21 @@
+language: node_js
+sudo: required
+node_js:
+- '6'
+- '7'
+branches:
+  only:
+  - master
+deploy:
+  provider: heroku
+  api_key:
+    secure: b9ec777b-f764-4ff1-abc5-55ef220ecdef
+  app: vladdos-fronttest
+  on:
+    repo: vladpereskokov/Frontend
+  skip_cleanup: true
+script:
+  - npm run eslint
+install:
+  - npm install
+  - npm run webpack
