@@ -24,7 +24,10 @@ module.exports = {
         query: {presets: ['es2015', 'stage-2']}
       }, {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css')
+        loader: ExtractTextPlugin.extract("style", "css")
+      }, {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract("style", "css!sass")
       }
     ]
   },

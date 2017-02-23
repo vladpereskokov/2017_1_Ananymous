@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "webpack": "./node_modules/.bin/webpack",
+    "webpack": "./node_modules/.bin/webpack --watch",
     "webpackDEV": "./node_modules/.bin/webpack webpack.config.js --watch",
     "eslint": "./node_modules/.bin/eslint public/*.js",
     "start": "node server.js"
@@ -33,5 +33,9 @@
     "url-loader": "^0.5.6",
     "webpack": "^1.12.2",
     "whatwg-fetch": "^2.0.2"
+  },
+  "devDependencies": {
+    "node-sass": "^4.5.0",
+    "sass-loader": "^6.0.2"
   }
 }

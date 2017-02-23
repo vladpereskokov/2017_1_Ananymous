@@ -4,6 +4,8 @@ import SignUp from './views/SignUp/SignUp';
 import Scoreboard from './views/Scoreboard/Scoreboard';
 import Main from './views/Main/Main';
 
+import './css/reset.scss';
+
 const router = new Router();
 
 router
