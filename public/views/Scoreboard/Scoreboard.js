@@ -39,8 +39,6 @@ class Scoreboard extends View {
 
   _backButton() {
     const back = new Block('button', {
-      id: 'submit',
-      type: 'submit',
       class: 'back-button btn btn-lg btn-primary btn-block',
       text: 'Back'
     });
