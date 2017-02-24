@@ -1,9 +1,11 @@
 import Block from '../Block/Block';
 
+import './Header.scss';
+
 class Header extends Block {
   constructor(type, options = {}) {
     super('h' + type, options);
-    this.setAttributeBlock('class', 'primary');
+    this.setAttributeBlock('class', 'header');
   }
 }
 

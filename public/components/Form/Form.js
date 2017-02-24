@@ -41,6 +41,8 @@ export default class Form extends Block {
         return new Input(attributes);
       case 'button':
         return new Button(attributes);
+      default:
+        return null;
     }
   }
 

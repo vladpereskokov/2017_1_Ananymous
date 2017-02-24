@@ -5,7 +5,7 @@ import './Input.scss';
 class Input extends Block {
   constructor(options = {}) {
     super('input', options);
-    this.setAttributeBlock('class', 'primary');
+    this.setAttributeBlock('class', 'input');
   }
 }
 

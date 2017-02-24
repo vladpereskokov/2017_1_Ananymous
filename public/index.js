@@ -15,10 +15,30 @@
 //   .addRoute('/', Main)
 //   .start();
 
-import Input from './components/Input/Input';
+import Form from './components/Form/Form';
 
-const input = new Input({
-  placeholder: 'Click me'
-});
+const form = new Form([{
+  element: 'title',
+  text: 'Sign In'
+}, {
+  element: 'label',
+  text: 'Email address'
+}, {
+  element: 'input',
+  type: 'email',
+  placeholder: 'Email address'
+}, {
+  element: 'label',
+  text: 'Password'
+}, {
+  element: 'input',
+  type: 'password',
+  placeholder: 'Password'
+}, {
+  element: 'button',
+  type: 'submit',
+  text: 'Sign In'
+}
+]);
 
-document.body.querySelector('.content').appendChild(input.render());
+document.body.querySelector('.content').appendChild(form.render());
