@@ -6,16 +6,10 @@ const signInForm = new Form([{
   element: 'title',
   text: 'Sign In',
 }, {
-  element: 'label',
-  text: 'Email address',
-}, {
   element: 'input',
   type: 'email',
   placeholder: 'Email address',
   autofocus: true
-}, {
-  element: 'label',
-  text: 'Password',
 }, {
   element: 'input',
   type: 'password',

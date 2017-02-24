@@ -6,31 +6,19 @@ const signUpForm = new Form([{
   element: 'title',
   text: 'Sign Up',
 }, {
-  element: 'label',
-  text: 'Login',
-}, {
   element: 'input',
   type: 'text',
   placeholder: 'Login',
   autofocus: true
 }, {
-  element: 'label',
-  text: 'Email address',
-}, {
   element: 'input',
   type: 'email',
   placeholder: 'Email address'
-}, {
-  element: 'label',
-  text: 'Password',
 }, {
   element: 'input',
   type: 'password',
   placeholder: 'Password',
   required: true
-}, {
-  element: 'label',
-  text: 'RepeatPassword',
 }, {
   element: 'input',
   type: 'password',
