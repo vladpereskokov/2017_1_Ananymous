@@ -19,26 +19,26 @@ import Form from './components/Form/Form';
 
 const form = new Form([{
   element: 'title',
-  text: 'Sign In'
+  text: 'Sign In',
 }, {
   element: 'label',
-  text: 'Email address'
+  text: 'Email address',
 }, {
   element: 'input',
   type: 'email',
-  placeholder: 'Email address'
+  placeholder: 'Email address',
 }, {
   element: 'label',
-  text: 'Password'
+  text: 'Password',
 }, {
   element: 'input',
   type: 'password',
-  placeholder: 'Password'
+  placeholder: 'Password',
 }, {
   element: 'button',
   type: 'submit',
-  text: 'Sign In'
-}
+  text: 'Sign In',
+},
 ]);
 
 document.body.querySelector('.content').appendChild(form.render());
