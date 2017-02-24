@@ -1,5 +1,8 @@
 import Block from '../../components/Block/Block';
+import Button from '../../components/Button/Button';
 import View from '../../modules/View/View';
+
+import './Main.scss';
 
 class Main extends View {
   constructor() {
@@ -24,10 +27,10 @@ class Main extends View {
   }
 
   _mainPage() {
-    const mainForm = new Block('div', { class: 'form z-depth-2' });
-    const signUpButton = this._createButton('SignUp', 'Sign Up');
-    const signInButton = this._createButton('SignIn', 'Sign In');
-    const scoreboard = this._createButton('Scoreboard', 'Scoreboard');
+    const mainForm = new Block('div', { class: 'main z-depth-2' });
+    const signUpButton = this._createButton('Sign Up');
+    const signInButton = this._createButton('Sign In');
+    const scoreboard = this._createButton('Scoreboard');
 
     signUpButton.start('click', this.showSignUp.bind(this));
     signInButton.start('click', this.showSignIn.bind(this));
@@ -40,10 +43,8 @@ class Main extends View {
     return mainForm;
   }
 
-  _createButton(elementId, elementText) {
-    return new Block('button', {
-      class: 'btn btn-lg btn-primary btn-block',
-      id: elementId,
+  _createButton(elementText) {
+    return new Button({
       text: elementText,
     });
   }

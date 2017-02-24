@@ -5,9 +5,11 @@ import Input from '../Input/Input';
 import Label from '../Label/Label';
 import Header from '../Header/Header';
 
+import './Form.scss';
+
 export default class Form extends Block {
   constructor(elements = []) {
-    super('form', { class: '' });
+    super('form', { class: 'form z-depth-2' });
     this._createForm(elements);
   }
 

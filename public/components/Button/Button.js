@@ -5,7 +5,11 @@ import './Button.scss';
 class Button extends Block {
   constructor(options = {}) {
     super('button', options);
-    this.setAttributeBlock('class', 'button');
+    this.setAttributeBlock('class', 'btn');
+  }
+
+  start(event, callback) {
+    this._getElement().addEventListener(event, callback);
   }
 }
 

@@ -1,3 +1,4 @@
+import Button from '../../components/Button/Button';
 import Block from '../../components/Block/Block';
 import Table from '../../components/Table/Table';
 import View from '../../modules/View/View';
@@ -5,12 +6,10 @@ import View from '../../modules/View/View';
 import './Scoreboard.scss';
 
 const scoreboard = new Block('div', {
-  class: 'form z-depth-2 table-responsive'
+  class: 'z-depth-2 scoreboard'
 });
 
 const table = new Table({
-  class: 'table table-striped'
-}, {
   head : ['Nickname', 'Score'],
   body: [
     ['Marvin', '150'],
@@ -38,8 +37,8 @@ class Scoreboard extends View {
   }
 
   _backButton() {
-    const back = new Block('button', {
-      class: 'back-button btn btn-lg btn-primary btn-block',
+    const back = new Button({
+      class: 'back-button',
       text: 'Back'
     });
 

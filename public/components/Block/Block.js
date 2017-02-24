@@ -37,10 +37,6 @@ export default class Block {
     document.querySelector(this._getNameElement()).remove();
   }
 
-  start(event, callback) {
-    this._getElement().addEventListener(event, callback);
-  }
-
   search(block) {
     return this._getElement().querySelector(block);
   }

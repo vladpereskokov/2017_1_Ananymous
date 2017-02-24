@@ -1,56 +1,44 @@
 import Form from '../../components/Form/Form';
-import Block from '../../components/Block/Block';
+import Button from '../../components/Button/Button';
 import View from '../../modules/View/View';
 
-const signUpForm = new Form({
-  class: 'form z-depth-2'
-}, [{
-  element: 'h2',
+const signUpForm = new Form([{
+  element: 'title',
   text: 'Sign Up',
-  class: 'form-heading'
 }, {
   element: 'label',
   text: 'Login',
-  class: 'sr-only'
 }, {
   element: 'input',
   type: 'text',
-  class: 'form-control',
   placeholder: 'Login',
   autofocus: true
 }, {
   element: 'label',
   text: 'Email address',
-  class: 'sr-only'
 }, {
   element: 'input',
   type: 'email',
-  class: 'form-control',
   placeholder: 'Email address'
 }, {
   element: 'label',
   text: 'Password',
-  class: 'sr-only'
 }, {
   element: 'input',
   type: 'password',
-  class: 'form-control',
   placeholder: 'Password',
   required: true
 }, {
   element: 'label',
   text: 'RepeatPassword',
-  class: 'sr-only'
 }, {
   element: 'input',
   type: 'password',
-  class: 'form-control',
   placeholder: 'Repeat Password',
   required: true
 }, {
   element: 'button',
   type: 'submit',
-  class: 'btn btn-lg btn-primary btn-block',
   text: 'Sign Up'
 }]);
 
@@ -70,10 +58,8 @@ class SignUp extends View {
   }
 
   _backButton() {
-    const back = new Block('button', {
-      id: 'submit',
+    const back = new Button({
       type: 'submit',
-      class: 'btn btn-lg btn-primary btn-block',
       text: 'Back'
     });
 

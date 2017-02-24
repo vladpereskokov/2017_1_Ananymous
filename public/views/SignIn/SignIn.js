@@ -1,36 +1,28 @@
 import Form from '../../components/Form/Form';
-import Block from '../../components/Block/Block';
+import Button from '../../components/Button/Button';
 import View from '../../modules/View/View';
 
-const signInForm = new Form({
-  class: 'form z-depth-2'
-}, [{
-  element: 'h2',
+const signInForm = new Form([{
+  element: 'title',
   text: 'Sign In',
-  class: 'form-heading'
 }, {
   element: 'label',
   text: 'Email address',
-  class: 'sr-only'
 }, {
   element: 'input',
   type: 'email',
-  class: 'form-control',
   placeholder: 'Email address',
   autofocus: true
 }, {
   element: 'label',
   text: 'Password',
-  class: 'sr-only'
 }, {
   element: 'input',
   type: 'password',
-  class: 'form-control',
   placeholder: 'Password'
 }, {
   element: 'button',
   type: 'submit',
-  class: 'btn btn-lg btn-primary btn-block',
   text: 'Sign In'
 }]);
 
@@ -50,10 +42,8 @@ export default class SignIn extends View {
   }
 
   _backButton() {
-    const back = new Block('button', {
-      id: 'submit',
+    const back = new Button({
       type: 'submit',
-      class: 'btn btn-lg btn-primary btn-block',
       text: 'Back'
     });
 

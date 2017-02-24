@@ -1,8 +1,8 @@
 import Block from '../Block/Block';
 
 class Table extends Block {
-  constructor(attributes = {}, elements = {}) {
-    super('table', attributes);
+  constructor(elements = {}) {
+    super('table', {class: 'table table-striped'});
     this._createTable(elements);
   }
 
