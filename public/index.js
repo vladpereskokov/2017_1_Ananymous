@@ -21,4 +21,4 @@ const input = new Input({
   placeholder: 'Click me'
 });
 
-document.body.appendChild(input.render());
+document.body.querySelector('.content').appendChild(input.render());
