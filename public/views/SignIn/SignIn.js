@@ -2,8 +2,6 @@ import Form from '../../components/Form/Form';
 import Block from '../../components/Block/Block';
 import View from '../../modules/View/View';
 
-import './Signin.scss';
-
 const signInForm = new Form({
   class: 'form z-depth-2'
 }, [{

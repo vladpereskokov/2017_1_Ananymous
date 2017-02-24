@@ -2,7 +2,7 @@ import Block from '../../components/Block/Block';
 import Table from '../../components/Table/Table';
 import View from '../../modules/View/View';
 
-import './Scoreboard.css';
+import './Scoreboard.scss';
 
 const scoreboard = new Block('div', {
   class: 'form z-depth-2 table-responsive'
