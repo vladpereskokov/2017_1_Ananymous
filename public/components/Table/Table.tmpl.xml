@@ -14,7 +14,10 @@
         <fest:for iterate="data.body" index="i">
           <tr>
             <td>
-              <fest:value>data.body[i]</fest:value>
+              <fest:value>data.body[i][0]</fest:value>
+            </td>
+            <td>
+              <fest:value>data.body[i][1]</fest:value>
             </td>
           </tr>
         </fest:for>

@@ -11,7 +11,7 @@ class Table extends Block {
 
   _createTable(elements) {
     const node = new Block('div');
-
+    console.log(elements.body);
     node._getElement().innerHTML = template({
       head: elements.head,
       body: elements.body,
