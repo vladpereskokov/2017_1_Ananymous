@@ -15,10 +15,10 @@
 //   .addRoute('/', Main)
 //   .start();
 
-import Button from './components/Button/Button';
+import Input from './components/Input/Input';
 
-const btn = new Button({
-  text: 'Click me'
+const input = new Input({
+  placeholder: 'Click me'
 });
 
-document.body.appendChild(btn.render());
+document.body.appendChild(input.render());
