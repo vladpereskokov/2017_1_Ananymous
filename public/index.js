@@ -14,8 +14,3 @@ router
   .addRoute('/Scoreboard', Scoreboard)
   .addRoute('/', Main)
   .start();
-
-// const node = document.createElement('div');
-// node.innerHTML = tmpl({ text: 'Пора начинать активнее разрабатывать' });
-//
-// document.body.querySelector('.content').appendChild(node);

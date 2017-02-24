@@ -1,41 +1,23 @@
 import Block from '../Block/Block';
 
+import './Table.scss';
+import template from './Table.tmpl.xml';
+
 class Table extends Block {
   constructor(elements = {}) {
-    super('table', {class: 'table table-striped'});
-    this._createTable(elements);
+    super('table');
+    this._getElement().appendChild(this._createTable(elements));
   }
 
   _createTable(elements) {
-    this._setHead(elements.head);
-    this._setBody(elements.body);
-  }
+    const node = new Block('div');
 
-  _setHead(elements) {
-    const head = this._createBlock('thead');
-    head.append(this._createBlock('tr').render());
-    this.setContent(head, elements, 'th');
-    this.append(head.render());
-  }
-
-  setContent(block, elements, tag) {
-    elements.forEach(element => {
-      block.append(this._createBlock(tag, {
-        'text' : element
-      }).render());
-    });
-  }
-
-  _setBody(elements) {
-    const body = this._createBlock('tbody');
-
-    elements.forEach(element => {
-      const row = this._createBlock('tr');
-      this.setContent(row, element, 'td');
-      body.append(row.render());
+    node._getElement().innerHTML = template({
+      head: elements.head,
+      body: elements.body,
     });
 
-    this.append(body.render());
+    return node.render();
   }
 }
 
