@@ -5,7 +5,7 @@ import './Label.scss';
 class Label extends Block {
   constructor(options = {}) {
     super('label', options);
-    this.setAttributeBlock('class', 'sr-only');
+    this.setAttributeBlock('class', 'sr-only ' + options.class);
   }
 }
 

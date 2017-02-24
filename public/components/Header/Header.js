@@ -5,7 +5,7 @@ import './Header.scss';
 class Header extends Block {
   constructor(type, options = {}) {
     super('h' + type, options);
-    this.setAttributeBlock('class', 'header');
+    this.setAttributeBlock('class', 'header ' + options.class);
   }
 }
 
