@@ -12,25 +12,25 @@ class Table extends Block {
   }
 
   _setHead(elements) {
-    const head = Block._createBlock('thead');
-    head.append(Block._createBlock('tr').render());
-    Table.setContent(head, elements, 'th');
+    const head = this._createBlock('thead');
+    head.append(this._createBlock('tr').render());
+    this.setContent(head, elements, 'th');
     this.append(head.render());
   }
 
-  static setContent(block, elements, tag) {
+  setContent(block, elements, tag) {
     elements.forEach(element => {
-      block.append(Block._createBlock(tag, {
+      block.append(this._createBlock(tag, {
         'text' : element
       }).render());
     });
   }
 
   _setBody(elements) {
-    const body = Block._createBlock('tbody');
+    const body = this._createBlock('tbody');
     elements.forEach(element => {
-      const row = Block._createBlock('tr');
-      Table.setContent(row, element, 'td');
+      const row = this._createBlock('tr');
+      this.setContent(row, element, 'td');
       body.append(row.render());
     });
     this.append(body.render());

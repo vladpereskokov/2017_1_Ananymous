@@ -18,7 +18,7 @@ export default class Form extends Block {
   }
 
   _addElement(name, attributes) {
-    const element = Block._createBlock(name, attributes);
+    const element = this._createBlock(name, attributes);
     if (attributes.type === 'submit') {
       element.start('click', event => this._submit(event));
     }
@@ -48,12 +48,12 @@ export default class Form extends Block {
   }
 
   _getData() {
-    return Form._getFields(this._getElement().elements);
+    return this._getFields(this._getElement().elements);
   }
 
-  static _getFields(elements) {
+  _getFields(elements) {
     const fields = {};
-    Block._getKeys(elements).forEach((element) => {
+    this._getKeys(elements).forEach((element) => {
       const id = elements[element].id;
       const value = elements[element].value;
       if (id) {

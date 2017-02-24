@@ -25,9 +25,9 @@ class Main extends View {
 
   _mainPage() {
     const mainForm = new Block('div', { class: 'form z-depth-2' });
-    const signUpButton = Main._createButton('SignUp', 'Sign Up');
-    const signInButton = Main._createButton('SignIn', 'Sign In');
-    const scoreboard = Main._createButton('Scoreboard', 'Scoreboard');
+    const signUpButton = this._createButton('SignUp', 'Sign Up');
+    const signInButton = this._createButton('SignIn', 'Sign In');
+    const scoreboard = this._createButton('Scoreboard', 'Scoreboard');
 
     signUpButton.start('click', this.showSignUp.bind(this));
     signInButton.start('click', this.showSignIn.bind(this));
@@ -40,7 +40,7 @@ class Main extends View {
     return mainForm;
   }
 
-  static _createButton(elementId, elementText) {
+  _createButton(elementId, elementText) {
     return new Block('button', {
       class: 'btn btn-lg btn-primary btn-block',
       id: elementId,

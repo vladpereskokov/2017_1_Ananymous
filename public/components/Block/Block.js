@@ -1,7 +1,7 @@
 export default class Block {
   constructor(name, attributes = {}) {
     this._name = name;
-    this._element = Block._createDocumentElement(this._getNameElement());
+    this._element = this._createDocumentElement(this._getNameElement());
     delete attributes.block;
     this.setAttributes(attributes);
   }
@@ -12,7 +12,7 @@ export default class Block {
 
   setAttributes(attributes) {
     this._setText(attributes);
-    Block._getKeys(attributes).forEach(name => {
+    this._getKeys(attributes).forEach(name => {
       this._setAttribute(name, attributes[name]);
     });
   }
@@ -45,11 +45,11 @@ export default class Block {
     return this._getElement().querySelector(block);
   }
 
-  static _createDocumentElement(name) {
+  _createDocumentElement(name) {
     return document.createElement(name);
   }
 
-  static _createBlock(name, options = {}) {
+  _createBlock(name, options = {}) {
     return new Block(name, options);
   }
 
@@ -62,13 +62,13 @@ export default class Block {
   }
 
   _setText(attributes) {
-    if (Block._checkText(attributes)) {
+    if (this._checkText(attributes)) {
       this.setText(attributes.text);
       delete attributes.text;
     }
   }
 
-  static _checkText(attributes) {
+  _checkText(attributes) {
     return attributes.text !== undefined;
   }
 
@@ -76,7 +76,7 @@ export default class Block {
     return this._element;
   }
 
-  static _getKeys(data) {
+  _getKeys(data) {
     return Object.keys(data);
   }
 }
