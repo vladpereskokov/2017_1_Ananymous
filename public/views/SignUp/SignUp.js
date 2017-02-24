@@ -78,7 +78,7 @@ class SignUp extends View {
     });
 
     back.start('click', this.showMain.bind(this));
-    
+
     return back;
   }
 
