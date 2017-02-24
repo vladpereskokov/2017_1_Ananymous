@@ -1,9 +1,12 @@
 import 'whatwg-fetch';
 import Block from '../Block/Block';
+import Button from '../Button/Button';
+import Input from '../Input/Input';
 
 export default class Form extends Block {
   constructor(formAttributes = {}, elements = []) {
     super('form', formAttributes);
+    this.setAttributeBlock('class', 'primary');
     this._createForm(elements);
   }
 
@@ -18,6 +21,8 @@ export default class Form extends Block {
   }
 
   _addElement(name, attributes) {
+    const type = attributes.type;
+
     const element = this._createBlock(name, attributes);
 
     if (attributes.type === 'submit') {
