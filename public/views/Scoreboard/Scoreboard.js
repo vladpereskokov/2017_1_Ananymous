@@ -42,7 +42,9 @@ class Scoreboard extends View {
       class: 'back-button btn btn-lg btn-primary btn-block',
       text: 'Back'
     });
+
     back.start('click', this.showMain.bind(this));
+
     return back;
   }
 

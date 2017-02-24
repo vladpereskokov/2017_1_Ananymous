@@ -28,11 +28,13 @@ class Table extends Block {
 
   _setBody(elements) {
     const body = this._createBlock('tbody');
+
     elements.forEach(element => {
       const row = this._createBlock('tr');
       this.setContent(row, element, 'td');
       body.append(row.render());
     });
+
     this.append(body.render());
   }
 }

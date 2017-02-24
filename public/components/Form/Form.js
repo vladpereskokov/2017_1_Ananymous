@@ -19,15 +19,19 @@ export default class Form extends Block {
 
   _addElement(name, attributes) {
     const element = this._createBlock(name, attributes);
+
     if (attributes.type === 'submit') {
       element.start('click', event => this._submit(event));
     }
+
     this._setElement(element);
   }
 
   _submit(event) {
     event.preventDefault();
+
     const data = this._getData();
+
     fetch('/users', {
       method: 'POST',
       headers: {
@@ -53,6 +57,7 @@ export default class Form extends Block {
 
   _getFields(elements) {
     const fields = {};
+
     this._getKeys(elements).forEach((element) => {
       const id = elements[element].id;
       const value = elements[element].value;
@@ -60,6 +65,7 @@ export default class Form extends Block {
         fields[id] = value;
       }
     });
+
     return fields;
   }
 }
