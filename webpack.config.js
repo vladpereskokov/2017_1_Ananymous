@@ -28,7 +28,10 @@ module.exports = {
       }, {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract("style", "css!sass")
-      }
+      }, {
+        test: /\.tmpl\.xml/,
+        loader: 'tp-fest-loader'
+      },
     ]
   },
 

@@ -17,6 +17,8 @@
 
 import Form from './components/Form/Form';
 
+import tmpl from './test.tmpl.xml';
+
 const form = new Form([{
   element: 'title',
   text: 'Sign In'
@@ -42,3 +44,8 @@ const form = new Form([{
 ]);
 
 document.body.querySelector('.content').appendChild(form.render());
+
+const node = document.createElement('div');
+node.innerHTML = tmpl({ text: 'Пора начинать активнее разрабатывать' });
+
+document.body.querySelector('.content').appendChild(node);
