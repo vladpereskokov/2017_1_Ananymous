@@ -2,11 +2,12 @@ import 'whatwg-fetch';
 import Block from '../Block/Block';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
+import Label from '../Label/Label';
+import Header from '../Header/Header';
 
 export default class Form extends Block {
-  constructor(formAttributes = {}, elements = []) {
-    super('form', formAttributes);
-    this.setAttributeBlock('class', 'primary');
+  constructor(elements = []) {
+    super('form', { class: '' });
     this._createForm(elements);
   }
 
@@ -20,16 +21,27 @@ export default class Form extends Block {
     });
   }
 
-  _addElement(name, attributes) {
-    const type = attributes.type;
-
-    const element = this._createBlock(name, attributes);
+  _addElement(name, attributes = {}) {
+    const element = this._createElement(name, attributes);
 
     if (attributes.type === 'submit') {
       element.start('click', event => this._submit(event));
     }
 
     this._setElement(element);
+  }
+
+  _createElement(type, attributes) {
+    switch (type) {
+      case 'title':
+        return new Header(2, attributes);
+      case 'label':
+        return new Label(attributes);
+      case 'input':
+        return new Input(attributes);
+      case 'button':
+        return new Button(attributes);
+    }
   }
 
   _submit(event) {
@@ -53,7 +65,7 @@ export default class Form extends Block {
   }
 
   _setElement(element) {
-    this._getElement().append(element.render());
+    this.append(element.render());
   }
 
   _getData() {
