@@ -13,36 +13,28 @@ const signInForm = new Form({
 }, {
   element: 'label',
   text: 'Email address',
-  for: 'nputEmail',
   class: 'sr-only'
 }, {
   element: 'input',
   type: 'email',
-  id: 'inputEmail',
   class: 'form-control',
   placeholder: 'Email address',
-  required: true,
   autofocus: true
 }, {
   element: 'label',
   text: 'Password',
-  for: 'inputPassword',
   class: 'sr-only'
 }, {
   element: 'input',
   type: 'password',
-  id: 'inputPassword',
   class: 'form-control',
-  placeholder: 'Password',
-  required: true
+  placeholder: 'Password'
 }, {
   element: 'button',
-  id: 'submit',
   type: 'submit',
   class: 'btn btn-lg btn-primary btn-block',
   text: 'Sign In'
-}
-]);
+}]);
 
 export default class SignIn extends View {
   constructor() {

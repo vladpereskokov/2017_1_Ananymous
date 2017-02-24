@@ -11,60 +11,48 @@ const signUpForm = new Form({
 }, {
   element: 'label',
   text: 'Login',
-  for: 'inputLogin',
   class: 'sr-only'
 }, {
   element: 'input',
   type: 'text',
-  id: 'inputLogin',
   class: 'form-control',
   placeholder: 'Login',
-  required: true,
   autofocus: true
 }, {
   element: 'label',
   text: 'Email address',
-  for: 'inputEmail',
   class: 'sr-only'
 }, {
   element: 'input',
   type: 'email',
-  id: 'inputEmail',
   class: 'form-control',
-  placeholder: 'Email address',
-  required: true
+  placeholder: 'Email address'
 }, {
   element: 'label',
   text: 'Password',
-  for: 'inputPassword',
   class: 'sr-only'
 }, {
   element: 'input',
   type: 'password',
-  id: 'inputPassword',
   class: 'form-control',
   placeholder: 'Password',
   required: true
 }, {
   element: 'label',
   text: 'RepeatPassword',
-  for: 'inputRepeatPassword',
   class: 'sr-only'
 }, {
   element: 'input',
   type: 'password',
-  id: 'inputRepeatPassword',
   class: 'form-control',
   placeholder: 'Repeat Password',
   required: true
 }, {
   element: 'button',
-  id: 'submit',
   type: 'submit',
   class: 'btn btn-lg btn-primary btn-block',
   text: 'Sign Up'
-}
-]);
+}]);
 
 class SignUp extends View {
   constructor() {
