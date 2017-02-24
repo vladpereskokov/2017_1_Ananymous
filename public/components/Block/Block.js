@@ -6,7 +6,7 @@ export default class Block {
     this.setAttributes(attributes);
   }
 
-  setAttribute(name, value) {
+  setAttributeBlock(name, value) {
     this._getElement().setAttribute(name, value);
   }
 
@@ -54,7 +54,7 @@ export default class Block {
   }
 
   _setAttribute(name, value) {
-    return typeof value === 'boolean' ? this.setAttribute(name, name) : this.setAttribute(name, value);
+    return typeof value === 'boolean' ? this.setAttributeBlock(name, name) : this.setAttributeBlock(name, value);
   }
 
   _getNameElement() {
