@@ -43,9 +43,9 @@ const form = new Form([{
 },
 ]);
 
-document.body.querySelector('.content').appendChild(form.render());
+document.body.querySelector('.content__form').appendChild(form.render());
 
-const node = document.createElement('div');
-node.innerHTML = tmpl({ text: 'Пора начинать активнее разрабатывать' });
-
-document.body.querySelector('.content').appendChild(node);
+// const node = document.createElement('div');
+// node.innerHTML = tmpl({ text: 'Пора начинать активнее разрабатывать' });
+//
+// document.body.querySelector('.content').appendChild(node);
