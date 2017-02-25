@@ -6,46 +6,44 @@ import Label from '../Label/Label';
 import Header from '../Header/Header';
 
 import './Form.scss';
+import template from './Form.tmpl.xml';
 
 export default class Form extends Block {
   constructor(elements = []) {
-    super('form', { class: 'form z-depth-2' });
+    super('div', {class: 'form z-depth-2'});
     this._createForm(elements);
   }
 
   _createForm(elements) {
-    this._setElements(elements);
-  }
-
-  _setElements(elements) {
-    elements.forEach(element => {
-      this._addElement(element.element, element);
+    this._getElement().innerHTML = template({
+      title: elements[0].text,
+      elements: elements.slice(1, elements.length - 2),
     });
+
+    this.append(this._submitButton(elements[elements.length - 2].text).render());
+    this.append(this._backButton(elements[elements.length - 1].action).render());
   }
 
-  _addElement(name, attributes = {}) {
-    const element = this._createElement(name, attributes);
+  _submitButton(buttonText) {
+    const submit = new Button({
+      type: 'submit',
+      text: buttonText,
+    });
 
-    if (attributes.type === 'submit') {
-      element.start('click', event => this._submit(event));
-    }
+    submit.start('click', event => this._submit(event));
 
-    this._setElement(element);
+    return submit;
   }
 
-  _createElement(type, attributes) {
-    switch (type) {
-      case 'title':
-        return new Header(2, attributes);
-      case 'label':
-        return new Label(attributes);
-      case 'input':
-        return new Input(attributes);
-      case 'button':
-        return new Button(attributes);
-      default:
-        return null;
-    }
+  _backButton(action) {
+    const back = new Button({
+      type: 'submit',
+      text: 'Back',
+    });
+
+    back.start('click', action);
+
+    return back;
   }
 
   _submit(event) {

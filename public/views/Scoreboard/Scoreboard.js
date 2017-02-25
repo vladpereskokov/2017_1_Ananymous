@@ -25,7 +25,6 @@ class Scoreboard extends View {
 
   _backButton() {
     const back = new Button({
-      class: 'back-button',
       text: 'Back'
     });
 

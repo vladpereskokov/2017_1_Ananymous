@@ -1,5 +1,4 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
-  <div class="z-depth-2 scoreboard">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -23,5 +22,4 @@
         </fest:for>
       </tbody>
     </table>
-  </div>
 </fest:template>

@@ -1,0 +1,9 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
+  <form>
+    <h2 class="header"><fest:value>data.title</fest:value></h2>
+    <fest:for iterate="data.elements" index="i" value="input">
+      <input type="{input.type}" placeholder="{input.placeholder}">
+      </input>
+    </fest:for>
+  </form>
+</fest:template>

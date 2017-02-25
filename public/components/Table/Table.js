@@ -5,19 +5,15 @@ import template from './Table.tmpl.xml';
 
 class Table extends Block {
   constructor(elements = {}) {
-    super('table');
-    this._getElement().appendChild(this._createTable(elements));
+    super('div', { class: "z-depth-2 scoreboard"});
+    this._createTable(elements);
   }
 
   _createTable(elements) {
-    const node = new Block('div');
-    console.log(elements.body);
-    node._getElement().innerHTML = template({
+    this._getElement().innerHTML = template({
       head: elements.head,
       body: elements.body,
     });
-
-    return node.render();
   }
 }
 
