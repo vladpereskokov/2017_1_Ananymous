@@ -1,9 +1,6 @@
 import 'whatwg-fetch';
 import Block from '../Block/Block';
 import Button from '../Button/Button';
-import Input from '../Input/Input';
-import Label from '../Label/Label';
-import Header from '../Header/Header';
 
 import './Form.scss';
 import template from './Form.tmpl.xml';
