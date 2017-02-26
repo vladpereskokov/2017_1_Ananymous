@@ -3,6 +3,7 @@ import Button from '../../components/Button/Button';
 import View from '../../modules/View/View';
 
 import './Main.scss';
+import template from './Main.tmpl.xml';
 
 class Main extends View {
   constructor() {
@@ -10,8 +11,24 @@ class Main extends View {
   }
 
   init(options = {}) {
-    this._el.appendChild(this._mainPage().render());
+    // this._el.appendChild(this._mainPage().render());
+    this._createMain();
     document.body.appendChild(this._el);
+  }
+
+  _createMain() {
+    this._el.innerHTML = template({
+      buttons: [{
+        text: 'Sign Up',
+        action: this.showSignUp.bind(this),
+      }, {
+        text: 'Sign In',
+        action: this.showSignIn.bind(this),
+      }, {
+        text: 'Scoreboard',
+        action: this.showScoreboard.bind(this),
+      }],
+    });
   }
 
   showSignIn() {
@@ -24,29 +41,6 @@ class Main extends View {
 
   showScoreboard() {
     this.getRouter().go('/Scoreboard');
-  }
-
-  _mainPage() {
-    const mainForm = new Block('div', { class: 'main z-depth-2' });
-    const signUpButton = this._createButton('Sign Up');
-    const signInButton = this._createButton('Sign In');
-    const scoreboard = this._createButton('Scoreboard');
-
-    signUpButton.start('click', this.showSignUp.bind(this));
-    signInButton.start('click', this.showSignIn.bind(this));
-    scoreboard.start('click', this.showScoreboard.bind(this));
-
-    mainForm.append(signUpButton.render());
-    mainForm.append(signInButton.render());
-    mainForm.append(scoreboard.render());
-
-    return mainForm;
-  }
-
-  _createButton(elementText) {
-    return new Button({
-      text: elementText,
-    });
   }
 }
 
