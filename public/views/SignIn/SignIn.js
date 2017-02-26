@@ -17,9 +17,11 @@ export default class SignIn extends View {
       element: 'title',
       text: 'Sign In',
     }, {
+      name: 'email',
       type: 'email',
       placeholder: 'Email address',
     }, {
+      name: 'password',
       type: 'password',
       placeholder: 'Password',
     }, {

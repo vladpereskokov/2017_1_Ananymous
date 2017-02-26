@@ -75,4 +75,8 @@ export default class Block {
   _getKeys(data) {
     return Object.keys(data);
   }
+
+  _find(tag) {
+    return this._getElement().querySelector(tag);
+  }
 }

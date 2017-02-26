@@ -18,15 +18,19 @@ class SignUp extends View {
       element: 'title',
       text: 'Sign Up',
     }, {
+      name: 'login',
       type: 'text',
       placeholder: 'Login',
     }, {
+      name: 'email',
       type: 'email',
       placeholder: 'Email address'
     }, {
+      name: 'password1',
       type: 'password',
       placeholder: 'Password',
     }, {
+      name: 'password2',
       type: 'password',
       placeholder: 'Repeat Password',
     }, {
