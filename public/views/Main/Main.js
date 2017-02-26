@@ -18,13 +18,13 @@ class Main extends View {
     this._el.innerHTML = template({
       buttons: [{
         text: 'Sign Up',
-        action: "alert('hello')",
+        action: '/SignUp',
       }, {
         text: 'Sign In',
-        action: this.showSignIn.bind(this),
+        action: '/SignIn',
       }, {
         text: 'Scoreboard',
-        action: this.showScoreboard.bind(this),
+        action: '/Scoreboard',
       }],
     });
   }

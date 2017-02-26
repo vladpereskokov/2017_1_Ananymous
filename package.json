@@ -4,7 +4,8 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "webpack": "./node_modules/.bin/webpack",
+    "webpack": "./node_modules/.bin/webpack --watch",
+    "webpack-develop": "./node_modules/.bin/webpack",
     "eslint": "./node_modules/.bin/eslint public/*.js",
     "start": "node server.js"
   },

@@ -6,7 +6,7 @@
           <fest:attribute name="class">
             btn button
           </fest:attribute>
-          <fest:attribute name="onclick">
+          <fest:attribute name="data-nav">
             <fest:value>button.action</fest:value>
           </fest:attribute>
         </fest:attributes>
