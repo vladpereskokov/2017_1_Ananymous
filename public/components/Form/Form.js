@@ -71,6 +71,26 @@ export default class Form extends Block {
       this._checkSignInForm(data);
   }
 
+  _checkSignUpForm(data) {
+    this._checkSignInForm(data);
+
+    const login = 'login';
+    const passwordRepeat = 'password2';
+    const loginElement = this._checkLogin(data.login);
+    const passwordRepeatElement = this._checkPasswordRepeat(data.password1, data.password2);
+
+    this._defaultError(login);
+    this._defaultError(passwordRepeat);
+
+    if (!loginElement.check) {
+      this._addError(login, loginElement.text);
+    }
+
+    if (!passwordRepeatElement.check) {
+      this._addError(passwordRepeat, passwordRepeatElement.text);
+    }
+  }
+
   _checkSignInForm(data) {
     const email = 'email';
     const password = 'password1';
@@ -103,6 +123,26 @@ export default class Form extends Block {
 
     elementInput.classList.add('error');
     elementLabel.innerText = text;
+  }
+
+  _checkLogin(login) {
+    if (this._isFill(login)) {
+      return {
+        check: false,
+        text: 'Заполните поле login'
+      };
+    }
+
+    if (!this._validateLogin(login)) {
+      return {
+        check: false,
+        text: 'Введите верный login'
+      }
+    }
+
+    return {
+      check: true
+    }
   }
 
   _checkEmail(email) {
@@ -147,8 +187,33 @@ export default class Form extends Block {
     }
   }
 
+  _checkPasswordRepeat(password1, password2) {
+    const isPassword = this._checkPassword(password2);
+
+    if (!isPassword.check) {
+      return isPassword;
+    }
+
+    if (password1 !== password2) {
+      return {
+        check: false,
+        text: 'Пароли не совпадают'
+      };
+    }
+
+    return {
+      check: true
+    }
+  }
+
+  _validateLogin(login) {
+    const regExpLogin = /^[a-zA-Z](.[a-zA-Z0-9_-]*)$/;
+    return regExpLogin.test(login);
+  }
+
   _validateEmail(email) {
-    const regExpEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regExpEmail =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return regExpEmail.test(email);
   }
 
