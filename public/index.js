@@ -8,7 +8,7 @@ import './css/reset.scss';
 
 const router = new Router();
 
-const eventListener = (event) => {
+const eventListener = (event => {
   const el = event.target;
   if ((el.tagName === 'A' || el.tagName === 'BUTTON') && (el.getAttribute('data-nav') || el.getAttribute('href'))) {
     const url = el.getAttribute('data-nav') || el.getAttribute('href');
@@ -17,7 +17,7 @@ const eventListener = (event) => {
       new Router().go(url);
     }
   }
-};
+});
 
 window.addEventListener('click', eventListener);
 
