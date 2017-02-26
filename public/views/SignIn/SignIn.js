@@ -21,7 +21,7 @@ export default class SignIn extends View {
       type: 'email',
       placeholder: 'Email address',
     }, {
-      name: 'password',
+      name: 'password1',
       type: 'password',
       placeholder: 'Password',
     }, {

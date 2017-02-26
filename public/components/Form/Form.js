@@ -49,10 +49,7 @@ export default class Form extends Block {
     event.preventDefault();
 
     const data = this._getData(titleForm);
-
     this._checkFields(data);
-
-    // alert(data[0]);
 
     // fetch('/users', {
     //   method: 'POST',
@@ -75,16 +72,32 @@ export default class Form extends Block {
   }
 
   _checkSignInForm(data) {
-    const email = this._checkEmail(data.email);
-    const password = this._checkPassword1(data.password1);
+    const email = 'email';
+    const password = 'password1';
+    const emailElement = this._checkEmail(data.email);
+    const passwordElement = this._checkPassword(data.password1);
 
-    if (!email.check) {
-      this._addError('email', email.text);
+    this._defaultError(email);
+    this._defaultError(password);
+
+    if (!emailElement.check) {
+      this._addError(email, emailElement.text);
     }
 
-    if (!password.check) {
-      this._addError('password1', password.text);
+    if (!passwordElement.check) {
+      this._addError(password, passwordElement.text);
     }
+  }
+
+  _defaultError(name) {
+    const element = this._find(`label[name=${name}]`);
+    element.innerText = '';
+  }
+
+  _addError(name, text) {
+    const element = this._find(`label[name=${name}]`);
+    element.innerText = text;
+
   }
 
   _checkEmail(email) {
@@ -101,11 +114,37 @@ export default class Form extends Block {
         text: 'Введите верный email'
       }
     }
+
+    return {
+      check: true
+    }
+  }
+
+  _checkPassword(password) {
+    if (this._isFill(password)) {
+      return {
+        check: false,
+        text: 'Заполните поле password'
+      };
+    }
+
+    const regExpPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/;
+
+    if (password.length < 8 && !regExpPassword.test(password)) {
+      return {
+        check: false,
+        text: 'Введите корректный password'
+      };
+    }
+
+    return {
+      check: true
+    }
   }
 
   _validateEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
+    const regExpEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regExpEmail.test(email);
   }
 
   _isFill(field) {
@@ -115,7 +154,8 @@ export default class Form extends Block {
   _getData(titleForm) {
     const form = (document.getElementsByName(titleForm)[0]).elements;
     const fields = {};
-    Object.keys(form).forEach((input) => {
+
+    this._getKeys(form).forEach((input) => {
       const name = form[input].name;
 
       if (name) {
