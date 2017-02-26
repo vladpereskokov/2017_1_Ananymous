@@ -90,14 +90,19 @@ export default class Form extends Block {
   }
 
   _defaultError(name) {
-    const element = this._find(`label[name=${name}]`);
-    element.innerText = '';
+    const elementInput = this._find(`input[name=${name}]`);
+    const elementLabel = this._find(`label[name=${name}]`);
+
+    elementInput.classList.remove('error');
+    elementLabel.innerText = '';
   }
 
   _addError(name, text) {
-    const element = this._find(`label[name=${name}]`);
-    element.innerText = text;
+    const elementInput = this._find(`input[name=${name}]`);
+    const elementLabel = this._find(`label[name=${name}]`);
 
+    elementInput.classList.add('error');
+    elementLabel.innerText = text;
   }
 
   _checkEmail(email) {

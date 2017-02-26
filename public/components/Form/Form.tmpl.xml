@@ -2,7 +2,7 @@
   <form name="{data.title}">
     <h2 class="header"><fest:value>data.title</fest:value></h2>
     <fest:for iterate="data.elements" index="i" value="input">
-      <input class="error" name="{input.name}" type="{input.type}" placeholder="{input.placeholder}"></input>
+      <input name="{input.name}" type="{input.type}" placeholder="{input.placeholder}"></input>
       <label name="{input.name}" class="errorText"></label>
     </fest:for>
   </form>
