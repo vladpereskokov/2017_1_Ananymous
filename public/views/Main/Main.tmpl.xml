@@ -1,7 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
   <div class="main z-depth-2">
     <fest:for iterate="data.buttons" index="i" value="button">
-      <button onclick="{button.action}">
+      <button>
         <fest:attributes>
           <fest:attribute name="class">
             btn button

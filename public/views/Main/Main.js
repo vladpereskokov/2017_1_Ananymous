@@ -1,5 +1,3 @@
-import Block from '../../components/Block/Block';
-import Button from '../../components/Button/Button';
 import View from '../../modules/View/View';
 
 import './Main.scss';
@@ -20,7 +18,7 @@ class Main extends View {
     this._el.innerHTML = template({
       buttons: [{
         text: 'Sign Up',
-        action: this.showSignUp.bind(this),
+        action: "alert('hello')",
       }, {
         text: 'Sign In',
         action: this.showSignIn.bind(this),
