@@ -47,9 +47,10 @@ export default class Form extends Block {
 
   _submit(event, titleForm) {
     event.preventDefault();
+
     const data = this._getData(titleForm);
 
-
+    this._checkFields(data);
 
     // alert(data[0]);
 
@@ -66,6 +67,49 @@ export default class Form extends Block {
     // })
     //   .then(response => console.log('Request succeeded with JSON response', response))
     //   .catch(error => console.log('Request failed', error));
+  }
+
+  _checkFields(data) {
+    return 'password2' in data ? this._checkSignUpForm(data) :
+      this._checkSignInForm(data);
+  }
+
+  _checkSignInForm(data) {
+    const email = this._checkEmail(data.email);
+    const password = this._checkPassword1(data.password1);
+
+    if (!email.check) {
+      this._addError('email', email.text);
+    }
+
+    if (!password.check) {
+      this._addError('password1', password.text);
+    }
+  }
+
+  _checkEmail(email) {
+    if (this._isFill(email)) {
+      return {
+        check: false,
+        text: 'Заполните поле email'
+      };
+    }
+
+    if (!this._validateEmail(email)) {
+      return {
+        check: false,
+        text: 'Введите верный email'
+      }
+    }
+  }
+
+  _validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  _isFill(field) {
+    return field.trim().length === 0;
   }
 
   _getData(titleForm) {
