@@ -64,6 +64,15 @@ export default class Form extends Block {
     // })
     //   .then(response => console.log('Request succeeded with JSON response', response))
     //   .catch(error => console.log('Request failed', error));
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://ananymous.herokuapp.com/api/signin", true);
+    // xhr.withCredentials = true;
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "http://ananymous.herokuapp.com");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET, POST");
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "X-Custom-Header");
+    xhr.send(JSON.stringify({login:'hello', email: 'goodbye@mail.ru', password:'hop'}));
+    alert(xhr.body);
   }
 
   _checkFields(data) {
