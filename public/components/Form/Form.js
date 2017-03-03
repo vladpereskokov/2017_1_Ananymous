@@ -1,6 +1,6 @@
-import 'whatwg-fetch';
 import Block from '../Block/Block';
 import Button from '../Button/Button';
+import HTTP from '../../modules/Queries/HTTP';
 
 import './Form.scss';
 import template from './Form.tmpl.xml';
@@ -8,6 +8,10 @@ import template from './Form.tmpl.xml';
 export default class Form extends Block {
   constructor(elements = []) {
     super('div', {class: 'form z-depth-2'});
+
+    this._http = new HTTP();
+    this._http._baseUrl= 'https://ananymous.herokuapp.com/api';
+
     this._createForm(elements);
   }
 
@@ -51,15 +55,7 @@ export default class Form extends Block {
     const data = this._getData(titleForm);
     this._checkFields(data);
 
-    fetch('https://ananymous.herokuapp.com/api/status', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      credentials: 'include'
-    })
-      .then(response => console.log('Request succeeded with JSON response', response))
-      .catch(error => console.log('Request failed', error));
+    this._http.get('/status', null, (text) => {console.log(text)});
   }
 
   _checkFields(data) {

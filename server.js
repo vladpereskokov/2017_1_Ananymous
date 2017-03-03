@@ -9,7 +9,6 @@ app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static('public'));
 app.use('/SignUp', express.static('public'));
 app.use('/SignIn', express.static('public'));
-app.use('/proxy', proxy('www.google.com'));
 
 app.use(parser.json());
 
@@ -27,7 +26,6 @@ app.post('/users', (req, res) => {
       password: password
     };
   }
-
   res.send(emails[email]);
 });
 
