@@ -59,20 +59,20 @@ app.post('/users', (req, res) => {
       password: password
     };
   }
-  // request({
-  //     method: 'POST',
-  //     preambleCRLF: true,
-  //     postambleCRLF: true,
-  //     uri: 'http://ananymous.herokuapp.com/api/signup',
-  //     'Content-Type': 'application/json',
-  //     body: JSON.stringify(formData)
-  //   },
-  //   function (error, response, body) {
-  //     if (error) {
-  //       return console.error('upload failed:', error);
-  //     }
-  //     console.log('Upload successful!  Server responded with:', response);
-  //   });
+  request({
+      method: 'POST',
+      preambleCRLF: true,
+      postambleCRLF: true,
+      uri: 'localhost:4000',
+      'Content-Type': 'application/json',
+      body: JSON.stringify(formData)
+    },
+    function (error, response, body) {
+      if (error) {
+        return console.error('upload failed:', error);
+      }
+      console.log('Upload successful!  Server responded with:', response);
+    });
   res.send(emails[email]);
 });
 
