@@ -51,24 +51,15 @@ export default class Form extends Block {
     const data = this._getData(titleForm);
     this._checkFields(data);
 
-    // fetch('/users', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     email: data.inputEmail,
-    //     password: data.inputPassword
-    //   }),
-    //   credentials: 'include'
-    // })
-    //   .then(response => console.log('Request succeeded with JSON response', response))
-    //   .catch(error => console.log('Request failed', error));
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/signin", false);
-    xhr.withCredentials = true;
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify({login:'hello', email: 'goodbye@mail.ru', password:'hop'}));
+    fetch('https://ananymous.herokuapp.com/api/status', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      credentials: 'include'
+    })
+      .then(response => console.log('Request succeeded with JSON response', response))
+      .catch(error => console.log('Request failed', error));
   }
 
   _checkFields(data) {
