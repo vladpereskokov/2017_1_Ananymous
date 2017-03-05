@@ -15,8 +15,7 @@ deploy:
     repo: vladpereskokov/2017_1_Ananymous
     branch: develop
   skip_cleanup: true
-script:
-  - npm run eslint
 install:
+  - npm run eslint
   - npm install
   - npm run webpack
