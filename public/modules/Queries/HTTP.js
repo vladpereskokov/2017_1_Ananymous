@@ -17,7 +17,7 @@ export default class HTTP {
   }
 
   set Headers(value) {
-    if (!(value && ('' + value === '[object Object]'))) {
+    if (!(value && (`${value}` === '[object Object]'))) {
       throw new TypeError('Headers must be a plain object');
     }
     const valid = Object.keys(value).every(key => typeof value[key] === 'string');
@@ -31,12 +31,13 @@ export default class HTTP {
     this._sender(uri, 'GET', callback);
   }
 
-  _sender(uri, method, callback = null, headers = {'Content-Type': 'application/json; charset=utf-8'},
-         coockies = 'include') {
+  _sender(uri, _method, callback = null,
+          _headers = { 'Content-Type': 'application/json; charset=utf-8' },
+          coockies = 'include') {
     fetch(this._baseUrl + uri, {
-      method: method,
+      method: _method,
       mode: 'cors',
-      headers: headers,
+      headers: _headers,
       credentials: coockies
     })
       .then(response => {

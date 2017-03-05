@@ -4,9 +4,9 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "webpack": "./node_modules/.bin/webpack",
+    "webpack": "./node_modules/.bin/webpack --watch",
     "webpack-develop": "./node_modules/.bin/webpack",
-    "eslint": "./node_modules/.bin/eslint public/*.js",
+    "eslint": "./node_modules/.bin/eslint ./public/**/*.js",
     "start": "node server.js"
   },
   "engines": {
@@ -16,6 +16,7 @@
   "license": "",
   "dependencies": {
     "express-http-proxy": "^0.11.0",
+    "whatwg-fetch": "^2.0.3",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
@@ -38,7 +39,7 @@
     "style-loader": "^0.13.0",
     "tp-fest-loader": "^1.0.0",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.2",
-    "whatwg-fetch": "^2.0.2"
+    "webpack": "^1.14.0",
+    "whatwg-fetch": "^2.0.3"
   }
 }

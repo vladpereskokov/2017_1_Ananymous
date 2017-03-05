@@ -15,20 +15,20 @@ export default class SignIn extends View {
   _createForm() {
     return new Form([{
       element: 'title',
-      text: 'Sign In',
+      text: 'Sign In'
     }, {
       name: 'email',
       type: 'email',
-      placeholder: 'Email address',
+      placeholder: 'Email address'
     }, {
       name: 'password1',
       type: 'password',
-      placeholder: 'Password',
+      placeholder: 'Password'
     }, {
-      text: 'Sign In',
+      text: 'Sign In'
     }, {
       text: 'Back',
-      action: this.showMain.bind(this),
+      action: this.showMain.bind(this)
     }]);
   }
 

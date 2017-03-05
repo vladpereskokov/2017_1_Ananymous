@@ -21,26 +21,31 @@ export default class Router {
    * Добавляет новый Route в роутер
    * @param {string} pathname - Шаблон пути
    * @param {View} view - Класс конкретной View
-   * @param {Object} [options={}] - Дополнительные параметры, которые будут переданы во view при её создании и инициализации
+   * @param {Object} [options={}] - Дополнительные параметры,
+   * которые будут переданы во view при её создании и инициализации
    * @returns {Router}
    */
   addRoute(pathname, view, options = {}) {
-    let route = new Route(pathname, view, options);
+    const route = new Route(pathname, view, options);
+
     route.setRouter(this);
     this.routes.push(route);
+
     return this;
   }
 
   /**
    * Запускает роутер и переходит по текущему пути в приложении
-   * @param {Object} [state={}] - Объект state, который передаётся в первый вызов onroute
+   * @param {Object} [state={}] - Объект state,
+   * который передаётся в первый вызов onroute
    */
   start(state = {}) {
-    window.onpopstate = function (event) {
-      let state = event.state;
-      let pathname = window.location.pathname;
+    window.onpopstate = (event => {
+      const state = event.state;
+      const pathname = window.location.pathname;
+
       this.onroute(pathname, state);
-    }.bind(this);
+    }).bind(this);
 
     const pathname = window.location.pathname;
     this.onroute(pathname, state);
@@ -52,7 +57,7 @@ export default class Router {
    * @param {Object} [state={}] - Объект state, который передаётся в вызов метода navigate
    */
   onroute(pathname, state = {}) {
-    let route = this.routes.find(route => route.match(pathname));
+    const route = this.routes.find(route => route.match(pathname));
     if (!route) {
       return;
     }
@@ -80,7 +85,8 @@ export default class Router {
 
   /**
    * Позволяет установить свою собственную реализацию History API
-   * @param {Object} history - должен предоставлять реализацию методов back(), forward(), pushState()
+   * @param {Object} history -
+   * должен предоставлять реализацию методов back(), forward(), pushState()
    */
   setHistory(history) {
     this.history = history;

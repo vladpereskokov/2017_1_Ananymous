@@ -40,14 +40,14 @@ export default class View {
    * Показывает view
    */
   show() {
-    this._el.style.display = "block";
+    this._el.style.display = 'block';
   }
 
   /**
    * Скрывает view
    */
   hide() {
-    this._el.style.display = "none";
+    this._el.style.display = 'none';
   }
 
   /**
@@ -76,12 +76,13 @@ export default class View {
 
   /**
    * Устанавливает текущей view набор атрибутов
-   * @param {Object} [attrs={}] - Объект с атрибутами, которые будут установлены у текущего элемента view
+   * @param {Object} [attrs={}] - Объект с атрибутами,
+   * которые будут установлены у текущего элемента view
    */
   setAttrs(attrs = {}) {
     Object.keys(attrs).forEach(name => {
       this._el.setAttribute(name, attrs[name]);
-    })
+    });
   }
 
   /**

@@ -3,7 +3,7 @@ import Table from '../../components/Table/Table';
 import View from '../../modules/View/View';
 
 const table = new Table({
-  head : ['Nickname', 'Score'],
+  head: ['Nickname', 'Score'],
   body: [
     ['Marvin', '150'],
     ['Trash', '500'],

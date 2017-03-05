@@ -16,11 +16,11 @@ class SignUp extends View {
   _createForm() {
     return new Form([{
       element: 'title',
-      text: 'Sign Up',
+      text: 'Sign Up'
     }, {
       name: 'login',
       type: 'text',
-      placeholder: 'Login',
+      placeholder: 'Login'
     }, {
       name: 'email',
       type: 'email',
@@ -28,15 +28,15 @@ class SignUp extends View {
     }, {
       name: 'password1',
       type: 'password',
-      placeholder: 'Password',
+      placeholder: 'Password'
     }, {
       name: 'password2',
       type: 'password',
-      placeholder: 'Repeat Password',
+      placeholder: 'Repeat Password'
     }, {
       text: 'Sign Up'
     }, {
-      action: (this.showMain.bind(this)),
+      action: (this.showMain.bind(this))
     }]);
   }
 

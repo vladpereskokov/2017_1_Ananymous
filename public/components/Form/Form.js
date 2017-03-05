@@ -7,10 +7,10 @@ import template from './Form.tmpl.xml';
 
 export default class Form extends Block {
   constructor(elements = []) {
-    super('div', {class: 'form z-depth-2'});
+    super('div', { class: 'form z-depth-2' });
 
     this._http = new HTTP();
-    this._http._baseUrl= 'https://ananymous.herokuapp.com/api';
+    this._http._baseUrl = 'https://ananymous.herokuapp.com/api';
 
     this._createForm(elements);
   }
@@ -20,7 +20,7 @@ export default class Form extends Block {
 
     this._getElement().innerHTML = template({
       title: titleForm,
-      elements: elements.slice(1, elements.length - 2),
+      elements: elements.slice(1, elements.length - 2)
     });
 
     this._find('form').appendChild((this._submitButton(elements[elements.length - 2].text, titleForm).render()));
@@ -30,7 +30,7 @@ export default class Form extends Block {
   _submitButton(buttonText, titleForm) {
     const submit = new Button({
       type: 'submit',
-      text: buttonText,
+      text: buttonText
     });
 
     submit.start('click', event => this._submit(event, titleForm));
@@ -41,7 +41,7 @@ export default class Form extends Block {
   _backButton(action) {
     const back = new Button({
       type: 'submit',
-      text: 'Back',
+      text: 'Back'
     });
 
     back.start('click', action);
@@ -55,7 +55,7 @@ export default class Form extends Block {
     const data = this._getData(titleForm);
     this._checkFields(data);
 
-    this._http.get('/status', null, (text) => {console.log(text)});
+    this._http.get('/status', null, text => { console.log(text); });
   }
 
   _checkFields(data) {
@@ -129,12 +129,12 @@ export default class Form extends Block {
       return {
         check: false,
         text: 'Введите верный login'
-      }
+      };
     }
 
     return {
       check: true
-    }
+    };
   }
 
   _checkEmail(email) {
@@ -149,12 +149,12 @@ export default class Form extends Block {
       return {
         check: false,
         text: 'Введите верный email'
-      }
+      };
     }
 
     return {
       check: true
-    }
+    };
   }
 
   _checkPassword(password) {
@@ -176,7 +176,7 @@ export default class Form extends Block {
 
     return {
       check: true
-    }
+    };
   }
 
   _checkPasswordRepeat(password1, password2) {
@@ -195,7 +195,7 @@ export default class Form extends Block {
 
     return {
       check: true
-    }
+    };
   }
 
   _validateLogin(login) {
@@ -217,7 +217,7 @@ export default class Form extends Block {
     const form = (document.getElementsByName(titleForm)[0]).elements;
     const fields = {};
 
-    this._getKeys(form).forEach((input) => {
+    this._getKeys(form).forEach(input => {
       const name = form[input].name;
 
       if (name) {

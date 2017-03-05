@@ -1,7 +1,6 @@
-
-const pathToRegex = (pathname) => {
-  let keyNames = [];
-  let parts = pathname
+const pathToRegex = (pathname => {
+  const keyNames = [];
+  const parts = pathname
     .split('/')
     .filter(part => part)
     .map(part => {
@@ -12,19 +11,21 @@ const pathToRegex = (pathname) => {
       return new RegExp(`^\/${part}`, `i`);
     });
 
+  return path => {
+    const keys = [];
+    const check = parts.every(regexp => {
+      const tmp = regexp.exec(path);
 
-  return function (path) {
-
-    let keys = [];
-    let check = parts.every((regexp) => {
-      let tmp = regexp.exec(path);
       if (!tmp) {
         return false;
       }
+
       if (tmp.length === 2) {
         keys.push(tmp[1]);
       }
+
       path = path.replace(regexp, '');
+
       return true;
     });
 
@@ -34,8 +35,9 @@ const pathToRegex = (pathname) => {
         return prev;
       }, {});
     }
+
     return null;
   };
-};
+});
 
-export default pathToRegex
+export default pathToRegex;

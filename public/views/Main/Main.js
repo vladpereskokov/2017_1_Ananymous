@@ -9,7 +9,6 @@ class Main extends View {
   }
 
   init(options = {}) {
-    // this._el.appendChild(this._mainPage().render());
     this._createMain();
     document.body.appendChild(this._el);
   }
@@ -18,27 +17,15 @@ class Main extends View {
     this._el.innerHTML = template({
       buttons: [{
         text: 'Sign Up',
-        action: '/SignUp',
+        action: '/SignUp'
       }, {
         text: 'Sign In',
-        action: '/SignIn',
+        action: '/SignIn'
       }, {
         text: 'Scoreboard',
-        action: '/Scoreboard',
-      }],
+        action: '/Scoreboard'
+      }]
     });
-  }
-
-  showSignIn() {
-    this.getRouter().go('/SignIn');
-  }
-
-  showSignUp() {
-    this.getRouter().go('/SignUp');
-  }
-
-  showScoreboard() {
-    this.getRouter().go('/Scoreboard');
   }
 }
 
