@@ -1,6 +1,6 @@
 import Block from '../Block/Block';
 import Button from '../Button/Button';
-import HTTP from '../../modules/Queries/HTTP';
+import Transport from '../../modules/Transport/Transport';
 
 import './Form.scss';
 import template from './Form.tmpl.xml';
@@ -9,8 +9,9 @@ export default class Form extends Block {
   constructor(elements = []) {
     super('div', { class: 'form z-depth-2' });
 
-    this._http = new HTTP();
+    this._http = new Transport();
     this._http._baseUrl = 'https://ananymous.herokuapp.com/api';
+    this._isTrueForm = true;
 
     this._createForm(elements);
   }
@@ -51,12 +52,29 @@ export default class Form extends Block {
 
   _submit(event, titleForm) {
     event.preventDefault();
+    this._isTrueForm = true;
 
     const data = this._getData(titleForm);
     this._checkFields(data);
 
-    this._http.get('/status', null, text => { console.log(text); });
+    const form = new FormData();
+    form.append('login', 'hello');
+    form.append('email', data.email);
+    form.append('password', data.password1);
+
+    if (this._isTrueForm) {
+      this._http.post('/signup', form)
+        .then(response => {
+          console.log(response);
+        });
+    }
   }
+
+  // _createPostForm(data) {
+  //   return new FormData({
+  //
+  //   })
+  // }
 
   _checkFields(data) {
     return 'password2' in data ? this._checkSignUpForm(data) :
@@ -76,10 +94,12 @@ export default class Form extends Block {
 
     if (!loginElement.check) {
       this._addError(login, loginElement.text);
+      this._isTrueForm = false;
     }
 
     if (!passwordRepeatElement.check) {
       this._addError(passwordRepeat, passwordRepeatElement.text);
+      this._isTrueForm = false;
     }
   }
 
@@ -94,10 +114,12 @@ export default class Form extends Block {
 
     if (!emailElement.check) {
       this._addError(email, emailElement.text);
+      this._isTrueForm = false;
     }
 
     if (!passwordElement.check) {
       this._addError(password, passwordElement.text);
+      this._isTrueForm = false;
     }
   }
 

@@ -1,15 +1,23 @@
 import 'whatwg-fetch';
 
-export default class HTTP {
+export default class Transport {
   constructor() {
-    if (HTTP.__instance) {
-      return HTTP.__instance;
+    if (Transport.__instance) {
+      return Transport.__instance;
     }
 
     this._headers = {};
     this._baseUrl = '';
 
-    HTTP.__instance = this;
+    Transport.__instance = this;
+  }
+
+  get BaseUrl() {
+    return this._baseUrl;
+  }
+
+  set BaseUrl(url) {
+    this._baseUrl = url;
   }
 
   get Headers() {
@@ -20,31 +28,41 @@ export default class HTTP {
     if (!(value && (`${value}` === '[object Object]'))) {
       throw new TypeError('Headers must be a plain object');
     }
+
     const valid = Object.keys(value).every(key => typeof value[key] === 'string');
+
     if (!valid) {
       throw new TypeError('Headers must be a plain object');
     }
+
     this._headers = value;
   }
 
-  get(uri, query = null, callback = null) {
-    this._sender(uri, 'GET', callback);
+  get(uri) {
+    return this._sender(uri, 'GET');
   }
 
-  _sender(uri, _method, callback = null,
+  post(uri, data) {
+    return this._sender(uri, 'POST', data);
+  }
+
+  put(uri) {
+    return this._sender(uri, 'PUT');
+  }
+
+  delete(uri) {
+    return this._sender(uri, 'DELETE');
+  }
+
+  _sender(uri, _method, data = null,
           _headers = { 'Content-Type': 'application/json; charset=utf-8' },
           coockies = 'include') {
-    fetch(this._baseUrl + uri, {
+    return fetch(this._baseUrl + uri, {
       method: _method,
       mode: 'cors',
       headers: _headers,
+      body: data,
       credentials: coockies
-    })
-      .then(response => {
-        if (typeof callback === 'function') {
-          callback(response);
-        }
-      })
-      .catch(error => console.log('Request failed', error));
+    });
   }
 }
