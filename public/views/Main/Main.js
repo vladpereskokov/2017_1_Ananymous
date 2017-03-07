@@ -8,10 +8,10 @@ const isLogged = false;
 const notLogged = {
   buttons: [{
     text: 'Sign Up',
-    action: '/signUp'
+    action: '/signup'
   }, {
     text: 'Sign In',
-    action: '/signIn'
+    action: '/signin'
   }, {
     text: 'Scoreboard',
     action: '/scoreboard'

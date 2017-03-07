@@ -25,7 +25,7 @@ window.addEventListener('click', eventListener);
 router
   .addRoute('/game', Game)
   .addRoute('/scoreboard', Scoreboard)
-  .addRoute('/signUp', SignUp)
-  .addRoute('/signIn', SignIn)
+  .addRoute('/signup', SignUp)
+  .addRoute('/signin', SignIn)
   .addRoute('/', Main)
   .start();
