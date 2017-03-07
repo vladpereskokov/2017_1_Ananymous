@@ -16,7 +16,7 @@ module.exports = {
     "comma-dangle": [2, "never"],
     "no-console": 0,
     "no-useless-escape": 0,
-    'quotes': ["error", "single", { "allowTemplateLiterals": true }],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "import/no-unresolved": [2, {"commonjs": true, "amd": true}],
     "prefer-template": "error",
     "object-shorthand": "error",
@@ -27,5 +27,6 @@ module.exports = {
     "no-extra-bind": 0,
     "no-useless-constructor": 0,
     "no-unused-vars": 0,
+    "quote-props": 0
   }
 };
