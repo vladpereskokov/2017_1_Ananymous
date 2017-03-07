@@ -62,8 +62,14 @@ export default class Form extends Block {
     form.append('email', data.email);
     form.append('password', data.password1);
 
+    const ob = {
+      'login': 'to1',
+      'email': data.email,
+      'password': data.password1
+    };
+
     if (this._isTrueForm) {
-      this._http.post('/signup', form)
+      this._http.post('/signup', JSON.stringify(ob))
         .then(response => {
           console.log(response);
         });

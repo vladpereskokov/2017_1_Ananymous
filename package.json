@@ -33,6 +33,7 @@
     "express": "^4.14.1",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
+    "jasmine": "^2.5.3",
     "json-loader": "^0.5.4",
     "node-sass": "^4.5.0",
     "sass-loader": "^6.0.2",

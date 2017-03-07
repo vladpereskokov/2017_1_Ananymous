@@ -59,7 +59,6 @@ export default class Transport {
           coockies = 'include') {
     return fetch(this._baseUrl + uri, {
       method: _method,
-      mode: 'cors',
       headers: _headers,
       body: data,
       credentials: coockies
