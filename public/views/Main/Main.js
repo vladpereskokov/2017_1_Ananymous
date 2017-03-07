@@ -3,6 +3,34 @@ import View from '../../modules/View/View';
 import './Main.scss';
 import template from './Main.tmpl.xml';
 
+const isLogged = false;
+
+const notLogged = {
+  buttons: [{
+    text: 'Sign Up',
+    action: '/SignUp'
+  }, {
+    text: 'Sign In',
+    action: '/SignIn'
+  }, {
+    text: 'Scoreboard',
+    action: '/Scoreboard'
+  }]
+};
+
+const logged = {
+  buttons: [{
+    text: 'Game',
+    action: '/Game'
+  }, {
+    text: 'Scoreboard',
+    action: '/Scoreboard'
+  }, {
+    text: 'Logout',
+    action: '/Logout'
+  }]
+};
+
 class Main extends View {
   constructor() {
     super();
@@ -14,18 +42,7 @@ class Main extends View {
   }
 
   _createMain() {
-    this._el.innerHTML = template({
-      buttons: [{
-        text: 'Sign Up',
-        action: '/SignUp'
-      }, {
-        text: 'Sign In',
-        action: '/SignIn'
-      }, {
-        text: 'Scoreboard',
-        action: '/Scoreboard'
-      }]
-    });
+    this._el.innerHTML = template(isLogged === true ? logged : notLogged);
   }
 }
 
