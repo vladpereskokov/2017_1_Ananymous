@@ -23,9 +23,9 @@ const eventListener = (event => {
 window.addEventListener('click', eventListener);
 
 router
-  .addRoute('/Game', Game)
-  .addRoute('/Scoreboard', Scoreboard)
-  .addRoute('/SignUp', SignUp)
-  .addRoute('/SignIn', SignIn)
+  .addRoute('/game', Game)
+  .addRoute('/scoreboard', Scoreboard)
+  .addRoute('/signUp', SignUp)
+  .addRoute('/signIn', SignIn)
   .addRoute('/', Main)
   .start();
