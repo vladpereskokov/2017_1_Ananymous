@@ -42,7 +42,7 @@ class Main extends View {
   }
 
   _createMain() {
-    this._el.innerHTML = template(isLogged === true ? logged : notLogged);
+    this._el.innerHTML = template(isLogged ? logged : notLogged);
   }
 }
 
