@@ -1,5 +1,4 @@
 import Form from '../../components/Form/Form';
-import Button from '../../components/Button/Button';
 import View from '../../modules/View/View';
 
 class SignUp extends View {

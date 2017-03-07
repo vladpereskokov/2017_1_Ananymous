@@ -2,6 +2,7 @@ import Router from './modules/Route/Router';
 import SignIn from './views/SignIn/SignIn';
 import SignUp from './views/SignUp/SignUp';
 import Scoreboard from './views/Scoreboard/Scoreboard';
+import Game from './views/Game/Game';
 import Main from './views/Main/Main';
 
 import './css/reset.scss';
@@ -22,6 +23,7 @@ const eventListener = (event => {
 window.addEventListener('click', eventListener);
 
 router
+  .addRoute('/Game', Game)
   .addRoute('/SignUp', SignUp)
   .addRoute('/SignIn', SignIn)
   .addRoute('/Scoreboard', Scoreboard)
