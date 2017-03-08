@@ -16,8 +16,7 @@ export default class SignIn extends View {
     return new Form({
       data: {
         title: 'Sign In',
-        fields: [
-          {
+        fields: [{
             name: 'email',
             type: 'email',
             placeholder: 'Email address'
@@ -27,17 +26,13 @@ export default class SignIn extends View {
             placeholder: 'Password'
           }
         ],
-        controls: [
-          {
-            type: 'button',
+        controls: [{
             text: 'Sign In',
             action: '/signin'
           }, {
-            type: 'button',
             text: 'Back',
             action: this.showMain.bind(this)
-          }
-        ]
+          }]
       }
     });
   }

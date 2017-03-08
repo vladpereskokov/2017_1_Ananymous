@@ -1,7 +1,6 @@
 import Block from '../Block/Block';
 import Button from '../Button/Button';
 import Transport from '../../modules/Transport/Transport';
-import { isLogged } from '../../views/Main/Main';
 
 import './Form.scss';
 import template from './Form.tmpl.xml';
@@ -61,11 +60,11 @@ export default class Form extends Block {
     console.log(isLogged);
 
     if (this._isTrueForm) {
-      this._http.post(uri, JSON.stringify(this._getSendPack(uri, data)))
+      this._http.post('/signup', JSON.stringify(this._getSendPack('/signup', data)))
         .then(response => {
           console.log(response);
           if (+response.status === 200) {
-            // isLogged = true;
+            window.isLogged = true;
           }
         });
     }
@@ -84,7 +83,7 @@ export default class Form extends Block {
 
   _signUpPack(data) {
     return {
-      'login': data.login,
+      'login': 'hello11111',
       'email': data.email,
       'password': data.password1
     }

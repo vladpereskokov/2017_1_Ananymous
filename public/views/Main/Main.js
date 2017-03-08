@@ -3,7 +3,7 @@ import View from '../../modules/View/View';
 import './Main.scss';
 import template from './Main.tmpl.xml';
 
-export let isLogged = false;
+window.isLogged = false;
 
 const notLogged = {
   buttons: [{
@@ -39,8 +39,13 @@ class Main extends View {
   }
 
   _createMain() {
-    this._el.innerHTML = template(isLogged ? logged : notLogged);
+    this._el.innerHTML = template(this._changeForm(window.isLogged));
   }
+
+  _changeForm(check) {
+    return check ? logged : notLogged;
+  }
+
 }
 
 export default Main;

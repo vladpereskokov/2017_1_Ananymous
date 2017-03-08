@@ -13,30 +13,36 @@ class SignUp extends View {
   }
 
   _createForm() {
-    return new Form([{
-      element: 'title',
-      text: 'Sign Up'
-    }, {
-      name: 'login',
-      type: 'text',
-      placeholder: 'Login'
-    }, {
-      name: 'email',
-      type: 'email',
-      placeholder: 'Email address'
-    }, {
-      name: 'password1',
-      type: 'password',
-      placeholder: 'Password'
-    }, {
-      name: 'password2',
-      type: 'password',
-      placeholder: 'Repeat Password'
-    }, {
-      text: 'Sign Up'
-    }, {
-      action: (this.showMain.bind(this))
-    }]);
+    return new Form({
+      data: {
+        title: 'Sign Up',
+        fields: [{
+            name: 'login',
+            type: 'text',
+            placeholder: 'Login'
+          }, {
+            name: 'email',
+            type: 'email',
+            placeholder: 'Email address'
+          }, {
+            name: 'password1',
+            type: 'password',
+            placeholder: 'Password'
+          }, {
+            name: 'password2',
+            type: 'password',
+            placeholder: 'Repeat Password'
+          }
+        ],
+        controls: [{
+            text: 'Sign Un',
+            action: '/signup'
+          }, {
+            text: 'Back',
+            action: this.showMain.bind(this)
+          }]
+      }
+    });
   }
 
   showMain() {
