@@ -7,7 +7,8 @@
     "webpack": "./node_modules/.bin/webpack",
     "webpack-develop": "./node_modules/.bin/webpack --watch",
     "eslint": "./node_modules/.bin/eslint ./public/**/*.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "karma start karma.conf.js"
   },
   "engines": {
     "node": "7.5.0"
