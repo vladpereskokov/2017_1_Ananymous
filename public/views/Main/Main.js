@@ -12,9 +12,6 @@ const notLogged = {
   }, {
     text: 'Sign In',
     action: '/signin'
-  }, {
-    text: 'Scoreboard',
-    action: '/scoreboard'
   }]
 };
 

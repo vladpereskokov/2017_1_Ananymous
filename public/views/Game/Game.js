@@ -2,7 +2,7 @@ import Block from '../../components/Block/Block';
 import Button from '../../components/Button/Button';
 import View from '../../modules/View/View';
 
-import './main_background.png';
+import './Game.scss';
 
 class Game extends View {
   constructor() {
@@ -10,17 +10,15 @@ class Game extends View {
   }
 
   init(options = {}) {
-    const img = new Block('img', {
-      src: '/views/Game/main_background.png'
+
+    const block = new Block('div', {
+      class: 'is_overlay',
+      id: 'trailer'
     });
 
-    const button = new Button({
-      text: 'Back'
-    });
-    button.start('click', this.showMain.bind(this));
-
-    document.body.appendChild(img.render());
-    document.body.appendChild(button.render());
+    block._getElement().innerHTML = "<video id=\"video\" width=\"100%\" height=\"auto\" autoplay=\"autoplay\" " +
+      "loop=\"loop\" preload=\"auto\"><source src=\"/views/Game/background.mp4\"></source></video>";
+    document.body.appendChild(block.render());
   }
 
   showMain() {

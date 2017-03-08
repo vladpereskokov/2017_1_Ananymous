@@ -7,8 +7,7 @@
     "webpack": "./node_modules/.bin/webpack",
     "webpack-develop": "./node_modules/.bin/webpack --watch",
     "eslint": "./node_modules/.bin/eslint ./public/**/*.js",
-    "start": "node server.js",
-    "test": "karma start karma.conf.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": "7.5.0"
@@ -38,11 +37,6 @@
     "jasmine": "^2.5.3",
     "jasmine-core": "^2.5.2",
     "json-loader": "^0.5.4",
-    "karma": "^1.5.0",
-    "karma-babel-preprocessor": "^6.0.1",
-    "karma-coverage": "^1.1.1",
-    "karma-jasmine": "^1.1.0",
-    "karma-phantomjs-launcher": "^1.0.2",
     "node-sass": "^4.5.0",
     "sass-loader": "^6.0.2",
     "style-loader": "^0.13.0",
