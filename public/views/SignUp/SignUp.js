@@ -35,7 +35,7 @@ class SignUp extends View {
           }
         ],
         controls: [{
-            text: 'Sign Un',
+            text: 'Sign Up',
             action: '/signup'
           }, {
             text: 'Back',
