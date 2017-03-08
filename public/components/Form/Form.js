@@ -60,7 +60,7 @@ export default class Form extends Block {
     console.log(isLogged);
 
     if (this._isTrueForm) {
-      this._http.post('/signup', JSON.stringify(this._getSendPack('/signup', data)))
+      this._http.post(uri, JSON.stringify(this._getSendPack(uri, data)))
         .then(response => {
           console.log(response);
           if (+response.status === 200) {
@@ -83,7 +83,7 @@ export default class Form extends Block {
 
   _signUpPack(data) {
     return {
-      'login': 'hello11111',
+      'login': data.login,
       'email': data.email,
       'password': data.password1
     }
