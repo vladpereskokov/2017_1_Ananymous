@@ -1,40 +1,41 @@
 import Block from '../Block/Block';
 import Button from '../Button/Button';
 import Transport from '../../modules/Transport/Transport';
+import { isLogged } from '../../views/Main/Main';
 
 import './Form.scss';
 import template from './Form.tmpl.xml';
 
 export default class Form extends Block {
-  constructor(elements = []) {
+  constructor(elements = {}) {
     super('div', { class: 'form z-depth-2' });
 
     this._http = new Transport();
     this._http._baseUrl = 'https://ananymous.herokuapp.com/api';
     this._isTrueForm = true;
 
-    this._createForm(elements);
+    this._createForm(elements.data);
   }
 
   _createForm(elements) {
-    const titleForm = elements[0].text;
+    const titleForm = elements.title;
 
     this._getElement().innerHTML = template({
       title: titleForm,
-      elements: elements.slice(1, elements.length - 2)
+      elements: elements.fields
     });
 
-    this._find('form').appendChild((this._submitButton(elements[elements.length - 2].text, titleForm).render()));
-    this.append(this._backButton(elements[elements.length - 1].action).render());
+    this._find('form').appendChild((this._submitButton(elements.controls[0], titleForm).render()));
+    this.append(this._backButton(elements.controls[1].action).render());
   }
 
-  _submitButton(buttonText, titleForm) {
+  _submitButton(button, titleForm) {
     const submit = new Button({
       type: 'submit',
-      text: buttonText
+      text: button.text
     });
 
-    submit.start('click', event => this._submit(event, titleForm));
+    submit.start('click', event => this._submit(event, button.action, titleForm));
 
     return submit;
   }
@@ -50,37 +51,44 @@ export default class Form extends Block {
     return back;
   }
 
-  _submit(event, titleForm) {
+  _submit(event, uri, titleForm) {
     event.preventDefault();
     this._isTrueForm = true;
 
     const data = this._getData(titleForm);
     this._checkFields(data);
 
-    const form = new FormData();
-    form.append('login', 'hello');
-    form.append('email', data.email);
-    form.append('password', data.password1);
-
-    const ob = {
-      'login': 'to1',
-      'email': data.email,
-      'password': data.password1
-    };
+    console.log(isLogged);
 
     if (this._isTrueForm) {
-      this._http.post('/signup', JSON.stringify(ob))
+      this._http.post(uri, JSON.stringify(this._getSendPack(uri, data)))
         .then(response => {
           console.log(response);
+          if (+response.status === 200) {
+            // isLogged = true;
+          }
         });
     }
   }
 
-  // _createPostForm(data) {
-  //   return new FormData({
-  //
-  //   })
-  // }
+  _getSendPack(uri, data) {
+    return uri === '/signin' ? this._signInPack(data) : this._signUpPack(data);
+  }
+
+  _signInPack(data) {
+    return {
+      'username': data.email,
+      'password': data.password1
+    }
+  }
+
+  _signUpPack(data) {
+    return {
+      'login': data.login,
+      'email': data.email,
+      'password': data.password1
+    }
+  }
 
   _checkFields(data) {
     return 'password2' in data ? this._checkSignUpForm(data) :
@@ -255,3 +263,5 @@ export default class Form extends Block {
     return fields;
   }
 }
+
+export let a = 3;

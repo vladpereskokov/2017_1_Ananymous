@@ -13,23 +13,33 @@ export default class SignIn extends View {
   }
 
   _createForm() {
-    return new Form([{
-      element: 'title',
-      text: 'Sign In'
-    }, {
-      name: 'email',
-      type: 'email',
-      placeholder: 'Email address'
-    }, {
-      name: 'password1',
-      type: 'password',
-      placeholder: 'Password'
-    }, {
-      text: 'Sign In'
-    }, {
-      text: 'Back',
-      action: this.showMain.bind(this)
-    }]);
+    return new Form({
+      data: {
+        title: 'Sign In',
+        fields: [
+          {
+            name: 'email',
+            type: 'email',
+            placeholder: 'Email address'
+          }, {
+            name: 'password1',
+            type: 'password',
+            placeholder: 'Password'
+          }
+        ],
+        controls: [
+          {
+            type: 'button',
+            text: 'Sign In',
+            action: '/signin'
+          }, {
+            type: 'button',
+            text: 'Back',
+            action: this.showMain.bind(this)
+          }
+        ]
+      }
+    });
   }
 
   showMain() {

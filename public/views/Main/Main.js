@@ -3,7 +3,7 @@ import View from '../../modules/View/View';
 import './Main.scss';
 import template from './Main.tmpl.xml';
 
-const isLogged = false;
+export let isLogged = false;
 
 const notLogged = {
   buttons: [{
