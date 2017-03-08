@@ -43,7 +43,7 @@ class Main extends View {
   }
 
   _changeForm(check) {
-    return check ? logged : notLogged;
+    return !check ? logged : notLogged;
   }
 
 }
