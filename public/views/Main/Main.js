@@ -1,4 +1,5 @@
 import View from '../../modules/View/View';
+import userService from '../../services/UserService/UserService';
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
@@ -34,16 +35,23 @@ class Main extends View {
   }
 
   init(options = {}) {
-    this._createMain();
+    this._makeMain();
     document.body.appendChild(this._el);
   }
 
-  _createMain() {
-    this._el.innerHTML = template(this._changeForm(window.isLogged));
+  _makeMain(state = false) {
+    this._el.innerHTML = template(this._changeForm(state));
   }
 
-  _changeForm(check) {
-    return check ? logged : notLogged;
+  _changeForm(state) {
+    return state ? logged : notLogged;
+  }
+
+  show() {
+    const state = userService.getState();
+
+    this._makeMain(state);
+    this._el.style.display = 'block';
   }
 
 }

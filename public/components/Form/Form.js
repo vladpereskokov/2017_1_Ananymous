@@ -1,6 +1,7 @@
 import Block from '../Block/Block';
 import Button from '../Button/Button';
 import Transport from '../../modules/Transport/Transport';
+import userService from '../../services/UserService/UserService';
 
 import './Form.scss';
 import template from './Form.tmpl.xml';
@@ -57,15 +58,12 @@ export default class Form extends Block {
     const data = this._getData(titleForm);
     this._checkFields(data);
 
-    console.log(isLogged);
-
     if (this._isTrueForm) {
       this._http.post(uri, JSON.stringify(this._getSendPack(uri, data)))
         .then(response => {
           console.log(response);
-          if (+response.status === 200) {
-            window.isLogged = true;
-          }
+          +response.status === 200 ? userService.setState(true) :
+            userService.setState(false);
         });
     }
   }

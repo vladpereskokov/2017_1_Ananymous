@@ -4,18 +4,18 @@ export default class User {
     this._login = null;
   }
 
-  get getUser() {
+  getUser() {
     return {
       id: this._id,
       login: this._login
     };
   }
 
-  get getLogin() {
+  getLogin() {
     return this._login;
   }
 
-  get getId() {
+  getId() {
     return this._id;
   }
 

@@ -12,11 +12,11 @@ class UserService {
     UserService.__instance = this;
   }
 
-  get getData() {
+  getData() {
     return this._user.getUser;
   }
 
-  get getState() {
+  getState() {
     return this._state;
   }
 
