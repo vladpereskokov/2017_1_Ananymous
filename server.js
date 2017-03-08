@@ -1,7 +1,5 @@
-const proxy = require('express-http-proxy');
 const express = require('express');
 const parser = require('body-parser');
-const request = require('request');
 const app = express();
 
 app.set('port', (process.env.PORT || 3000));
