@@ -1,4 +1,4 @@
-import pathToRegex from '../OtherScripts/PathToRegex';
+import pathToRegex from '../OtherScripts/PathToRegex/PathToRegex';
 
 let id = 0;
 

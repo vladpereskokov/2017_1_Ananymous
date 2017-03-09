@@ -42,7 +42,7 @@ export default class Transport {
     return this._sender(uri, 'GET');
   }
 
-  post(uri, data) {
+  post(uri, data = {}) {
     return this._sender(uri, 'POST', data);
   }
 
@@ -54,7 +54,7 @@ export default class Transport {
     return this._sender(uri, 'DELETE');
   }
 
-  _sender(uri, _method, data = null,
+  _sender(uri, _method, data = {},
           _headers = { 'Content-Type': 'application/json; charset=utf-8' },
           coockies = 'include') {
     return fetch(this._baseUrl + uri, {
