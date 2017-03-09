@@ -16,6 +16,9 @@ class Main extends View {
 
   _makeMain(state = false) {
     this._el.innerHTML = template(this._changeForm(state));
+    if (state) {
+      this._logoutButton();
+    }
   }
 
   _changeForm(state) {
@@ -23,12 +26,21 @@ class Main extends View {
   }
 
   logout() {
-    alert('here');
     const state = userService.getState();
     if (state) {
       userService.setState(false);
       this.show();
     }
+  }
+
+  _logoutButton() {
+    const button = this._findLogoutButton();
+    button.addEventListener('click', this.logout.bind(this));
+    button.style.display = 'block';
+  }
+
+  _findLogoutButton() {
+    return (document.getElementsByName('logout'))[0];
   }
 
   _getUnLoggedForm() {
@@ -51,9 +63,6 @@ class Main extends View {
       }, {
         text: 'Scoreboard',
         action: '/scoreboard'
-      }, {
-        text: 'Logout',
-        action: this.logout.bind(this)
       }]
     };
   }

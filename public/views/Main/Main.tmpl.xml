@@ -13,5 +13,16 @@
         <fest:value>button.text</fest:value>
       </button>
     </fest:for>
+    <button>
+      <fest:attributes>
+        <fest:attribute name="class">
+          btn button logout
+        </fest:attribute>
+        <fest:attribute name="name">
+          logout
+        </fest:attribute>
+      </fest:attributes>
+      Logout
+    </button>
   </div>
 </fest:template>
