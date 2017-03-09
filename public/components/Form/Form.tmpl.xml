@@ -1,6 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
   <form name="{data.title}">
     <h2 class="header"><fest:value>data.title</fest:value></h2>
+    <p class="errorText" name="mainError"></p>
     <fest:for iterate="data.elements" index="i" value="input">
       <input name="{input.name}" type="{input.type}" placeholder="{input.placeholder}"></input>
       <label name="{input.name}" class="errorText"></label>

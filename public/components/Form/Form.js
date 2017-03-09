@@ -8,7 +8,7 @@ import template from './Form.tmpl.xml';
 
 export default class Form extends Block {
   constructor(elements = {}) {
-    super('div', { class: 'form z-depth-2' });
+    super('div', {class: 'form z-depth-2'});
 
     this._http = new Transport();
     this._http._baseUrl = 'https://ananymous.herokuapp.com/api';
@@ -25,17 +25,17 @@ export default class Form extends Block {
       elements: elements.fields
     });
 
-    this._find('form').appendChild((this._submitButton(elements.controls[0], titleForm).render()));
+    this._find('form').appendChild((this._submitButton(elements.controls[0], elements.controls[1].action, titleForm).render()));
     this.append(this._backButton(elements.controls[1].action).render());
   }
 
-  _submitButton(button, titleForm) {
+  _submitButton(button, backAction, titleForm) {
     const submit = new Button({
       type: 'submit',
       text: button.text
     });
 
-    submit.start('click', event => this._submit(event, button.action, titleForm));
+    submit.start('click', event => this._submit(event, button.action, backAction, titleForm));
 
     return submit;
   }
@@ -51,7 +51,7 @@ export default class Form extends Block {
     return back;
   }
 
-  _submit(event, uri, titleForm) {
+  _submit(event, uri, backAction, titleForm) {
     event.preventDefault();
     this._isTrueForm = true;
 
@@ -61,11 +61,31 @@ export default class Form extends Block {
     if (this._isTrueForm) {
       this._http.post(uri, JSON.stringify(this._getSendPack(uri, data)))
         .then(response => {
-          console.log(response);
-          +response.status === 200 ? userService.setState(true) :
-            userService.setState(false);
+
+          return +response.status !== 200 ? response.json() : null;
+          // this._mainError();
+        })
+        .then(data => {
+          const element = document.querySelector('p.errorText');
+          const status = data == null;
+
+          element.textContent = (status) ? '' : data.message;
+          userService.setState(status);
+          if (status) {
+            backAction();
+          }
         });
     }
+  }
+
+  _mainError(status, response) {
+    const element = document.querySelector('p.errorText');
+    const statusCheck = status === 200;
+
+    console.log(response);
+
+    element.textContent = (statusCheck) ? '' : response.message;
+    userService.setState(status);
   }
 
   _getSendPack(uri, data) {

@@ -3,7 +3,6 @@ import SignIn from './views/SignIn/SignIn';
 import SignUp from './views/SignUp/SignUp';
 import Scoreboard from './views/Scoreboard/Scoreboard';
 import Game from './views/Game/Game';
-import Logout from './views/Logout/Logout';
 import Main from './views/Main/Main';
 
 import './css/reset.scss';
@@ -25,7 +24,6 @@ window.addEventListener('click', eventListener);
 
 router
   .addRoute('/game', Game)
-  .addRoute('/logout', Logout)
   .addRoute('/scoreboard', Scoreboard)
   .addRoute('/signup', SignUp)
   .addRoute('/signin', SignIn)

@@ -4,31 +4,6 @@ import userService from '../../services/UserService/UserService';
 import './Main.scss';
 import template from './Main.tmpl.xml';
 
-window.isLogged = false;
-
-const notLogged = {
-  buttons: [{
-    text: 'Sign Up',
-    action: '/signup'
-  }, {
-    text: 'Sign In',
-    action: '/signin'
-  }]
-};
-
-const logged = {
-  buttons: [{
-    text: 'Game',
-    action: '/game'
-  }, {
-    text: 'Scoreboard',
-    action: '/scoreboard'
-  }, {
-    text: 'Logout',
-    action: '/logout'
-  }]
-};
-
 class Main extends View {
   constructor() {
     super();
@@ -44,7 +19,43 @@ class Main extends View {
   }
 
   _changeForm(state) {
-    return state ? logged : notLogged;
+    return state ? this._getLoggedForm() : this._getUnLoggedForm();
+  }
+
+  logout() {
+    alert('here');
+    const state = userService.getState();
+    if (state) {
+      userService.setState(false);
+      this.show();
+    }
+  }
+
+  _getUnLoggedForm() {
+    return {
+      buttons: [{
+        text: 'Sign Up',
+        action: '/signup'
+      }, {
+        text: 'Sign In',
+        action: '/signin'
+      }]
+    };
+  }
+
+  _getLoggedForm() {
+    return {
+      buttons: [{
+        text: 'Game',
+        action: '/game'
+      }, {
+        text: 'Scoreboard',
+        action: '/scoreboard'
+      }, {
+        text: 'Logout',
+        action: this.logout.bind(this)
+      }]
+    };
   }
 
   show() {
