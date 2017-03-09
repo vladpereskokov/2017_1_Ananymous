@@ -1,4 +1,5 @@
 import View from '../../modules/View/View';
+import transport from '../../modules/Transport/Transport';
 import userService from '../../services/UserService/UserService';
 
 import './Main.scss';
@@ -27,10 +28,24 @@ class Main extends View {
 
   logout() {
     const state = userService.getState();
+
     if (state) {
+      // this._postRequestLogout();
       userService.setState(false);
       this.show();
     }
+  }
+
+  _postRequestLogout() {
+    transport.post('/logout')
+      .then(response => {
+        if (+response.status === 200) {
+          userService.setState(false);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   _logoutButton() {

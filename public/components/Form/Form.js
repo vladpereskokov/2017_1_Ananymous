@@ -1,6 +1,6 @@
 import Block from '../Block/Block';
 import Button from '../Button/Button';
-import Transport from '../../modules/Transport/Transport';
+import transport from '../../modules/Transport/Transport';
 import userService from '../../services/UserService/UserService';
 
 import './Form.scss';
@@ -10,8 +10,6 @@ export default class Form extends Block {
   constructor(elements = {}) {
     super('div', {class: 'form z-depth-2'});
 
-    this._http = new Transport();
-    this._http._baseUrl = 'https://ananymous.herokuapp.com/api';
     this._isTrueForm = true;
 
     this._createForm(elements.data);
@@ -59,11 +57,9 @@ export default class Form extends Block {
     this._checkFields(data);
 
     if (this._isTrueForm) {
-      this._http.post(uri, JSON.stringify(this._getSendPack(uri, data)))
+      transport.post(uri, JSON.stringify(this._getSendPack(uri, data)))
         .then(response => {
-
           return +response.status !== 200 ? response.json() : null;
-          // this._mainError();
         })
         .then(data => {
           const element = document.querySelector('p.errorText');
@@ -71,6 +67,7 @@ export default class Form extends Block {
 
           element.textContent = (status) ? '' : data.message;
           userService.setState(status);
+
           if (status) {
             backAction();
           }

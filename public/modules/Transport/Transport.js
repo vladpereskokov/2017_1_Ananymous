@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-export default class Transport {
+class Transport {
   constructor() {
     if (Transport.__instance) {
       return Transport.__instance;
@@ -42,7 +42,7 @@ export default class Transport {
     return this._sender(uri, 'GET');
   }
 
-  post(uri, data = {}) {
+  post(uri, data = null) {
     return this._sender(uri, 'POST', data);
   }
 
@@ -65,3 +65,8 @@ export default class Transport {
     });
   }
 }
+
+const transport = new Transport();
+transport._baseUrl = 'https://ananymous.herokuapp.com/api';
+
+export default transport;
