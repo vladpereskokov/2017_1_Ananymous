@@ -62,7 +62,7 @@ export default class Form extends Block {
           return +response.status !== 200 ? response.json() : null;
         })
         .then(data => {
-          const element = document.querySelector('p.errorText');
+          const element = this._find('p');
           const status = data == null;
 
           element.textContent = (status) ? '' : data.message;
@@ -93,7 +93,7 @@ export default class Form extends Block {
     return {
       'username': data.email,
       'password': data.password1
-    }
+    };
   }
 
   _signUpPack(data) {
@@ -101,7 +101,7 @@ export default class Form extends Block {
       'login': data.login,
       'email': data.email,
       'password': data.password1
-    }
+    };
   }
 
   _checkFields(data) {
