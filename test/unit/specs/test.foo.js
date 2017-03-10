@@ -11,8 +11,8 @@ describe('Api tests', () => {
 
   it('Регистрация', (done) => {
     transport.post('/signup', JSON.stringify({
-      'login': 'pazan1',
-      'email': 'robiqt112@mail.ru',
+      'login': 'pazan228',
+      'email': 'robiqt228@mail.ru',
       'password': 'qwertyqwerty'
     }))
       .then(response => {
@@ -23,9 +23,17 @@ describe('Api tests', () => {
 
   it('Вход', (done) => {
     transport.post('/signin', JSON.stringify({
-      'username': 'robiqt112@mail.ru',
+      'username': 'robiqt228@mail.ru',
       'password': 'qwertyqwerty'
     }))
+      .then(response => {
+        expect(response.status).toEqual(200);
+        done(true);
+      });
+  });
+
+  it('Юзеры', (done) => {
+    transport.get('/users')
       .then(response => {
         expect(response.status).toEqual(200);
         done(true);

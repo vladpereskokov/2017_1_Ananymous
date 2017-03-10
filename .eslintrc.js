@@ -29,6 +29,6 @@ module.exports = {
     "no-unused-vars": 0,
     "quote-props": 0,
     "arrow-body-style": 0,
-    "padded-blocks": 0,
+    "padded-blocks": 0
   }
 };

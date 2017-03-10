@@ -37,7 +37,7 @@ class Main extends View {
   }
 
   _postRequestLogout() {
-    transport.post('/logout')
+    transport.post('/logout', JSON.stringify({ 'name': 'top' }))
       .then(response => {
         if (+response.status === 200) {
           userService.setState(false);

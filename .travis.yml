@@ -18,4 +18,5 @@ deploy:
 install:
   - npm install
   - npm run eslint
+  - npm run test
   - npm run webpack
