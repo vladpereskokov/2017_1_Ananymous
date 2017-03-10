@@ -11,8 +11,7 @@ class Main extends View {
   }
 
   init(options = {}) {
-    this._makeMain();
-    document.body.appendChild(this._el);
+    this._getRequestIsLogin();
   }
 
   _makeMain(state = false) {
@@ -48,10 +47,33 @@ class Main extends View {
       });
   }
 
+  _getRequestIsLogin() {
+    transport.get('/cur-user')
+      .then(response => {
+        if (+response.status === 200) {
+          userService.setState(true);
+        }
+        const state = userService.getState();
+
+        this._makeMain(state);
+
+        document.body.appendChild(this._el);
+
+        if (state) {
+          this._logoutButton();
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   _logoutButton() {
     const button = this._findLogoutButton();
-    button.addEventListener('click', this.logout.bind(this));
-    button.style.display = 'block';
+    if (button) {
+      button.addEventListener('click', this.logout.bind(this));
+      button.style.display = 'block';
+    }
   }
 
   _findLogoutButton() {
