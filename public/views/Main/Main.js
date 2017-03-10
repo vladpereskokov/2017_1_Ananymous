@@ -30,7 +30,7 @@ class Main extends View {
     const state = userService.getState();
 
     if (state) {
-      // this._postRequestLogout();
+      this._postRequestLogout();
       userService.setState(false);
       this.show();
     }

@@ -1,4 +1,4 @@
-import 'whatwg-fetch';
+import fetch from 'isomorphic-fetch';
 
 class Transport {
   constructor() {
@@ -42,7 +42,7 @@ class Transport {
     return this._sender(uri, 'GET');
   }
 
-  post(uri, data = null) {
+  post(uri, data = {}) {
     return this._sender(uri, 'POST', data);
   }
 
