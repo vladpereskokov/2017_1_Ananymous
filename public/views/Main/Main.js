@@ -1,5 +1,4 @@
 import View from '../../modules/View/View';
-import transport from '../../modules/Transport/Transport';
 import userService from '../../services/UserService/UserService';
 
 import './Main.scss';
@@ -11,11 +10,20 @@ class Main extends View {
   }
 
   init(options = {}) {
-    this._getRequestIsLogin();
+    userService.isLogin()
+      .then(response => {
+        if (+response.status === 200) {
+          userService.setState(true);
+        }
+
+        this.show();
+      });
   }
 
-  _makeMain(state = false) {
+  _makeMain(state) {
     this._el.innerHTML = template(this._changeForm(state));
+    document.body.appendChild(this._el);
+
     if (state) {
       this._logoutButton();
     }
@@ -29,47 +37,17 @@ class Main extends View {
     const state = userService.getState();
 
     if (state) {
-      this._postRequestLogout();
-      userService.setState(false);
-      this.show();
+      userService.logout()
+        .then(state => {
+          userService.setState(state);
+          this.show();
+        });
     }
-  }
-
-  _postRequestLogout() {
-    transport.post('/logout', JSON.stringify({ 'name': 'top' }))
-      .then(response => {
-        if (+response.status === 200) {
-          userService.setState(false);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  _getRequestIsLogin() {
-    transport.get('/cur-user')
-      .then(response => {
-        if (+response.status === 200) {
-          userService.setState(true);
-        }
-        const state = userService.getState();
-
-        this._makeMain(state);
-
-        document.body.appendChild(this._el);
-
-        if (state) {
-          this._logoutButton();
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
   }
 
   _logoutButton() {
     const button = this._findLogoutButton();
+
     if (button) {
       button.addEventListener('click', this.logout.bind(this));
       button.style.display = 'block';
