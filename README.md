@@ -4,3 +4,5 @@
 #
 
 [Heroku test](https://hunt-develop.herokuapp.com "Test here")
+
+[Игра в итоге будет здесь](https://www.soul-hunting.ru "Game is here")
