@@ -16,8 +16,8 @@ class Game extends View {
       id: 'trailer'
     });
 
-    block._getElement().innerHTML = "<video id=\"video\" width=\"100%\" height=\"auto\" autoplay=\"autoplay\" " +
-      "loop=\"loop\" preload=\"auto\"><source src=\"/views/Game/background.mp4\"></source></video>";
+    block._getElement().innerHTML = '<video id=\"video\" width=\"100%\" height=\"auto\" autoplay=\"autoplay\" ' +
+      'loop=\"loop\" preload=\"auto\"><source src=\"/views/Game/background.mp4\"></source></video>';
     document.body.appendChild(block.render());
   }
 

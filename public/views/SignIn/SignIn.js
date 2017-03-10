@@ -17,22 +17,22 @@ export default class SignIn extends View {
       data: {
         title: 'Sign In',
         fields: [{
-            name: 'email',
-            type: 'email',
-            placeholder: 'Email address'
-          }, {
-            name: 'password1',
-            type: 'password',
-            placeholder: 'Password'
-          }
+          name: 'email',
+          type: 'email',
+          placeholder: 'Email address'
+        }, {
+          name: 'password1',
+          type: 'password',
+          placeholder: 'Password'
+        }
         ],
         controls: [{
-            text: 'Sign In',
-            action: '/signin'
-          }, {
-            text: 'Back',
-            action: this.showMain.bind(this)
-          }]
+          text: 'Sign In',
+          action: '/signin'
+        }, {
+          text: 'Back',
+          action: this.showMain.bind(this)
+        }]
       }
     });
   }

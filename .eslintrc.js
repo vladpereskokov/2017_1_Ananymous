@@ -27,6 +27,8 @@ module.exports = {
     "no-extra-bind": 0,
     "no-useless-constructor": 0,
     "no-unused-vars": 0,
-    "quote-props": 0
+    "quote-props": 0,
+    "arrow-body-style": 0,
+    "padded-blocks": 0,
   }
 };

@@ -17,30 +17,30 @@ class SignUp extends View {
       data: {
         title: 'Sign Up',
         fields: [{
-            name: 'login',
-            type: 'text',
-            placeholder: 'Login'
-          }, {
-            name: 'email',
-            type: 'email',
-            placeholder: 'Email address'
-          }, {
-            name: 'password1',
-            type: 'password',
-            placeholder: 'Password'
-          }, {
-            name: 'password2',
-            type: 'password',
-            placeholder: 'Repeat Password'
-          }
+          name: 'login',
+          type: 'text',
+          placeholder: 'Login'
+        }, {
+          name: 'email',
+          type: 'email',
+          placeholder: 'Email address'
+        }, {
+          name: 'password1',
+          type: 'password',
+          placeholder: 'Password'
+        }, {
+          name: 'password2',
+          type: 'password',
+          placeholder: 'Repeat Password'
+        }
         ],
         controls: [{
-            text: 'Sign Up',
-            action: '/signup'
-          }, {
-            text: 'Back',
-            action: this.showMain.bind(this)
-          }]
+          text: 'Sign Up',
+          action: '/signup'
+        }, {
+          text: 'Back',
+          action: this.showMain.bind(this)
+        }]
       }
     });
   }

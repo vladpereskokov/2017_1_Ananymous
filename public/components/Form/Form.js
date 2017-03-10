@@ -8,7 +8,7 @@ import template from './Form.tmpl.xml';
 
 export default class Form extends Block {
   constructor(elements = {}) {
-    super('div', {class: 'form z-depth-2'});
+    super('div', { class: 'form z-depth-2' });
 
     this._isTrueForm = true;
 
@@ -277,5 +277,3 @@ export default class Form extends Block {
     return fields;
   }
 }
-
-export let a = 3;
