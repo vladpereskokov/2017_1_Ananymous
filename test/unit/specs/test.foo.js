@@ -9,14 +9,14 @@ describe('Api tests', () => {
       });
   });
 
-  it('Регистрация', (done) => {
+  it('Конфликт при регистрации', (done) => {
     transport.post('/signup', JSON.stringify({
       'login': 'passan228',
       'email': 'robiqt2281@mail.ru',
       'password': 'qwertyqwerty'
     }))
       .then(response => {
-        expect(response.status).toEqual(200);
+        expect(response.status).toEqual(409);
         done(true);
       });
   });
