@@ -31,12 +31,4 @@ describe('Api tests', () => {
         done(true);
       });
   });
-
-  it('Норм logout', (done) => {
-    transport.post('/logout')
-      .then(response => {
-        expect(response.status).toEqual(200);
-        done(true);
-      });
-  });
 });
