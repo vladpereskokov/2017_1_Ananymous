@@ -57,6 +57,7 @@ export default class Form extends Block {
     this._checkFields(data);
 
     if (this._isTrueForm) {
+
       transport.post(uri, JSON.stringify(this._getSendPack(uri, data)))
         .then(response => {
           return +response.status !== 200 ? response.json() : null;
@@ -73,16 +74,6 @@ export default class Form extends Block {
           }
         });
     }
-  }
-
-  _mainError(status, response) {
-    const element = document.querySelector('p.errorText');
-    const statusCheck = status === 200;
-
-    console.log(response);
-
-    element.textContent = (statusCheck) ? '' : response.message;
-    userService.setState(status);
   }
 
   _getSendPack(uri, data) {

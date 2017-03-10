@@ -40,9 +40,7 @@ class UserService {
   logout() {
     return transport.post('/logout', JSON.stringify({ 'name': 'top' }))
       .then(response => {
-        if (+response.status === 200) {
-          this.setState(false);
-        }
+        return +response.status === 200;
       });
   }
 }
