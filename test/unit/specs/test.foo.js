@@ -11,8 +11,8 @@ describe('Api tests', () => {
 
   it('Регистрация', (done) => {
     transport.post('/signup', JSON.stringify({
-      'login': 'pazan228',
-      'email': 'robiqt228@mail.ru',
+      'login': 'passan228',
+      'email': 'robiqt2281@mail.ru',
       'password': 'qwertyqwerty'
     }))
       .then(response => {
@@ -23,7 +23,7 @@ describe('Api tests', () => {
 
   it('Вход', (done) => {
     transport.post('/signin', JSON.stringify({
-      'username': 'robiqt228@mail.ru',
+      'username': 'robiqt2281@mail.ru',
       'password': 'qwertyqwerty'
     }))
       .then(response => {
