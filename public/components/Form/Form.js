@@ -13,8 +13,6 @@ export default class Form extends Block {
       class: 'form z-depth-2'
     });
 
-    this._isTrueForm = true;
-
     this._createForm(elements.data);
   }
 
@@ -36,7 +34,7 @@ export default class Form extends Block {
 
     this._getKeys(form).forEach(input => {
       const element = form[input];
-      if (element.type) {
+      if (element.name) {
         this._setFocus(element);
       }
     });
@@ -44,34 +42,50 @@ export default class Form extends Block {
 
   _setFocus(input) {
     input.onblur = (() => {
-      const type = input.type;
+      const name = input.name;
       const value = input.value;
-      const fill = formService.checkFill(value, type).response;
+      const fill = formService.checkFill(value, this._getReadableNameByName(name)).response;
 
       if (fill) {
         this._addError(input, fill);
       } else {
-        const check = this._checkByType(type, value).response;
+        const check = this._checkByName(name, value).response;
+
         if (check) {
-          alert(check);
           this._addError(input, check);
           return;
         }
 
+        if (name === 'password1') {
+          const secondPassword = this._getNextPassword(input);
+
+          if (secondPassword.classList.contains('error') &&
+            formService.checkPasswords(input, secondPassword).response) {
+            this._defaultError(secondPassword);
+          }
+        }
+
         if (input.name === 'password2') {
-          const passwordFirst = this._getPreviousPassword(input);
-          const compare = formService.checkPasswords(value, passwordFirst).response;
+          const firstPassword = this._getPreviousPassword(input).value;
+          const compare = formService.checkPasswords(value, firstPassword).response;
 
           if (compare) {
             this._addError(input, compare);
+            return;
           }
         }
+
+        this._addOK(input);
       }
     });
 
     input.onfocus = (() => {
       this._defaultError(input);
     });
+  }
+
+  _addOK(input) {
+    input.classList.add('ok');
   }
 
   _addError(input, errorText) {
@@ -85,10 +99,11 @@ export default class Form extends Block {
     const label = input.nextElementSibling;
 
     input.classList.remove('error');
+    input.classList.remove('ok');
     label.innerText = '';
   }
 
-  _checkByType(type, value) {
+  _checkByName(type, value) {
     switch (type) {
       case 'login':
         return formService.checkLogin(value);
@@ -99,6 +114,21 @@ export default class Form extends Block {
         return formService.checkPassword(value);
       default:
         return '';
+    }
+  }
+
+  _getReadableNameByName(type) {
+    switch (type) {
+      case 'login':
+        return 'логин';
+      case 'email':
+        return 'e-mail';
+      case 'password1':
+      case 'password2':
+        return 'пароль';
+      default:
+        return '';
+
     }
   }
 
@@ -126,30 +156,24 @@ export default class Form extends Block {
 
   _submit(event, uri, backAction) {
     event.preventDefault();
-    this._isTrueForm = true;
 
     const data = this._getData();
-    // this._checkFields(data);
-    // service check data
 
-    if (this._isTrueForm) {
+    transport.post(uri, JSON.stringify(this._getSendPack(uri, data)))
+      .then(response => {
+        return +response.status !== 200 ? response.json() : null;
+      })
+      .then(data => {
+        const element = this._find('p');
+        const status = data == null;
 
-      transport.post(uri, JSON.stringify(this._getSendPack(uri, data)))
-        .then(response => {
-          return +response.status !== 200 ? response.json() : null;
-        })
-        .then(data => {
-          const element = this._find('p');
-          const status = data == null;
+        element.textContent = (status) ? '' : data.message;
+        userService.setState(status);
 
-          element.textContent = (status) ? '' : data.message;
-          userService.setState(status);
-
-          if (status) {
-            backAction();
-          }
-        });
-    }
+        if (status) {
+          backAction();
+        }
+      });
   }
 
   _getSendPack(uri, data) {
@@ -187,5 +211,9 @@ export default class Form extends Block {
 
   _getPreviousPassword(input) {
     return input.previousElementSibling.previousElementSibling;
+  }
+
+  _getNextPassword(input) {
+    return input.nextElementSibling.nextElementSibling;
   }
 }
