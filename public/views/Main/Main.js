@@ -48,11 +48,11 @@ class Main extends View {
   _getUnLoggedForm() {
     return {
       buttons: [{
-        text: 'Sign Up',
-        action: '/signup'
-      }, {
         text: 'Sign In',
         action: '/signin'
+      }, {
+        text: 'Sign Up',
+        action: '/signup'
       }]
     };
   }

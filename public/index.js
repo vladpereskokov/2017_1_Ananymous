@@ -5,7 +5,7 @@ import Scoreboard from './views/Scoreboard/Scoreboard';
 import Game from './views/Game/Game';
 import Main from './views/Main/Main';
 
-import './css/reset.scss';
+import './static/css/reset.scss';
 
 const router = new Router();
 

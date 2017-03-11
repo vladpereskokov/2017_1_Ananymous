@@ -1,22 +1,40 @@
 .main {
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  font-size: 16px;
+  margin: 0;
+  height: 100%;
+  background-image: url(../../static/images/background.png);
+  background-size: cover;
 }
 
-.main:focus {
+.main__header {
+  max-width: 100px;
+  max-height: 100px;
+  font-family: "Astakhov Skin";
+  font-size: 50pt;
+  color: white;
+  cursor: pointer;
+}
+
+.main__form {
+  max-width: 300px;
+  max-height: 200px;
+}
+
+.main__form:focus {
   z-index: 2;
 }
 
-.main input {
+.main__form input {
   margin-bottom: 5px;
 }
 
-.logout {
+.main__form__button {
+  font-family: "Micra";
+  font-size: 30pt;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.main__form__button-logout {
   display: none;
 }
