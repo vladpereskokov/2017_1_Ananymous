@@ -26,42 +26,40 @@ class FormService {
   }
 
   checkFill(field, type) {
-    if (isFill(field)) {
-      return {
-        response: `Заполните поле ${type}!`
-      };
-    }
+    return {
+      response: this._getStringByCondition(isFill(field), `Заполните поле ${type}!`)
+    };
   }
 
   checkLogin(login) {
-    if (!isLogin(login)) {
-      return {
-        response: 'Введите корректный логин!'
-      }
+    return {
+      response: this._getStringByCondition(!isLogin(login), 'Введите корректный логин!')
     }
   }
 
   checkEmail(email) {
-    if (!isEmail(email)) {
-      return {
-        response: 'Введите корректный e-mail!'
-      }
+    return {
+      response: this._getStringByCondition(!isEmail(email), 'Введите корректный e-mail!')
     }
   }
 
   checkPassword(password) {
-    if (!isPassword(password)) {
-      return {
-        response: 'Введите корректный пароль!'
-      }
+    return {
+      response: this._getStringByCondition(!isPassword(password), 'Введите корректный пароль!')
     }
   }
 
   checkPasswords(lhs, rhs) {
-    if (!isCompare(lhs, rhs)) {
-      return {
-        response: 'Пароли не совпадают!'
-      }
+    return {
+      response: this._getStringByCondition(!isCompare(lhs, rhs), 'Пароли не совпадают!')
     }
   }
+
+  _getStringByCondition(condition, string) {
+    return condition ? string : '';
+  }
 }
+
+const formService = new FormService();
+
+export default formService;
