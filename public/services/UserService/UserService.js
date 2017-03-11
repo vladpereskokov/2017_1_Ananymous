@@ -1,4 +1,4 @@
-import User from '../../models/User/User';
+import transport from '../../modules/Transport/Transport';
 
 class UserService {
   constructor() {
@@ -6,14 +6,18 @@ class UserService {
       return UserService.__instance;
     }
 
-    this._user = new User();
+    this._login = null;
+    this._email = null;
     this._state = false;
 
     UserService.__instance = this;
   }
 
   getData() {
-    return this._user.getUser;
+    return {
+      login: this._login,
+      email: this._email
+    };
   }
 
   getState() {
@@ -21,11 +25,23 @@ class UserService {
   }
 
   setData(data) {
-    this._user.setUser(data);
+    this._login = data.login;
+    this._email = data.email;
   }
 
   setState(state) {
     this._state = state;
+  }
+
+  isLogin() {
+    return transport.get('/cur-user');
+  }
+
+  logout() {
+    return transport.post('/logout', JSON.stringify({ 'name': 'top' }))
+      .then(response => {
+        return +response.status === 200;
+      });
   }
 }
 

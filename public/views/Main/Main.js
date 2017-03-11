@@ -1,5 +1,4 @@
 import View from '../../modules/View/View';
-import transport from '../../modules/Transport/Transport';
 import userService from '../../services/UserService/UserService';
 
 import './Main.scss';
@@ -10,13 +9,10 @@ class Main extends View {
     super();
   }
 
-  init(options = {}) {
-    this._makeMain();
-    document.body.appendChild(this._el);
-  }
-
-  _makeMain(state = false) {
+  _makeMain(state) {
     this._el.innerHTML = template(this._changeForm(state));
+    document.body.appendChild(this._el);
+
     if (state) {
       this._logoutButton();
     }
@@ -27,31 +23,22 @@ class Main extends View {
   }
 
   logout() {
-    const state = userService.getState();
-
-    if (state) {
-      this._postRequestLogout();
-      userService.setState(false);
-      this.show();
+    if (userService.getState()) {
+      userService.logout()
+        .then(state => {
+          userService.setState(!state);
+          this.resume();
+        });
     }
-  }
-
-  _postRequestLogout() {
-    transport.post('/logout', JSON.stringify({ 'name': 'top' }))
-      .then(response => {
-        if (+response.status === 200) {
-          userService.setState(false);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
   }
 
   _logoutButton() {
     const button = this._findLogoutButton();
-    button.addEventListener('click', this.logout.bind(this));
-    button.style.display = 'block';
+
+    if (button) {
+      button.addEventListener('click', this.logout.bind(this));
+      button.style.display = 'block';
+    }
   }
 
   _findLogoutButton() {
@@ -82,13 +69,23 @@ class Main extends View {
     };
   }
 
-  show() {
+  _createMain() {
     const state = userService.getState();
 
     this._makeMain(state);
-    this._el.style.display = 'block';
+    this.show();
   }
 
+  resume() {
+    userService.isLogin()
+      .then(response => {
+        if (+response.status === 200) {
+          userService.setState(true);
+        }
+
+        this._createMain();
+      });
+  }
 }
 
 export default Main;
