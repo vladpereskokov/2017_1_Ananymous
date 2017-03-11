@@ -1,8 +1,5 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
   <div class="main">
-    <div class="main__header">
-      adsf
-    </div>
     <div class="main__form">
       <fest:for iterate="data.buttons" index="i" value="button">
         <a>

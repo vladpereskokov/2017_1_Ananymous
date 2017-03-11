@@ -5,18 +5,15 @@
   background-size: cover;
 }
 
-.main__header {
-  max-width: 100px;
-  max-height: 100px;
-  font-family: "Astakhov Skin";
-  font-size: 50pt;
-  color: white;
-  cursor: pointer;
-}
-
 .main__form {
-  max-width: 300px;
-  max-height: 200px;
+  position: absolute;
+  max-width: 40%;
+  max-height: 30%;
+  left: 50%;
+  top: 50%;
+  margin-left: -20%;
+  margin-top: -15%;
+  text-align: center;
 }
 
 .main__form:focus {
@@ -27,12 +24,15 @@
   margin-bottom: 5px;
 }
 
+.main__form p {
+  max-width: 50%;
+}
+
 .main__form__button {
   font-family: "Micra";
   font-size: 30pt;
   color: white;
   cursor: pointer;
-  margin-top: 10px;
 }
 
 .main__form__button-logout {
