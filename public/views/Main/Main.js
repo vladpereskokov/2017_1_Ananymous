@@ -38,7 +38,6 @@ class Main extends View {
 
   _logoutButton() {
     const button = this._findLogoutButton();
-    console.log(button);
 
     if (button) {
       button.addEventListener('click', this.logout.bind(this));

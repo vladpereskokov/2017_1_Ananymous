@@ -20,7 +20,7 @@ module.exports = {
     "import/no-unresolved": [2, {"commonjs": true, "amd": true}],
     "prefer-template": "error",
     "object-shorthand": "error",
-    "indent": ["error", 2, { "FunctionDeclaration": {"body": 1, "parameters": 2} }],
+    "indent": ["error", 2, { "FunctionDeclaration": {"body": 1, "parameters": 2}, "SwitchCase": 1 }],
     "no-plusplus": 0,
     "no-unused-expressions": ["error", { "allowShortCircuit": true }],
     "no-shadow": 0,
@@ -29,6 +29,6 @@ module.exports = {
     "no-unused-vars": 0,
     "quote-props": 0,
     "arrow-body-style": 0,
-    "padded-blocks": 0
+    "padded-blocks": 0,
   }
 };

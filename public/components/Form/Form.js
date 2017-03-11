@@ -159,7 +159,7 @@ export default class Form extends Block {
 
     const data = this._getData();
 
-    transport.post(uri, JSON.stringify(this._getSendPack(uri, data)))
+    formService.sendRequest(uri, this._getSendPack(uri, data))
       .then(response => {
         return +response.status !== 200 ? response.json() : null;
       })

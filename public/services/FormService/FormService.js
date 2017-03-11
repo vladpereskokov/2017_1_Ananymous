@@ -14,8 +14,8 @@ class FormService {
     FormService.__instance = this;
   }
 
-  sendRequest(uri) {
-    return transport(uri, JSON.stringify(this._data));
+  sendRequest(uri, data) {
+    return transport.post(uri, JSON.stringify(data));
   }
 
   checkFill(field, type) {
@@ -27,29 +27,29 @@ class FormService {
   checkLogin(login) {
     return {
       response: this._getStringByCondition(!isLogin(login), 'Введите корректный логин!')
-    }
+    };
   }
 
   checkEmail(email) {
     return {
       response: this._getStringByCondition(!isEmail(email), 'Введите корректный e-mail!')
-    }
+    };
   }
 
   checkPassword(password) {
     return {
       response: this._getStringByCondition(isPassword(password), 'Введите корректный пароль!')
-    }
+    };
   }
 
   checkPasswords(lhs, rhs) {
     return {
       response: this._getStringByCondition(!isCompare(lhs, rhs), 'Пароли не совпадают!')
-    }
+    };
   }
 
   isFindField(value, type) {
-    let form = {
+    const form = {
       'login': `test${Math.floor(Math.random() * (1000 - 1)) + 1}`,
       'email': `qweqasdfw${Math.floor(Math.random() * (1000 - 1)) + 1}@mail.rq`,
       'password': 'qwertyqwerty'
