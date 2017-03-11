@@ -10,14 +10,7 @@ class Main extends View {
   }
 
   init(options = {}) {
-    userService.isLogin()
-      .then(response => {
-        if (+response.status === 200) {
-          userService.setState(true);
-        }
 
-        this.show();
-      });
   }
 
   _makeMain(state) {
@@ -34,19 +27,18 @@ class Main extends View {
   }
 
   logout() {
-    const state = userService.getState();
-
-    if (state) {
+    if (userService.getState()) {
       userService.logout()
         .then(state => {
-          userService.setState(state);
-          this.show();
+          userService.setState(!state);
+          this.resume();
         });
     }
   }
 
   _logoutButton() {
     const button = this._findLogoutButton();
+    console.log(button);
 
     if (button) {
       button.addEventListener('click', this.logout.bind(this));
@@ -82,13 +74,23 @@ class Main extends View {
     };
   }
 
-  show() {
+  _create() {
     const state = userService.getState();
 
     this._makeMain(state);
-    this._el.style.display = 'block';
+    this.show();
   }
 
+  resume() {
+    userService.isLogin()
+      .then(response => {
+        if (+response.status === 200) {
+          userService.setState(true);
+        }
+
+        this._create();
+      });
+  }
 }
 
 export default Main;

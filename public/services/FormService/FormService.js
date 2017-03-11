@@ -11,13 +11,6 @@ class FormService {
       return FormService.__instance;
     }
 
-    this._login = '';
-    this._email = '';
-    this._password = '';
-    this._passwordRepeat = '';
-    this._data = {};
-    this._response = {};
-
     FormService.__instance = this;
   }
 
