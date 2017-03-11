@@ -9,10 +9,6 @@ class Main extends View {
     super();
   }
 
-  init(options = {}) {
-
-  }
-
   _makeMain(state) {
     this._el.innerHTML = template(this._changeForm(state));
     document.body.appendChild(this._el);
@@ -73,7 +69,7 @@ class Main extends View {
     };
   }
 
-  _create() {
+  _createMain() {
     const state = userService.getState();
 
     this._makeMain(state);
@@ -87,7 +83,7 @@ class Main extends View {
           userService.setState(true);
         }
 
-        this._create();
+        this._createMain();
       });
   }
 }
