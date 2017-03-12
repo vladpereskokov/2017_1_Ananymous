@@ -18,8 +18,11 @@ body, html {
     display: flex;
   }
 
-  &__form {
+  &__wrapper {
     margin: auto;
+  }
+
+  &__form {
 
     &:focus {
       z-index: 2;
