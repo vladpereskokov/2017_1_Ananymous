@@ -12,6 +12,7 @@ class Main extends View {
   _makeMain(state) {
     this._el.innerHTML = template(this._changeForm(state));
     document.body.appendChild(this._el);
+    this._el.style.height = '100%';
 
     if (state) {
       this._logoutButton();

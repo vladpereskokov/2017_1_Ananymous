@@ -1,19 +1,16 @@
+body, html {
+  height: 100%;
+}
+
 .main {
-  margin: 0;
   height: 100%;
   background-image: url(../../static/images/background.png);
   background-size: cover;
+  display: flex;
 }
 
 .main__form {
-  position: absolute;
-  max-width: 40%;
-  max-height: 30%;
-  left: 50%;
-  top: 50%;
-  margin-left: -20%;
-  margin-top: -15%;
-  text-align: center;
+  margin: auto;
 }
 
 .main__form:focus {
@@ -21,11 +18,11 @@
 }
 
 .main__form input {
-  margin-bottom: 5px;
+
 }
 
 .main__form p {
-  max-width: 50%;
+
 }
 
 .main__form__button {
