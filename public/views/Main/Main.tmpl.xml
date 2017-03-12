@@ -1,5 +1,8 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
   <div class="main">
+    <div class="main__header">
+      SOUL HUNTING
+    </div>
     <div class="main__form">
       <fest:for iterate="data.buttons" index="i" value="button">
         <a>
@@ -12,7 +15,7 @@
             </fest:attribute>
           </fest:attributes>
           <fest:value>button.text</fest:value>
-        </a><br/>
+        </a>
       </fest:for>
       <a>
         <fest:attributes>

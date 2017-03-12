@@ -7,31 +7,40 @@ body, html {
   background-image: url(../../static/images/background.png);
   background-size: cover;
   display: flex;
-}
 
-.main__form {
-  margin: auto;
-}
+  &__header {
+    font-family: "Astakhov Skin";
+    font-size: 56pt;
+    color: white;
+    cursor: pointer;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+  }
 
-.main__form:focus {
-  z-index: 2;
-}
+  &__form {
+    margin: auto;
 
-.main__form input {
+    &:focus {
+      z-index: 2;
+    }
 
-}
+    &__button {
+      font-family: "Micra";
+      font-size: 30pt;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 40px;
+      display: block;
 
-.main__form p {
+      &:hover {
+        font-size: 33pt;
+        text-shadow: 0 0 10px #c00;
+      }
 
-}
-
-.main__form__button {
-  font-family: "Micra";
-  font-size: 30pt;
-  color: white;
-  cursor: pointer;
-}
-
-.main__form__button-logout {
-  display: none;
+      &-logout {
+        display: none;
+      }
+    }
+  }
 }
