@@ -6,17 +6,19 @@
       </div>
       <div class="main__form">
         <fest:for iterate="data.buttons" index="i" value="button">
-          <a>
-            <fest:attributes>
-              <fest:attribute name="class">
-                main__form__button
-              </fest:attribute>
-              <fest:attribute name="data-nav">
-                <fest:value>button.action</fest:value>
-              </fest:attribute>
-            </fest:attributes>
-            <fest:value>button.text</fest:value>
-          </a>
+          <div class="main__form-wrapper">
+            <a>
+              <fest:attributes>
+                <fest:attribute name="class">
+                  main__form__button
+                </fest:attribute>
+                <fest:attribute name="data-nav">
+                  <fest:value>button.action</fest:value>
+                </fest:attribute>
+              </fest:attributes>
+              <fest:value>button.text</fest:value>
+            </a>
+          </div>
         </fest:for>
         <a>
           <fest:attributes>
