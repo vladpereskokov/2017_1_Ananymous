@@ -7,7 +7,7 @@ class Game extends Block {
     super();
   }
 
-  init(options = {}) {
+  init() {
 
     const block = new Block('div', {
       class: 'is_overlay',

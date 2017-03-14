@@ -76,9 +76,7 @@ export default class Block {
     return this._getElement().querySelector(tag);
   }
 
-  init(options = {}) {
-
-  }
+  init() {}
 
   pause() {
     this.hide();

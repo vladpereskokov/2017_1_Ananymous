@@ -7,10 +7,13 @@ export default class SignIn extends Block {
     super();
   }
 
-  init(options = {}) {
+  init() {
     const form = this._createForm();
-    form.renderTo(this._el);
-    document.body.appendChild(this._el);
+    form.renderTo(this._getElement());
+  }
+
+  getForm() {
+    return this._getElement();
   }
 
   _createForm() {

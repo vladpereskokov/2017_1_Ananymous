@@ -47,6 +47,10 @@ class Main extends Block {
     return (document.getElementsByName('logout'))[0];
   }
 
+  _getSignInForm() {
+    return
+  }
+
   _getUnLoggedForm() {
     return {
       buttons: [{

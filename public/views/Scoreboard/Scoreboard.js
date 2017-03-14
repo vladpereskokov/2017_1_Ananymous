@@ -18,7 +18,7 @@ class Scoreboard extends Block {
     super();
   }
 
-  init(options = {}) {
+  init() {
     table.renderTo(this._getElement());
     document.body.appendChild(this._getElement());
     document.body.querySelector('.scoreboard').appendChild(this._backButton().render());

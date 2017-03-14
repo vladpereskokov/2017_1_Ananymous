@@ -7,7 +7,7 @@ class SignUp extends Block {
     super();
   }
 
-  init(options = {}) {
+  init() {
     const form = this._createForm();
     form.renderTo(this._getElement());
     document.body.querySelector('div.wrapper__main__wrapper').appendChild(this._getElement());
