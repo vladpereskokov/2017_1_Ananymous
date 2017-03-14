@@ -1,6 +1,7 @@
 import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
-import View from '../../modules/View/View';
+import Block from "../../components/Block/Block";
+
 
 const table = new Table({
   head: ['Nickname', 'Score'],
@@ -12,14 +13,14 @@ const table = new Table({
   ]
 });
 
-class Scoreboard extends View {
+class Scoreboard extends Block {
   constructor() {
     super();
   }
 
   init(options = {}) {
-    table.renderTo(this._el);
-    document.body.appendChild(this._el);
+    table.renderTo(this._getElement());
+    document.body.appendChild(this._getElement());
     document.body.querySelector('.scoreboard').appendChild(this._backButton().render());
   }
 

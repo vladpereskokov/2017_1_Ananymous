@@ -1,5 +1,5 @@
 export default class Block {
-  constructor(name, attributes = {}) {
+  constructor(name = 'div', attributes = {}) {
     this._name = name;
     this._element = this._createDocumentElement(this._getNameElement());
     delete attributes.block;
@@ -33,9 +33,9 @@ export default class Block {
     element.appendChild(this.render());
   }
 
-  remove() {
-    document.querySelector(this._getNameElement()).remove();
-  }
+  // remove() {
+  //   document.querySelector(this._getNameElement()).remove();
+  // }
 
   search(block) {
     return this._getElement().querySelector(block);
@@ -78,5 +78,50 @@ export default class Block {
 
   _find(tag) {
     return this._getElement().querySelector(tag);
+  }
+
+  init(options = {}) {
+
+  }
+
+  pause() {
+    this.hide();
+  }
+
+  resume() {
+    this.show();
+  }
+
+  show() {
+    this._getElement().style.display = 'block';
+  }
+
+  hide() {
+    this._getElement().style.display = 'none';
+  }
+
+  appendTo(element) {
+    element.appendChild(this._getElement());
+  }
+
+  remove() {
+    this._getElement() && this._getElement().remove();
+  }
+
+  setElement(el) {
+    this._getElement() && this._getElement().remove();
+    this._element = el;
+  }
+
+  setRouter(router) {
+    this._router = router;
+  }
+
+  getRouter() {
+    return this._router;
+  }
+
+  toString() {
+    return this._getElement().outerHTML;
   }
 }

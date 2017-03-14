@@ -1,10 +1,8 @@
 import Block from '../../components/Block/Block';
-import Button from '../../components/Button/Button';
-import View from '../../modules/View/View';
 
 import './Game.scss';
 
-class Game extends View {
+class Game extends Block {
   constructor() {
     super();
   }

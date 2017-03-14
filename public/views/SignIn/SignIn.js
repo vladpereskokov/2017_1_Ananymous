@@ -1,7 +1,8 @@
 import Form from '../../components/Form/Form';
-import View from '../../modules/View/View';
+import Block from "../../components/Block/Block";
 
-export default class SignIn extends View {
+
+export default class SignIn extends Block {
   constructor() {
     super();
   }
@@ -31,13 +32,13 @@ export default class SignIn extends View {
           action: '/signin'
         }, {
           text: 'Back',
-          action: this.showMain.bind(this)
+          action: this.showRegister.bind(this)
         }]
       }
     });
   }
 
-  showMain() {
-    this.getRouter().go('/');
+  showRegister() {
+    this.getRouter().go('/signup');
   }
 }

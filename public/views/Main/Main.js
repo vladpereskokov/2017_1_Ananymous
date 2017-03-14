@@ -1,18 +1,18 @@
-import View from '../../modules/View/View';
+import Block from "../../components/Block/Block";
 import userService from '../../services/UserService/UserService';
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
 
-class Main extends View {
+class Main extends Block {
   constructor() {
     super();
   }
 
   _makeMain(state) {
-    this._el.innerHTML = template(this._changeForm(state));
-    document.body.appendChild(this._el);
-    this._el.style.height = '100%';
+    this._getElement().innerHTML = template(this._changeForm(state));
+    document.body.appendChild(this._getElement());
+    this._getElement().style.height = '100%';
 
     if (state) {
       this._logoutButton();
@@ -49,10 +49,7 @@ class Main extends View {
   _getUnLoggedForm() {
     return {
       buttons: [{
-        text: 'Sign In',
-        action: '/signin'
-      }, {
-        text: 'Sign Up',
+        text: 'Register',
         action: '/signup'
       }]
     };

@@ -9,6 +9,7 @@ body, html {
   display: flex;
 
   &__wrapper {
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -20,7 +21,7 @@ body, html {
     margin-bottom: 200px;
     margin-top: 50px;
     width: 100%;
-    display: flex;
+    display: block;
   }
 
   &__form {
@@ -31,6 +32,7 @@ body, html {
 
     &-wrapper {
       margin-bottom: 40px;
+      height: 40px;
     }
 
     &__button {

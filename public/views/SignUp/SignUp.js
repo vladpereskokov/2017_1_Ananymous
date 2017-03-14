@@ -1,15 +1,16 @@
 import Form from '../../components/Form/Form';
-import View from '../../modules/View/View';
+import Block from "../../components/Block/Block";
 
-class SignUp extends View {
+
+class SignUp extends Block {
   constructor() {
     super();
   }
 
   init(options = {}) {
     const form = this._createForm();
-    form.renderTo(this._el);
-    document.body.appendChild(this._el);
+    form.renderTo(this._getElement());
+    document.body.appendChild(this._getElement());
   }
 
   _createForm() {
