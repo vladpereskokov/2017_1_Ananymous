@@ -62,9 +62,9 @@ export default class Router {
       return;
     }
 
-    if (this.activeRoute) {
-      this.activeRoute.leave();
-    }
+    // if (this.activeRoute) {
+    //   this.activeRoute.leave();
+    // }
 
     this.activeRoute = route;
     this.activeRoute.navigate(pathname, state);

@@ -1,16 +1,16 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
-  <div class="main">
-    <div class="main__wrapper">
-      <div class="main__header">
+  <div class="wrapper__main">
+    <div class="wrapper__main__wrapper">
+      <div class="wrapper__main__header">
         SOUL HUNTING
       </div>
-      <div class="main__form">
+      <div class="wrapper__main__form">
         <fest:for iterate="data.buttons" index="i" value="button">
-          <div class="main__form-wrapper">
+          <div class="wrapper__main__form-wrapper">
             <a>
               <fest:attributes>
                 <fest:attribute name="class">
-                  main__form__button
+                  wrapper__main__form__button
                 </fest:attribute>
                 <fest:attribute name="data-nav">
                   <fest:value>button.action</fest:value>
@@ -23,7 +23,7 @@
         <a>
           <fest:attributes>
             <fest:attribute name="class">
-              main__form__button main__form__button-logout
+              wrapper__main__form__button wrapper__main__form__button-logout
             </fest:attribute>
             <fest:attribute name="name">
               logout

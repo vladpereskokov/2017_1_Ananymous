@@ -6,13 +6,14 @@ import template from './Main.tmpl.xml';
 
 class Main extends Block {
   constructor() {
-    super();
+    super('div', {
+      class: 'wrapper'
+    });
   }
 
   _makeMain(state) {
     this._getElement().innerHTML = template(this._changeForm(state));
     document.body.appendChild(this._getElement());
-    this._getElement().style.height = '100%';
 
     if (state) {
       this._logoutButton();
