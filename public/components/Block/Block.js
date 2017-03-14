@@ -33,10 +33,6 @@ export default class Block {
     element.appendChild(this.render());
   }
 
-  // remove() {
-  //   document.querySelector(this._getNameElement()).remove();
-  // }
-
   search(block) {
     return this._getElement().querySelector(block);
   }
