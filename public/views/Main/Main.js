@@ -1,5 +1,7 @@
 import Block from "../../components/Block/Block";
 import userService from '../../services/UserService/UserService';
+import viewService from '../../services/ViewService/ViewService';
+import preLoader from '../../Animations/PreLoader/PreLoader';
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
@@ -17,11 +19,32 @@ class Main extends Block {
 
     if (state) {
       this._logoutButton();
+    } else {
+      this._setEventUnLoggedForm();
     }
   }
 
   _changeForm(state) {
     return state ? this._getLoggedForm() : this._getUnLoggedForm();
+  }
+
+  _setEventUnLoggedForm() {
+    this._setEventButton(this._getRegisterButtons()[0], this._alert.bind(this));
+    this._setEventButton(this._getRegisterButtons()[1], viewService.go.bind(this, '/signup'));
+  }
+
+  _alert() {
+    this._getElement();
+  }
+
+  _setEventButton(findButton, onclickFunction) {
+    findButton.onclick = () => {
+      onclickFunction();
+    }
+  }
+
+  _getRegisterButtons() {
+    return document.getElementsByClassName('wrapper__main__form__button');
   }
 
   logout() {
@@ -47,15 +70,12 @@ class Main extends Block {
     return (document.getElementsByName('logout'))[0];
   }
 
-  _getSignInForm() {
-    return
-  }
-
   _getUnLoggedForm() {
     return {
       buttons: [{
-        text: 'Register',
-        action: '/signup'
+        text: 'Sign In'
+      }, {
+        text: 'Register'
       }]
     };
   }
@@ -87,8 +107,10 @@ class Main extends Block {
         }
 
         this._createMain();
+
       });
   }
+
 }
 
 export default Main;

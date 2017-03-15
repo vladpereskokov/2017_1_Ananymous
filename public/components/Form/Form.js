@@ -10,7 +10,7 @@ import template from './Form.tmpl.xml';
 export default class Form extends Block {
   constructor(elements = {}) {
     super('div', {
-      class: 'form z-depth-2'
+      class: 'form'
     });
 
     this._createForm(elements.data);
@@ -24,8 +24,12 @@ export default class Form extends Block {
       elements: elements.fields
     });
 
-    this._find('form').appendChild((this._submitButton(elements.controls[0], elements.controls[1].action).render()));
-    this.append(this._backButton(elements.controls[1].action).render());
+    const backButton = elements.controls[1];
+
+    this._find('form').appendChild((this._submitButton(elements.controls[0], backButton.action).render()));
+    if (backButton.text) {
+      this.append(this._backButton(elements.controls[1].action).render());
+    }
     this._inputsFocusEvent();
   }
 

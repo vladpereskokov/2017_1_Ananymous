@@ -9,15 +9,7 @@ export default class Route {
 
   navigate(pathname) {
     if (this.match(pathname)) {
-      if (!this._view) {
-        const view = new this.ViewType();
-
-        view.init();
-        view.setRouter(this.__router);
-
-        this._view = view;
-      }
-
+      this._createView();
       this._view.resume();
     }
   }
@@ -27,10 +19,26 @@ export default class Route {
   }
 
   setRouter(router) {
-    this.__router = router;
+    this._router = router;
   }
 
   match(pathname) {
     return isPath(pathname, this._pathname);
+  }
+
+  getView() {
+    this._createView();
+    return this._view;
+  }
+
+  _createView() {
+    if (!this._view) {
+      const view = new this.ViewType();
+
+      view.init();
+      view.setRouter(this._router);
+
+      this._view = view;
+    }
   }
 }

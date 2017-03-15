@@ -13,8 +13,8 @@ export default class Router {
     Router.__instance = this;
   }
 
-  use(pathname, view, options = {}) {
-    const route = new Route(pathname, view, options);
+  use(pathname, view) {
+    const route = new Route(pathname, view);
 
     route.setRouter(this);
     this.routes.push(route);
@@ -24,14 +24,14 @@ export default class Router {
 
   start() {
     window.onpopstate = (event => {
-      this.onroute(window.location.pathname);
+      this._onRoute(window.location.pathname);
     }).bind(this);
 
-    this.onroute(window.location.pathname);
+    this._onRoute(window.location.pathname);
   }
 
-  onroute(pathname) {
-    const route = this.routes.find(route => route.match(pathname));
+  _onRoute(pathname) {
+    const route = this.getRoute(pathname);
 
     if (!route) {
       return;
@@ -51,7 +51,7 @@ export default class Router {
     }
 
     this.history.pushState({}, '', pathname);
-    this.onroute(pathname);
+    this._onRoute(pathname);
   }
 
   setHistory(history) {
@@ -64,5 +64,9 @@ export default class Router {
 
   forward() {
     this.history.forward();
+  }
+
+  getRoute(pathname) {
+    return this.routes.find(route => route.match(pathname));
   }
 }

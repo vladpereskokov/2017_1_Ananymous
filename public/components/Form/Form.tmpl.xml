@@ -1,10 +1,28 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
-  <form name="{data.title}">
-    <h2 class="header"><fest:value>data.title</fest:value></h2>
-    <p class="errorText" name="mainError"></p>
-    <fest:for iterate="data.elements" index="i" value="input">
-      <input name="{input.name}" type="{input.type}" placeholder="{input.placeholder}"></input>
-      <label name="{input.name}" class="errorText"></label>
-    </fest:for>
-  </form>
+  <!--<form name="{data.title}">-->
+    <!--<h2 class="header">-->
+      <!--<fest:value>data.title</fest:value>-->
+    <!--</h2>-->
+    <!--<p class="errorText" name="mainError"></p>-->
+    <!--<fest:for iterate="data.elements" index="i" value="input">-->
+      <!--<div class="form__input">-->
+        <!--<input name="{input.name}" type="{input.type}" placeholder="{input.placeholder}"></input>-->
+        <!--<label name="{input.name}" class="errorText"></label>-->
+      <!--</div>-->
+    <!--</fest:for>-->
+  <!--</form>-->
+
+  <div style="display: block; height: 100%;">
+    <form class="form" name="{data.title}">
+      <ul>
+        <fest:for iterate="data.elements" index="i" value="input">
+        <li>
+          <label for="{input.name}"><fest:value>input.type</fest:value></label>
+          <input name="{input.name}" type="{input.type}" placeholder="{input.placeholder}" maxlength="100"/>
+          <span>Enter a valid email address</span>
+        </li>
+        </fest:for>
+      </ul>
+    </form>
+  </div>
 </fest:template>

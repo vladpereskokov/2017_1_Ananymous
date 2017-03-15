@@ -7,9 +7,11 @@ export default class SignIn extends Block {
     super();
   }
 
-  init() {
+  init(options = {}) {
     const form = this._createForm();
     form.renderTo(this._getElement());
+    document.body.appendChild(this._getElement());
+
   }
 
   getForm() {
@@ -35,13 +37,13 @@ export default class SignIn extends Block {
           action: '/signin'
         }, {
           text: 'Back',
-          action: this.showRegister.bind(this)
+          action: this.showMain.bind(this)
         }]
       }
     });
   }
 
-  showRegister() {
-    this.getRouter().go('/signup');
+  showMain() {
+    this.getRouter().go('/');
   }
 }
