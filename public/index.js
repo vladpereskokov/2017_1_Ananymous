@@ -12,7 +12,7 @@ const router = new Router();
 
 const eventListener = (event => {
   const element = event.target;
-  if ((element.tagName === 'a' || (element.getAttribute('data-nav') ))) {
+  if ((element.tagName === 'a' || (element.getAttribute('data-nav')))) {
     const url = element.getAttribute('data-nav') || element.getAttribute('href');
     if (element.target !== '_blank' && element.target !== '_self') {
       event.preventDefault();

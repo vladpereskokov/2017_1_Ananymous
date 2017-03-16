@@ -1,5 +1,5 @@
 import Form from '../../components/Form/Form';
-import Block from "../../components/Block/Block";
+import Block from '../../components/Block/Block';
 
 
 export default class SignIn extends Block {

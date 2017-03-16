@@ -30,5 +30,6 @@ module.exports = {
     "quote-props": 0,
     "arrow-body-style": 0,
     "padded-blocks": 0,
+    "operator-assignment": 0
   }
 };

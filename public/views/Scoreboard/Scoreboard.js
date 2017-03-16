@@ -1,6 +1,6 @@
 import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
-import Block from "../../components/Block/Block";
+import Block from '../../components/Block/Block';
 
 
 const table = new Table({

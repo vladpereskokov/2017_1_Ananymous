@@ -1,7 +1,6 @@
-import Block from "../../components/Block/Block";
+import Block from '../../components/Block/Block';
 import userService from '../../services/UserService/UserService';
 import viewService from '../../services/ViewService/ViewService';
-import preLoader from '../../animations/PreLoader/PreLoader';
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
@@ -40,7 +39,7 @@ class Main extends Block {
   _setEventButton(findButton, onclickFunction) {
     findButton.onclick = () => {
       onclickFunction();
-    }
+    };
   }
 
   _getRegisterButtons() {
