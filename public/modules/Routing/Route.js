@@ -15,7 +15,7 @@ export default class Route {
   }
 
   leave() {
-    this._view && this._view.pause();
+    // this._view && this._view.pause();
   }
 
   setRouter(router) {

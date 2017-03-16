@@ -2,7 +2,6 @@
   <div class="form__wrapper-elements">
     <div class="form__header">
       <span>Soul Hunting</span>
-      <button class="form__header-close"></button>
     </div>
     <form class="form" name="{data.title}">
       <ul>

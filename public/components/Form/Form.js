@@ -33,7 +33,7 @@ export default class Form extends Block {
 
     this._getKeys(form).forEach(input => {
       const element = form[input];
-      console.log(form.querySelector('ul'));
+
       if (element.name) {
         this._setFocus(element);
       }

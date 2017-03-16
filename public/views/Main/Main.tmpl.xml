@@ -1,6 +1,5 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
   <div class="wrapper__main">
-    <div class="black_block"></div>
     <div class="wrapper__main__wrapper">
       <div class="wrapper__main__header">
         SOUL HUNTING
