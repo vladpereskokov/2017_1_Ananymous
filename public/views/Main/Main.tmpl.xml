@@ -13,6 +13,9 @@
                 <fest:attribute name="class">
                   wrapper__main__form__button
                 </fest:attribute>
+                <fest:attribute name="data-nav">
+                  <fest:value>button.action</fest:value>
+                </fest:attribute>
               </fest:attributes>
               <fest:value>button.text</fest:value>
             </a>

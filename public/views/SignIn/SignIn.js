@@ -23,10 +23,12 @@ export default class SignIn extends Block {
       data: {
         title: 'Sign In',
         fields: [{
+          title: 'Login',
           name: 'email',
           type: 'email',
           placeholder: 'Email address'
         }, {
+          title: 'Password',
           name: 'password1',
           type: 'password',
           placeholder: 'Password'
@@ -35,9 +37,6 @@ export default class SignIn extends Block {
         controls: [{
           text: 'Sign In',
           action: '/signin'
-        }, {
-          text: 'Back',
-          action: this.showMain.bind(this)
         }]
       }
     });

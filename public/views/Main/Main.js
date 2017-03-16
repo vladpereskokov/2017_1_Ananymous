@@ -1,7 +1,7 @@
 import Block from "../../components/Block/Block";
 import userService from '../../services/UserService/UserService';
 import viewService from '../../services/ViewService/ViewService';
-import preLoader from '../../Animations/PreLoader/PreLoader';
+import preLoader from '../../animations/PreLoader/PreLoader';
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
@@ -20,7 +20,7 @@ class Main extends Block {
     if (state) {
       this._logoutButton();
     } else {
-      this._setEventUnLoggedForm();
+      // this._setEventUnLoggedForm();
     }
   }
 
@@ -73,9 +73,11 @@ class Main extends Block {
   _getUnLoggedForm() {
     return {
       buttons: [{
-        text: 'Sign In'
+        text: 'Sign In',
+        action: '/signin'
       }, {
-        text: 'Register'
+        text: 'Register',
+        action: '/signup'
       }]
     };
   }
@@ -107,7 +109,6 @@ class Main extends Block {
         }
 
         this._createMain();
-
       });
   }
 

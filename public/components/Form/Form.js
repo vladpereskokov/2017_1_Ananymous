@@ -1,8 +1,8 @@
 import Block from '../Block/Block';
 import Button from '../Button/Button';
-import transport from '../../modules/Transport/Transport';
 import userService from '../../services/UserService/UserService';
 import formService from '../../services/FormService/FormService';
+import viewService from '../../services/ViewService/ViewService';
 
 import './Form.scss';
 import template from './Form.tmpl.xml';
@@ -10,7 +10,7 @@ import template from './Form.tmpl.xml';
 export default class Form extends Block {
   constructor(elements = {}) {
     super('div', {
-      class: 'form'
+      class: 'form__wrapper'
     });
 
     this._createForm(elements.data);
@@ -24,20 +24,16 @@ export default class Form extends Block {
       elements: elements.fields
     });
 
-    const backButton = elements.controls[1];
-
-    this._find('form').appendChild((this._submitButton(elements.controls[0], backButton.action).render()));
-    if (backButton.text) {
-      this.append(this._backButton(elements.controls[1].action).render());
-    }
+    this._find('form').appendChild((this._submitButton(elements.controls[0]).render()));
     this._inputsFocusEvent();
   }
 
   _inputsFocusEvent() {
-    const form = this._find('form').elements;
+    const form = this._find('form');
 
     this._getKeys(form).forEach(input => {
       const element = form[input];
+      console.log(form.querySelector('ul'));
       if (element.name) {
         this._setFocus(element);
       }
@@ -60,24 +56,24 @@ export default class Form extends Block {
           return;
         }
 
-        if (name === 'password1') {
-          const secondPassword = this._getNextPassword(input);
-
-          if (secondPassword.classList.contains('error') &&
-            formService.checkPasswords(input, secondPassword).response) {
-            this._defaultError(secondPassword);
-          }
-        }
-
-        if (input.name === 'password2') {
-          const firstPassword = this._getPreviousPassword(input).value;
-          const compare = formService.checkPasswords(value, firstPassword).response;
-
-          if (compare) {
-            this._addError(input, compare);
-            return;
-          }
-        }
+        // if (name === 'password1') {
+        //   const secondPassword = this._getNextPassword(input);
+        //   console.log(secondPassword);
+        //   if (secondPassword.classList.contains('error') &&
+        //     formService.checkPasswords(input, secondPassword).response) {
+        //     this._defaultError(secondPassword);
+        //   }
+        // }
+        //
+        // if (input.name === 'password2') {
+        //   const firstPassword = this._getPreviousPassword(input).value;
+        //   const compare = formService.checkPasswords(value, firstPassword).response;
+        //
+        //   if (compare) {
+        //     this._addError(input, compare);
+        //     return;
+        //   }
+        // }
 
         this._addOK(input);
       }
@@ -93,18 +89,17 @@ export default class Form extends Block {
   }
 
   _addError(input, errorText) {
-    const label = input.nextElementSibling;
+    const li = input.nextElementSibling;
 
-    input.classList.add('error');
-    label.innerText = errorText;
+    li.classList.add('error');
+    li.innerText = errorText;
   }
 
   _defaultError(input) {
-    const label = input.nextElementSibling;
+    const li = input.nextElementSibling;
 
-    input.classList.remove('error');
-    input.classList.remove('ok');
-    label.innerText = '';
+    li.classList.remove('error');
+    li.classList.remove('ok');
   }
 
   _checkByName(type, value) {
@@ -136,47 +131,26 @@ export default class Form extends Block {
     }
   }
 
-  _submitButton(button, backAction) {
+  _submitButton(button) {
     const submit = new Button({
       type: 'submit',
       text: button.text
     });
 
-    submit.start('click', event => this._submit(event, button.action, backAction));
+    submit.start('click', event => this._submit(event, button.action));
 
     return submit;
   }
 
-  _backButton(action) {
-    const back = new Button({
-      type: 'submit',
-      text: 'Back'
-    });
-
-    back.start('click', action);
-
-    return back;
-  }
-
-  _submit(event, uri, backAction) {
+  _submit(event, uri) {
     event.preventDefault();
 
     const data = this._getData();
 
     formService.sendRequest(uri, this._getSendPack(uri, data))
       .then(response => {
-        return +response.status !== 200 ? response.json() : null;
-      })
-      .then(data => {
-        const element = this._find('p');
-        const status = data == null;
-
-        element.textContent = (status) ? '' : data.message;
-        userService.setState(status);
-
-        if (status) {
-          backAction();
-        }
+        userService.setState(+response.status !== 200);
+        viewService.go('/');
       });
   }
 
@@ -213,11 +187,19 @@ export default class Form extends Block {
     return fields;
   }
 
-  _getPreviousPassword(input) {
-    return input.previousElementSibling.previousElementSibling;
+  _getPreviousElement(input) {
+    return input.previousElementSibling;
   }
 
-  _getNextPassword(input) {
-    return input.nextElementSibling.nextElementSibling;
+  _getNextElement(input) {
+    return input.nextElementSibling;
+  }
+
+  _getPreviousPassword(passwordInput) {
+    return passwordInput.previousElementSibling.previousElementSibling;
+  }
+
+  _getNextPassword(passwordInput) {
+    return passwordInput.nextElementSibling.nextElementSibling;
   }
 }

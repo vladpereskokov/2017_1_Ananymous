@@ -18,18 +18,22 @@ class SignUp extends Block {
       data: {
         title: 'Sign Up',
         fields: [{
+          title: 'Login',
           name: 'login',
           type: 'text',
           placeholder: 'Login'
         }, {
+          title: 'Email',
           name: 'email',
           type: 'email',
           placeholder: 'Email address'
         }, {
+          title: 'Password',
           name: 'password1',
           type: 'password',
           placeholder: 'Password'
         }, {
+          title: 'Repeat password',
           name: 'password2',
           type: 'password',
           placeholder: 'Repeat Password'
@@ -38,9 +42,6 @@ class SignUp extends Block {
         controls: [{
           text: 'Sign Up',
           action: '/signup'
-        }, {
-          text: 'Back',
-          action: this.showMain.bind(this)
         }]
       }
     });
