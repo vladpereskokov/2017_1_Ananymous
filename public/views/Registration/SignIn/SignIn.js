@@ -1,48 +1,18 @@
+import FormView from '../FormView/FormView';
 import Form from '../../../components/Form/Form';
-import Block from '../../../components/Block/Block';
 
-import '../Registration.scss';
+import '../FormView/FormView.scss';
 
-export default class SignIn extends Block {
+export default class SignIn extends FormView {
   constructor() {
-    super('div', {
-      class: 'registration'
-    });
-  }
-
-  init(options = {}) {
-    const form = this._createForm();
-    form.renderTo(this._getElement());
-
-    const top = new Block('div', {
-      class: 'registration__back'
-    });
-
-    const common = new Block('div', {
-      class: 'common'
-    });
-
-    top.appendTo(common.render());
-    this.appendTo(common.render());
-
-
-    document.body.querySelector('.wrapper__main').insertBefore(common.render(),
-      document.body.querySelector('.wrapper__main__wrapper'));
-  }
-
-  getForm() {
-    return this._getElement();
-  }
-
-  _createForm() {
-    return new Form({
+    super(new Form({
       data: {
         title: 'Sign In',
         fields: [{
           title: 'Login',
-          name: 'email',
-          type: 'email',
-          placeholder: 'Email address'
+          name: 'login',
+          type: 'text',
+          placeholder: 'Login'
         }, {
           title: 'Password',
           name: 'password1',
@@ -53,12 +23,10 @@ export default class SignIn extends Block {
         controls: [{
           text: 'Sign In',
           action: '/signin'
+        }, {
+          text: 'Back'
         }]
       }
-    });
-  }
-
-  showMain() {
-    this.getRouter().go('/');
+    }));
   }
 }

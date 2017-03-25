@@ -12,7 +12,7 @@ class ViewService {
   }
 
   getViewByRoute(pathname) {
-    return this._router.getRoute(pathname).getView()._getElement().querySelector('div').outerHTML;
+    return this._router.getRoute(pathname).getView();
   }
 
   go(url) {

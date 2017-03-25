@@ -24,12 +24,13 @@ export default class Form extends Block {
       elements: elements.fields
     });
 
-    this._find('form').appendChild((this._submitButton(elements.controls[0]).render()));
+    this.find('form').appendChild((this._submitButton(elements.controls[0]).render()));
+    this.find('form').appendChild((this._backButton(elements.controls[1]).render()));
     this._inputsFocusEvent();
   }
 
   _inputsFocusEvent() {
-    const form = this._find('form');
+    const form = this.find('form');
 
     this._getKeys(form).forEach(input => {
       const element = form[input];
@@ -56,24 +57,24 @@ export default class Form extends Block {
           return;
         }
 
-        // if (name === 'password1') {
-        //   const secondPassword = this._getNextPassword(input);
-        //   console.log(secondPassword);
-        //   if (secondPassword.classList.contains('error') &&
-        //     formService.checkPasswords(input, secondPassword).response) {
-        //     this._defaultError(secondPassword);
-        //   }
-        // }
-        //
-        // if (input.name === 'password2') {
-        //   const firstPassword = this._getPreviousPassword(input).value;
-        //   const compare = formService.checkPasswords(value, firstPassword).response;
-        //
-        //   if (compare) {
-        //     this._addError(input, compare);
-        //     return;
-        //   }
-        // }
+        if (name === 'password1') {
+          const secondPassword = this._getNextPassword(input);
+          console.log(secondPassword);
+          if (secondPassword.classList.contains('error') &&
+            formService.checkPasswords(input, secondPassword).response) {
+            this._defaultError(secondPassword);
+          }
+        }
+
+        if (input.name === 'password2') {
+          const firstPassword = this._getPreviousPassword(input).value;
+          const compare = formService.checkPasswords(value, firstPassword).response;
+
+          if (compare) {
+            this._addError(input, compare);
+            return;
+          }
+        }
 
         this._addOK(input);
       }
@@ -137,9 +138,24 @@ export default class Form extends Block {
       text: button.text
     });
 
+    submit.setAttributeBlock('disabled', 'disabled');
     submit.start('click', event => this._submit(event, button.action));
 
     return submit;
+  }
+
+  _backButton(button) {
+    const back = new Button({
+      type: 'submit',
+      text: button.text
+    });
+
+    back.start('click', event => {
+      event.preventDefault();
+      viewService.go('/');
+    });
+
+    return back;
   }
 
   _submit(event, uri) {
@@ -149,8 +165,13 @@ export default class Form extends Block {
 
     formService.sendRequest(uri, this._getSendPack(uri, data))
       .then(response => {
-        userService.setState(+response.status !== 200);
-        viewService.go('/');
+        return +response.status !== 200;
+      })
+      .then(status => {
+        userService.setState(status);
+        if (status) {
+          viewService.go('/');
+        }
       });
   }
 

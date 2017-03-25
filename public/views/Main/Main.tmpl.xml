@@ -1,37 +1,35 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
-  <div class="wrapper__main">
-    <div class="wrapper__main__wrapper">
-      <div class="wrapper__main__header">
-        SOUL HUNTING
-      </div>
-      <div class="wrapper__main__form">
-        <fest:for iterate="data.buttons" index="i" value="button">
-          <div class="wrapper__main__form-wrapper">
-            <a>
-              <fest:attributes>
-                <fest:attribute name="class">
-                  wrapper__main__form__button
-                </fest:attribute>
-                <fest:attribute name="data-nav">
-                  <fest:value>button.action</fest:value>
-                </fest:attribute>
-              </fest:attributes>
-              <fest:value>button.text</fest:value>
-            </a>
-          </div>
-        </fest:for>
-        <a>
-          <fest:attributes>
-            <fest:attribute name="class">
-              wrapper__main__form__button wrapper__main__form__button-logout
-            </fest:attribute>
-            <fest:attribute name="name">
-              logout
-            </fest:attribute>
-          </fest:attributes>
-          Logout
-        </a>
-      </div>
+  <div class="wrapper__main__wrapper">
+    <div class="wrapper__main__header">
+      SOUL HUNTING
+    </div>
+    <div class="wrapper__main__form">
+      <fest:for iterate="data.buttons" index="i" value="button">
+        <div class="wrapper__main__form-wrapper">
+          <a>
+            <fest:attributes>
+              <fest:attribute name="class">
+                wrapper__main__form__button
+              </fest:attribute>
+              <fest:attribute name="data-nav">
+                <fest:value>button.action</fest:value>
+              </fest:attribute>
+            </fest:attributes>
+            <fest:value>button.text</fest:value>
+          </a>
+        </div>
+      </fest:for>
+      <a>
+        <fest:attributes>
+          <fest:attribute name="class">
+            wrapper__main__form__button wrapper__main__form__button-logout
+          </fest:attribute>
+          <fest:attribute name="name">
+            logout
+          </fest:attribute>
+        </fest:attributes>
+        Logout
+      </a>
     </div>
   </div>
 </fest:template>

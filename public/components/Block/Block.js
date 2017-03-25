@@ -33,8 +33,16 @@ export default class Block {
     element.appendChild(this.render());
   }
 
-  search(block) {
-    return this._getElement().querySelector(block);
+  find(tag) {
+    return this._getElement().querySelector(tag);
+  }
+
+  globalFind(tag) {
+    return this._getDocument().querySelector(tag);
+  }
+
+  findAll(tag) {
+    return this._getDocument().querySelectorAll(tag);
   }
 
   _createDocumentElement(name) {
@@ -72,10 +80,6 @@ export default class Block {
     return Object.keys(data);
   }
 
-  _find(tag) {
-    return this._getElement().querySelector(tag);
-  }
-
   init() {}
 
   pause() {
@@ -98,10 +102,6 @@ export default class Block {
     element.appendChild(this._getElement());
   }
 
-  remove() {
-    this._getElement() && this._getElement().remove();
-  }
-
   setElement(el) {
     this._getElement() && this._getElement().remove();
     this._element = el;
@@ -117,5 +117,17 @@ export default class Block {
 
   toString() {
     return this._getElement().outerHTML;
+  }
+
+  start(event, callback) {
+    this._getElement().addEventListener(event, callback);
+  }
+
+  toDocument(element) {
+    this._getDocument().appendChild(element);
+  }
+
+  _getDocument() {
+    return document.body;
   }
 }

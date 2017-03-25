@@ -2,9 +2,9 @@ import Block from '../Block/Block';
 
 import './Button.scss';
 
-class Button extends Block {
-  constructor(options = {}) {
-    super('button', options);
+export default class Button extends Block {
+  constructor(attributes = {}) {
+    super('button', attributes);
     this.setAttributeBlock('class', 'button');
   }
 
@@ -12,5 +12,3 @@ class Button extends Block {
     this._getElement().addEventListener(event, callback);
   }
 }
-
-export default Button;

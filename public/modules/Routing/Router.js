@@ -1,4 +1,6 @@
 import Route from './Route';
+import viewService from '../../services/ViewService/ViewService';
+
 
 export default class Router {
   constructor() {
@@ -27,6 +29,7 @@ export default class Router {
       this._onRoute(window.location.pathname);
     }).bind(this);
 
+    viewService.setRouter(this);
     this._onRoute(window.location.pathname);
   }
 
@@ -46,7 +49,7 @@ export default class Router {
   }
 
   go(pathname) {
-    if (window.location.pathname === pathname) {
+    if (window.location.pathname === pathname && pathname !== '/signin') {
       return;
     }
 

@@ -4,7 +4,6 @@ import SignUp from './views/Registration/SignUp/SignUp';
 import Scoreboard from './views/Scoreboard/Scoreboard';
 import Game from './views/Game/Game';
 import Main from './views/Main/Main';
-import viewService from './services/ViewService/ViewService';
 
 import './static/css/reset.scss';
 
@@ -30,5 +29,3 @@ router
   .use('/signup', SignUp)
   .use('/signin', SignIn)
   .start();
-
-viewService.setRouter(router);

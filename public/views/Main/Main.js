@@ -1,4 +1,5 @@
 import Block from '../../components/Block/Block';
+import Image from '../../components/Image/Image';
 import userService from '../../services/UserService/UserService';
 import viewService from '../../services/ViewService/ViewService';
 
@@ -10,17 +11,26 @@ class Main extends Block {
     super('div', {
       class: 'wrapper'
     });
+
+    this._state = false;
   }
 
-  _makeMain(state) {
-    this._getElement().innerHTML = template(this._changeForm(state));
-    document.body.appendChild(this._getElement());
+  init() {
+    this.toDocument(this._getBackground());
+    this._builtMain();
+  }
 
-    if (state) {
-      this._logoutButton();
-    } else {
-      // this._setEventUnLoggedForm();
-    }
+  _builtMain(state = false) {
+    this._getElement().innerHTML = template(this._changeForm(state));
+    this.toDocument(this._getElement());
+
+    state ? this._logoutButton() : this._setEventUnLoggedForm();
+
+    return this;
+  }
+
+  _getBackground() {
+    return new Image().render();
   }
 
   _changeForm(state) {
@@ -28,12 +38,8 @@ class Main extends Block {
   }
 
   _setEventUnLoggedForm() {
-    this._setEventButton(this._getRegisterButtons()[0], this._alert.bind(this));
+    this._setEventButton(this._getRegisterButtons()[0], viewService.go.bind(this, '/signin'));
     this._setEventButton(this._getRegisterButtons()[1], viewService.go.bind(this, '/signup'));
-  }
-
-  _alert() {
-    this._getElement();
   }
 
   _setEventButton(findButton, onclickFunction) {
@@ -73,10 +79,8 @@ class Main extends Block {
     return {
       buttons: [{
         text: 'Sign In',
-        action: '/signin'
       }, {
-        text: 'Register',
-        action: '/signup'
+        text: 'Register'
       }]
     };
   }
@@ -96,21 +100,29 @@ class Main extends Block {
   _createMain() {
     const state = userService.getState();
 
-    this._makeMain(state);
-    this.show();
+    if (state !== this._state) {
+      this._builtMain(state);
+      this._state = state;
+    }
+  }
+
+  hide() {
+
   }
 
   resume() {
     userService.isLogin()
       .then(response => {
-        if (+response.status === 200) {
+        return +response.status === 200;
+      })
+      .then(status => {
+        if (status) {
           userService.setState(true);
         }
 
         this._createMain();
       });
   }
-
 }
 
 export default Main;
