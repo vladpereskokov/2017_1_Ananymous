@@ -37,6 +37,7 @@ class Router {
     if (!route) {
       return;
     }
+
     viewService.changeRoute(route, pathname);
   }
 

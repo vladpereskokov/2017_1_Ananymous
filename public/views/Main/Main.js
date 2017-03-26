@@ -1,6 +1,5 @@
 import Block from '../../components/Block/Block';
 import Image from '../../components/Image/Image';
-import userService from '../../services/UserService/UserService';
 import viewService from '../../services/ViewService/ViewService';
 
 import './Main.scss';
@@ -53,13 +52,10 @@ class Main extends Block {
   }
 
   logout() {
-    if (userService.getState()) {
-      userService.logout()
-        .then(state => {
-          userService.setState(!state);
-          this.resume();
-        });
-    }
+    viewService.logout()
+      .then(() => {
+      this.resume();
+      });
   }
 
   _logoutButton() {
@@ -97,31 +93,17 @@ class Main extends Block {
     };
   }
 
-  _createMain() {
-    const state = userService.getState();
-
+  _createMain(state) {
     if (state !== this._state) {
       this._builtMain(state);
       this._state = state;
     }
   }
 
-  hide() {
-
-  }
+  hide() {}
 
   resume() {
-    userService.isLogin()
-      .then(response => {
-        return +response.status === 200;
-      })
-      .then(status => {
-        if (status) {
-          userService.setState(true);
-        }
-
-        this._createMain();
-      });
+    this._createMain(viewService.getState());
   }
 }
 

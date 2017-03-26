@@ -14,11 +14,6 @@ export default class FormView extends Block {
     this._form.renderTo(this._getElement());
 
     this.globalFind('.wrapper').appendChild(this._getElement());
-
-    this.findAll('button')[1].addEventListener('click', () => {
-      this.hide();
-      viewService.go('/');
-    });
   }
 
   getForm() {

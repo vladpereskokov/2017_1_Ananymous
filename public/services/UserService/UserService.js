@@ -1,4 +1,5 @@
 import transport from '../../modules/Transport/Transport';
+import viewService from '../ViewService/ViewService';
 
 class UserService {
   constructor() {
@@ -34,7 +35,16 @@ class UserService {
   }
 
   isLogin() {
-    return transport.get('/cur-user');
+    return transport.get('/cur-user')
+      .then(response => {
+        return +response.status === 200;
+      })
+      .then(status => {
+        if (status) {
+          this._state = status;
+          viewService.go('/');
+        }
+      });
   }
 
   logout() {

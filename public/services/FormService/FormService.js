@@ -4,6 +4,7 @@ import isFill from '../../modules/OtherScripts/Validators/isFill/isFill';
 import isLogin from '../../modules/OtherScripts/Validators/isLogin/isLogin';
 import isPassword from '../../modules/OtherScripts/Validators/isPassword/isPassword';
 import transport from '../../modules/Transport/Transport';
+import userService from '../UserService/UserService';
 
 class FormService {
   constructor() {
@@ -15,7 +16,15 @@ class FormService {
   }
 
   sendRequest(uri, data) {
-    return transport.post(uri, JSON.stringify(data));
+    return transport.post(uri, JSON.stringify(data))
+      .then(response => {
+        return +response.status === 200;
+      })
+      .then(state => {
+        if (state) {
+          userService.isLogin();
+        }
+      });
   }
 
   checkFill(field, type) {

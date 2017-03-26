@@ -1,3 +1,5 @@
+import userService from '../UserService/UserService';
+
 class ViewService {
   constructor() {
     if (ViewService.__instance) {
@@ -12,8 +14,6 @@ class ViewService {
   changeRoute(route, pathname) {
     this._previousRoute = this._currentRoute;
     this._currentRoute = route;
-    console.log(route);
-    console.log(this._currentRoute);
 
     if (this._previousRoute) {
       this.hideRoute(this._previousRoute);
@@ -31,8 +31,20 @@ class ViewService {
   }
 
   go(url) {
-    console.log(this._currentRoute);
     this._currentRoute._getRouter().go(url);
+  }
+
+  logout() {
+    if (userService.getState()) {
+      return userService.logout()
+        .then(state => {
+          userService.setState(!state);
+        });
+    }
+  }
+
+  getState() {
+    return userService.getState();
   }
 }
 

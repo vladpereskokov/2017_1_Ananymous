@@ -38,7 +38,6 @@ export default class Route {
   }
 
   _getRouter() {
-    console.log(this._router);
     return this._router;
   }
 }
