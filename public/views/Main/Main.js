@@ -38,8 +38,8 @@ class Main extends Block {
   }
 
   _setEventUnLoggedForm() {
-    this._setEventButton(this._getRegisterButtons()[0], viewService.go.bind(this, '/signin'));
-    this._setEventButton(this._getRegisterButtons()[1], viewService.go.bind(this, '/signup'));
+    this._setEventButton(this._getRegisterButtons()[0], () => viewService.go('/signin'));
+    this._setEventButton(this._getRegisterButtons()[1], () => viewService.go('/signup'));
   }
 
   _setEventButton(findButton, onclickFunction) {

@@ -5,18 +5,34 @@ class ViewService {
     }
 
     ViewService.__instance = this;
+    this._currentRoute = null;
+    this._previousRoute = null;
   }
 
-  setRouter(router) {
-    this._router = router;
+  changeRoute(route, pathname) {
+    this._previousRoute = this._currentRoute;
+    this._currentRoute = route;
+    console.log(route);
+    console.log(this._currentRoute);
+
+    if (this._previousRoute) {
+      this.hideRoute(this._previousRoute);
+    }
+
+    this.showRoute(this._currentRoute, pathname);
   }
 
-  getViewByRoute(pathname) {
-    return this._router.getRoute(pathname).getView();
+  showRoute(view, pathname) {
+    view.navigate(pathname);
+  }
+
+  hideRoute(view) {
+    view.leave();
   }
 
   go(url) {
-    this._router.go(url);
+    console.log(this._currentRoute);
+    this._currentRoute._getRouter().go(url);
   }
 }
 

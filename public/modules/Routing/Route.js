@@ -26,11 +26,6 @@ export default class Route {
     return isPath(pathname, this._pathname);
   }
 
-  getView() {
-    this._createView();
-    // return this._view;
-  }
-
   _createView() {
     if (!this._view) {
       const view = new this.ViewType();
@@ -40,5 +35,10 @@ export default class Route {
 
       this._view = view;
     }
+  }
+
+  _getRouter() {
+    console.log(this._router);
+    return this._router;
   }
 }

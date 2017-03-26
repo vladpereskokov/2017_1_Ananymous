@@ -1,15 +1,13 @@
 import Route from './Route';
 import viewService from '../../services/ViewService/ViewService';
 
-
-export default class Router {
+class Router {
   constructor() {
     if (Router.__instance) {
       return Router.__instance;
     }
 
     this.routes = [];
-    this.activeRoute = null;
     this.history = window.history;
 
     Router.__instance = this;
@@ -29,7 +27,7 @@ export default class Router {
       this._onRoute(window.location.pathname);
     }).bind(this);
 
-    viewService.setRouter(this);
+    this._onRoute('/');
     this._onRoute(window.location.pathname);
   }
 
@@ -39,17 +37,11 @@ export default class Router {
     if (!route) {
       return;
     }
-
-    if (this.activeRoute) {
-      this.activeRoute.leave();
-    }
-
-    this.activeRoute = route;
-    this.activeRoute.navigate(pathname);
+    viewService.changeRoute(route, pathname);
   }
 
   go(pathname) {
-    if (window.location.pathname === pathname && pathname !== '/signin') {
+    if (window.location.pathname === pathname) {
       return;
     }
 
@@ -73,3 +65,5 @@ export default class Router {
     return this.routes.find(route => route.match(pathname));
   }
 }
+
+export default Router;
