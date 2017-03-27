@@ -12,12 +12,14 @@ export default class SignIn extends FormView {
           title: 'Login',
           name: 'login',
           type: 'text',
-          placeholder: 'Login'
+          description: 'Enter username',
+          placeholder: 'Username'
         }, {
           title: 'Password',
           name: 'password1',
           type: 'password',
-          placeholder: 'Password'
+          description: 'Enter password',
+          placeholder: '••••••••'
         }
         ],
         controls: [{

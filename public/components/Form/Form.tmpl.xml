@@ -6,12 +6,12 @@
     <form class="form" name="{data.title}">
       <ul>
         <fest:for iterate="data.elements" index="i" value="input">
-          <li class="error" name="{input.name}">
+          <li name="{input.name}">
             <label for="{input.name}">
               <fest:value>input.title</fest:value>
             </label>
             <input name="{input.name}" type="{input.type}" placeholder="{input.placeholder}" maxlength="100"/>
-            <span name="{input.name}" class="errorText">Enter a valid email address</span>
+            <span name="{input.name}"><fest:value>input.description</fest:value></span>
           </li>
         </fest:for>
       </ul>

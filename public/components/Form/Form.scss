@@ -119,3 +119,18 @@
     }
   }
 }
+
+.ok {
+  border: 2px solid limegreen !important;
+  transition: 0.5s;
+}
+
+.error {
+  border: 2px solid red !important;
+  transition: 0.5s;
+}
+
+.errorText {
+  color: red !important;
+  transition: 0.5s;
+}

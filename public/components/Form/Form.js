@@ -30,77 +30,97 @@ export default class Form extends Block {
   }
 
   _inputsFocusEvent() {
-    const form = this.find('form');
+    const form = this.find('form').querySelector('ul').children;
 
     this._getKeys(form).forEach(input => {
-      const element = form[input];
+      // const element = form[input];
+      console.log(form[input]);
 
-      if (element.name) {
-        this._setFocus(element);
-      }
+      this._setFocus(form[input]);
+
+      // if (element.name) {
+      //   this._setFocus(element);
+      // }
     });
   }
 
-  _setFocus(input) {
+  _getInput(element) {
+    return element.querySelector('input');
+  }
+
+  _setFocus(element) {
+    const input = this._getInput(element);
+
     input.onblur = (() => {
       const name = input.name;
       const value = input.value;
       const fill = formService.checkFill(value, this._getReadableNameByName(name)).response;
 
       if (fill) {
-        this._addError(input, fill);
+        this._addError(element, fill);
       } else {
         const check = this._checkByName(name, value).response;
 
         if (check) {
-          this._addError(input, check);
+          this._addError(element, check);
           return;
         }
 
         if (name === 'password1') {
-          const secondPassword = this._getNextPassword(input);
+          const secondPassword = this._getNextPassword(element);
+
           console.log(secondPassword);
-          if (secondPassword.classList.contains('error') &&
+
+          if (secondPassword && secondPassword.classList.contains('error') &&
             formService.checkPasswords(input, secondPassword).response) {
             this._defaultError(secondPassword);
+            this._addOK(secondPassword);
           }
         }
 
         if (input.name === 'password2') {
-          const firstPassword = this._getPreviousPassword(input).value;
+          const firstPassword = this._getPreviousPassword(element).value;
           const compare = formService.checkPasswords(value, firstPassword).response;
 
           if (compare) {
-            this._addError(input, compare);
+            this._addError(element, compare);
             return;
           }
         }
 
-        this._addOK(input);
+        this._addOK(element);
       }
     });
 
     input.onfocus = (() => {
-      this._defaultError(input);
+      this._defaultError(element);
     });
   }
 
-  _addOK(input) {
-    input.classList.add('ok');
+  _addOK(element) {
+    const span = element.querySelector('span');
+
+    element.classList.remove('error');
+    element.classList.add('ok');
+
+    span.innerText = 'Excellent!';
   }
 
-  _addError(input, errorText) {
-    const li = input.nextElementSibling;
+  _addError(element, errorText) {
+    const span = element.querySelector('span');
 
-    li.classList.add('error');
-    li.innerText = errorText;
+    element.classList.add('error');
+    span.classList.add('errorText');
+    span.innerText = errorText;
   }
 
-  _defaultError(input) {
-    const li = input.nextElementSibling;
+  _defaultError(element) {
+    const span = element.querySelector('span');
 
-    li.classList.remove('error');
-    li.classList.remove('ok');
+    element.classList.remove('error');
+    element.classList.remove('ok');
+
+    span.classList.remove('errorText');
   }
 
   _checkByName(type, value) {
@@ -120,12 +140,12 @@ export default class Form extends Block {
   _getReadableNameByName(type) {
     switch (type) {
       case 'login':
-        return 'логин';
+        return 'Login';
       case 'email':
-        return 'e-mail';
+        return 'E-Mail';
       case 'password1':
       case 'password2':
-        return 'пароль';
+        return 'Password';
       default:
         return '';
 
@@ -218,10 +238,11 @@ export default class Form extends Block {
   }
 
   _getPreviousPassword(passwordInput) {
-    return passwordInput.previousElementSibling.previousElementSibling;
+    console.log(passwordInput.parentNode.children);
+    return passwordInput.parentNode.children[2];
   }
 
   _getNextPassword(passwordInput) {
-    return passwordInput.nextElementSibling.nextElementSibling;
+    return passwordInput.parentNode.children[3];
   }
 }

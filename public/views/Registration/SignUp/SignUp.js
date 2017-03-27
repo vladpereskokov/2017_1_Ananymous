@@ -12,22 +12,26 @@ export default class SignUp extends FormView {
           title: 'Login',
           name: 'login',
           type: 'text',
-          placeholder: 'Login'
+          description: 'Enter username',
+          placeholder: 'Username'
         }, {
           title: 'Email',
           name: 'email',
           type: 'email',
+          description: 'Enter email',
           placeholder: 'Email address'
         }, {
           title: 'Password',
           name: 'password1',
           type: 'password',
-          placeholder: 'Password'
+          description: 'Enter password',
+          placeholder: '••••••••'
         }, {
           title: 'Repeat password',
           name: 'password2',
           type: 'password',
-          placeholder: 'Repeat Password'
+          description: 'Enter password',
+          placeholder: '••••••••'
         }
         ],
         controls: [{
