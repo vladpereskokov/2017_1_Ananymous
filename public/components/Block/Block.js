@@ -7,7 +7,7 @@ export default class Block {
   }
 
   setAttributeBlock(name, value) {
-    this._getElement().setAttribute(name, value);
+    name === 'class' ? this.addClass(value) : this._getElement().setAttribute(name, value);
   }
 
   setAttributes(attributes) {
@@ -23,6 +23,10 @@ export default class Block {
 
   append(child) {
     this._getElement().appendChild(child);
+  }
+
+  addClass(className) {
+    this._getElement().classList.add(className);
   }
 
   render() {

@@ -1,7 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
   <div class="wrapper__main__wrapper">
     <div class="wrapper__main__header">
-      SOUL HUNTING
+      SOUL HUNTING <a class="wrapper__main__header-register">&#174;</a>
     </div>
     <div class="wrapper__main__form">
       <fest:for iterate="data.buttons" index="i" value="button">
@@ -28,8 +28,12 @@
             logout
           </fest:attribute>
         </fest:attributes>
-        Logout
+        LOGOUT
       </a>
     </div>
+  </div>
+  <div class="footer">
+    <p class="footer-team">ANANYMOUS</p>
+    <p class="footer-register">&#174;</p>
   </div>
 </fest:template>

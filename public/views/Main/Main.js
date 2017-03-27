@@ -15,17 +15,35 @@ class Main extends Block {
   }
 
   init() {
-    this.toDocument(this._getBackground());
-    this._builtMain();
+    const main = new Block('div', {
+      class: 'main-wrapper'
+    });
+    // this.toDocument(this._getBackground());
+    // main.append(this._getBackground());
+    // this._builtMain(viewService.getState());
+    main.append(this._builtMain(viewService.getState()).render());
+    this.toDocument(main.render());
   }
 
   _builtMain(state = false) {
     this._getElement().innerHTML = template(this._changeForm(state));
+
     this.toDocument(this._getElement());
 
-    state ? this._logoutButton() : this._setEventUnLoggedForm();
+    if (state) {
+      this._setEventLoggedForm();
+      this._logoutButton();
+      this._setFormRotate();
+    } else {
+      this._setEventUnLoggedForm();
+    }
 
     return this;
+  }
+
+  _setFormRotate() {
+    const form = this.find('.wrapper__main__form');
+    form.classList.add('wrapper__main__form__game-design');
   }
 
   _getBackground() {
@@ -37,8 +55,13 @@ class Main extends Block {
   }
 
   _setEventUnLoggedForm() {
-    this._setEventButton(this._getRegisterButtons()[0], () => viewService.go('/signin'));
-    this._setEventButton(this._getRegisterButtons()[1], () => viewService.go('/signup'));
+    this._setEventButton(this._getButtons()[0], () => viewService.go('/signin'));
+    this._setEventButton(this._getButtons()[1], () => viewService.go('/signup'));
+  }
+
+  _setEventLoggedForm() {
+    this._setEventButton(this._getButtons()[0], () => viewService.go('/game'));
+    this._setEventButton(this._getButtons()[1], () => viewService.go('/scoreboard'));
   }
 
   _setEventButton(findButton, onclickFunction) {
@@ -47,14 +70,14 @@ class Main extends Block {
     };
   }
 
-  _getRegisterButtons() {
+  _getButtons() {
     return document.getElementsByClassName('wrapper__main__form__button');
   }
 
   logout() {
     viewService.logout()
       .then(() => {
-      this.resume();
+        this.resume();
       });
   }
 
@@ -74,9 +97,9 @@ class Main extends Block {
   _getUnLoggedForm() {
     return {
       buttons: [{
-        text: 'Sign In',
+        text: 'SIGN IN',
       }, {
-        text: 'Register'
+        text: 'REGISTER'
       }]
     };
   }
@@ -84,26 +107,35 @@ class Main extends Block {
   _getLoggedForm() {
     return {
       buttons: [{
-        text: 'Game',
+        text: 'GAME',
+        class: 'button-rotate',
         action: '/game'
       }, {
-        text: 'Scoreboard',
+        text: 'SCOREBOARD',
+        class: 'button-rotate',
         action: '/scoreboard'
       }]
     };
   }
 
-  _createMain(state) {
-    if (state !== this._state) {
-      this._builtMain(state);
-      this._state = state;
-    }
+  hide() {
+    this._getDocument().querySelector('.wrapper__main__wrapper').style.display = 'none';
   }
 
-  hide() {}
+  show() {
+    this._getDocument().querySelector('.wrapper__main__wrapper').style.display = 'block';
 
-  resume() {
-    this._createMain(viewService.getState());
+    viewService.isLogin()
+      .then(response => {
+        return +response.status === 200;
+      })
+      .then(status => {
+        if (status !== this._state) {
+          viewService.setState(status);
+          this._builtMain(viewService.getState());
+          this._state = status;
+        }
+      });
   }
 }
 

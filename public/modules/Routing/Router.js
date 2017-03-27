@@ -28,7 +28,9 @@ class Router {
     }).bind(this);
 
     this._onRoute('/');
-    this._onRoute(window.location.pathname);
+    if (window.location.pathname !== '/') {
+      this._onRoute(window.location.pathname);
+    }
   }
 
   _onRoute(pathname) {

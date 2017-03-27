@@ -43,8 +43,16 @@ class ViewService {
     }
   }
 
+  isLogin() {
+    return userService.isLogin();
+  }
+
   getState() {
     return userService.getState();
+  }
+
+  setState(state) {
+    userService.setState(state);
   }
 }
 

@@ -138,7 +138,7 @@ export default class Form extends Block {
       text: button.text
     });
 
-    submit.setAttributeBlock('disabled', 'disabled');
+    // submit.setAttributeBlock('disabled', 'disabled');
     submit.start('click', event => this._submit(event, button.action));
 
     return submit;
@@ -165,7 +165,8 @@ export default class Form extends Block {
 
     formService.sendRequest(uri, this._getSendPack(uri, data))
       .then(response => {
-        return +response.status !== 200;
+        console.log(response);
+        return +response.status === 200;
       })
       .then(status => {
         userService.setState(status);
@@ -181,7 +182,7 @@ export default class Form extends Block {
 
   _signInPack(data) {
     return {
-      'username': data.email,
+      'username': data.login,
       'password': data.password1
     };
   }
@@ -195,7 +196,7 @@ export default class Form extends Block {
   }
 
   _getData() {
-    const form = this._find('form').elements;
+    const form = this.find('form').elements;
     const fields = {};
 
     this._getKeys(form).forEach(input => {

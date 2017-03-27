@@ -9,6 +9,7 @@ export default class Route {
 
   navigate(pathname) {
     if (this.match(pathname)) {
+      this._pathname = pathname;
       this._createView();
       this._view.resume();
     }

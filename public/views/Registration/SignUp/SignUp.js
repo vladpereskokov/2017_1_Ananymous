@@ -35,7 +35,6 @@ export default class SignUp extends FormView {
           action: '/signup'
         }, {
           text: 'Back',
-          action: '/'
         }]
       }
     }));
