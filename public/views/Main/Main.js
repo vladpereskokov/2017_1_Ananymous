@@ -18,9 +18,6 @@ class Main extends Block {
     const main = new Block('div', {
       class: 'main-wrapper'
     });
-    // this.toDocument(this._getBackground());
-    // main.append(this._getBackground());
-    // this._builtMain(viewService.getState());
     main.append(this._builtMain(viewService.getState()).render());
     this.toDocument(main.render());
   }

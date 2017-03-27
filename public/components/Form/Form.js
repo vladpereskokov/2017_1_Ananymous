@@ -33,14 +33,7 @@ export default class Form extends Block {
     const form = this.find('form').querySelector('ul').children;
 
     this._getKeys(form).forEach(input => {
-      // const element = form[input];
-      console.log(form[input]);
-
       this._setFocus(form[input]);
-
-      // if (element.name) {
-      //   this._setFocus(element);
-      // }
     });
   }
 
@@ -69,8 +62,6 @@ export default class Form extends Block {
         if (name === 'password1') {
           const secondPassword = this._getNextPassword(element);
 
-          console.log(secondPassword);
-
           if (secondPassword && secondPassword.classList.contains('error') &&
             formService.checkPasswords(input, secondPassword).response) {
             this._defaultError(secondPassword);
@@ -89,12 +80,17 @@ export default class Form extends Block {
         }
 
         this._addOK(element);
+        this._letGoSubmit(this._getFormByList(element), element.parentNode.querySelectorAll('li'));
       }
     });
 
     input.onfocus = (() => {
       this._defaultError(element);
     });
+  }
+
+  _getFormByList(element) {
+    return element.parentNode.parentNode;
   }
 
   _addOK(element) {
@@ -152,13 +148,25 @@ export default class Form extends Block {
     }
   }
 
+  _letGoSubmit(element, list) {
+    for (let li of list) {
+      if (!li.classList.contains('ok')) {
+        return null;
+      }
+    }
+
+    const submit = element.querySelector('button');
+
+    submit.disabled = false;
+  }
+
   _submitButton(button) {
     const submit = new Button({
       type: 'submit',
       text: button.text
     });
 
-    // submit.setAttributeBlock('disabled', 'disabled');
+    submit.setAttributeBlock('disabled', 'disabled');
     submit.start('click', event => this._submit(event, button.action));
 
     return submit;
@@ -238,11 +246,12 @@ export default class Form extends Block {
   }
 
   _getPreviousPassword(passwordInput) {
-    console.log(passwordInput.parentNode.children);
-    return passwordInput.parentNode.children[2];
+    const password = passwordInput.parentNode.children[2];
+    return password ? password.querySelector('input') : null;
   }
 
   _getNextPassword(passwordInput) {
-    return passwordInput.parentNode.children[3];
+    const password = passwordInput.parentNode.children[3];
+    return password ? password.querySelector('input') : null;
   }
 }
