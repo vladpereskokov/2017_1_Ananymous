@@ -12,16 +12,21 @@ class Main extends Block {
       class: 'wrapper'
     });
 
-    this._state = false;
     this.toDocument(preLoader.render());
   }
 
   init() {
+    this._createWrapperMain();
+  }
+
+  _createWrapperMain() {
     const main = new Block('div', {
       class: 'main-wrapper'
     });
+
     main.append(this._builtMain(viewService.getState()).render());
-    this.toDocument(main.render());
+
+    return main;
   }
 
   _builtMain(state = false) {
@@ -78,7 +83,7 @@ class Main extends Block {
 
     viewService.logout()
       .then(() => {
-      viewService.hidePreLoader();
+        viewService.hidePreLoader();
         this.resume();
       });
   }
@@ -121,11 +126,18 @@ class Main extends Block {
   }
 
   hide() {
-    this._getDocument().querySelector('.wrapper__main__wrapper').style.display = 'none';
+    if (this._getDocument().querySelector('.wrapper__main__wrapper')) {
+      this._getDocument().querySelector('.wrapper__main__wrapper').style.display = 'none';
+    }
   }
 
   show() {
-    this._getDocument().querySelector('.wrapper__main__wrapper').style.display = 'block';
+    const main = this._getDocument().querySelector('.wrapper__main__wrapper');
+
+    if (main) {
+      main.style.display = 'block';
+    }
+
     viewService.showPreLoader();
 
     viewService.isLogin()
@@ -133,10 +145,16 @@ class Main extends Block {
         return +response.status === 200;
       })
       .then(status => {
-        if (status !== this._state) {
-          viewService.setState(status);
+        viewService.setState(status);
+        if (!main) {
+          console.log('here');
+
+          this.toDocument(this._createWrapperMain().render());
+        } else {
+          console.log('here1');
+          console.log(main);
+
           this._builtMain(viewService.getState());
-          this._state = status;
         }
 
         viewService.hidePreLoader();
