@@ -177,7 +177,6 @@ export default class Form extends Block {
     }
 
     const submit = element.querySelector('button');
-
     submit.disabled = false;
   }
 
@@ -189,6 +188,9 @@ export default class Form extends Block {
 
     submit.setAttributeBlock('disabled', 'disabled');
     submit.start('click', event => {
+      submit._getElement().disabled = false;
+      formService.showPreLoader();
+
       this._submit(event, button.action)
         .then(response => {
           console.log(response);
@@ -199,6 +201,7 @@ export default class Form extends Block {
 
           userService.setState(state);
           state ? viewService.go('/') : this._setErrorResponse(status);
+          formService.hidePreLoader();
         });
     });
 
@@ -210,7 +213,7 @@ export default class Form extends Block {
   }
 
   _writeError(string) {
-    const span = this.findAll('span')[1];
+    const span = this.findAll('span')[2];
 
     span.innerHTML = string;
     span.style.display = 'block';

@@ -1,4 +1,5 @@
 import userService from '../UserService/UserService';
+import preLoader from '../../views/PreLoader/PreLoader';
 
 class ViewService {
   constructor() {
@@ -53,6 +54,14 @@ class ViewService {
 
   setState(state) {
     userService.setState(state);
+  }
+
+  showPreLoader() {
+    preLoader.show();
+  }
+
+  hidePreLoader() {
+    preLoader.hide();
   }
 }
 

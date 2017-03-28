@@ -1,7 +1,7 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
   <div class="wrapper__main__wrapper">
     <div class="wrapper__main__header">
-      SOUL HUNTING <a class="wrapper__main__header-register">&#174;</a>
+      SOUL HUNTING <p class="wrapper__main__header-register">&#174;</p>
     </div>
     <div class="wrapper__main__form">
       <fest:for iterate="data.buttons" index="i" value="button">

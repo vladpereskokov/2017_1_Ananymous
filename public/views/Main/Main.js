@@ -1,6 +1,7 @@
 import Block from '../../components/Block/Block';
 import Image from '../../components/Image/Image';
 import viewService from '../../services/ViewService/ViewService';
+import preLoader from '../PreLoader/PreLoader';
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
@@ -12,6 +13,7 @@ class Main extends Block {
     });
 
     this._state = false;
+    this.toDocument(preLoader.render());
   }
 
   init() {
@@ -72,8 +74,11 @@ class Main extends Block {
   }
 
   logout() {
+    viewService.showPreLoader();
+
     viewService.logout()
       .then(() => {
+      viewService.hidePreLoader();
         this.resume();
       });
   }
@@ -121,6 +126,7 @@ class Main extends Block {
 
   show() {
     this._getDocument().querySelector('.wrapper__main__wrapper').style.display = 'block';
+    viewService.showPreLoader();
 
     viewService.isLogin()
       .then(response => {
@@ -132,6 +138,8 @@ class Main extends Block {
           this._builtMain(viewService.getState());
           this._state = status;
         }
+
+        viewService.hidePreLoader();
       });
   }
 }

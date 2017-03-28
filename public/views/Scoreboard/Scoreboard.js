@@ -1,5 +1,8 @@
+import Block from "../../components/Block/Block";
 import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
+import Popup from '../../animations/Popup/Popup';
+import Fade from '../../animations/Fade/Fade';
 
 const table = {
   head: ['Nickname', 'Score'],
@@ -19,13 +22,39 @@ class Scoreboard extends Table {
   }
 
   init() {
+    this._background = this._createBackground();
     this._getElement().append(this._backButton().render());
+    this._initAnimation();
+    this.globalFind('.wrapper').appendChild(this._background.render());
     this.globalFind('.wrapper').appendChild(this._getElement());
     this._sortTable();
   }
 
   showMain() {
     this.getRouter().go('/');
+  }
+
+  show() {
+    this._animationBackground.on();
+    this._animationTable.on();
+
+    this._getElement().style.display = 'block';
+    this._background._getElement().style.display = 'block';
+  }
+
+  hide() {
+    this._animationBackground.off();
+    this._animationTable.off();
+
+    setTimeout(() => {
+      this._getElement().style.display = 'none';
+      this._background._getElement().style.display = 'none';
+    }, 400);
+  }
+
+  _initAnimation() {
+    this._animationTable = new Popup(this);
+    this._animationBackground = new Fade(this._background);
   }
 
   _sortTable() {
@@ -84,6 +113,12 @@ class Scoreboard extends Table {
     back.start('click', this.showMain.bind(this));
 
     return back;
+  }
+
+  _createBackground() {
+    return new Block('div', {
+      class: 'registration__back'
+    })
   }
 }
 

@@ -4,6 +4,7 @@ import isFill from '../../modules/OtherScripts/Validators/isFill/isFill';
 import isLogin from '../../modules/OtherScripts/Validators/isLogin/isLogin';
 import isPassword from '../../modules/OtherScripts/Validators/isPassword/isPassword';
 import transport from '../../modules/Transport/Transport';
+import viewService from '../ViewService/ViewService';
 
 class FormService {
   constructor() {
@@ -64,6 +65,14 @@ class FormService {
 
   _getStringByCondition(condition, string) {
     return condition ? string : '';
+  }
+
+  showPreLoader() {
+    viewService.showPreLoader();
+  }
+
+  hidePreLoader() {
+    viewService.hidePreLoader();
   }
 }
 
