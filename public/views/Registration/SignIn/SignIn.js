@@ -25,8 +25,6 @@ export default class SignIn extends FormView {
         controls: [{
           text: 'Sign In',
           action: '/signin'
-        }, {
-          text: 'Back'
         }]
       }
     }));

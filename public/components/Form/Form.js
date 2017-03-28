@@ -24,9 +24,30 @@ export default class Form extends Block {
       elements: elements.fields
     });
 
+    this._appendClose();
+
     this.find('form').appendChild((this._submitButton(elements.controls[0]).render()));
-    this.find('form').appendChild((this._backButton(elements.controls[1]).render()));
     this._inputsFocusEvent();
+  }
+
+  _appendClose() {
+    const header = this.find('.form__header');
+
+    const close = new Block('span', {
+      class: 'close'
+    });
+
+    close._getElement().innerHTML = '&times;';
+
+    header.appendChild(close.render());
+    this._eventCloseButton(close);
+  }
+
+  _eventCloseButton(close) {
+    close._getElement().onclick = event => {
+      event.preventDefault();
+      viewService.go('/');
+    };
   }
 
   _inputsFocusEvent() {
@@ -167,23 +188,41 @@ export default class Form extends Block {
     });
 
     submit.setAttributeBlock('disabled', 'disabled');
-    submit.start('click', event => this._submit(event, button.action));
+    submit.start('click', event => {
+      this._submit(event, button.action)
+        .then(response => {
+          console.log(response);
+          return +response.status;
+        })
+        .then(status => {
+          const state = status === 200;
+
+          userService.setState(state);
+          state ? viewService.go('/') : this._setErrorResponse(status);
+        });
+    });
 
     return submit;
   }
 
-  _backButton(button) {
-    const back = new Button({
-      type: 'submit',
-      text: button.text
-    });
+  _setErrorResponse(status) {
+    this._writeError(this._getStringByErrorType(status));
+  }
 
-    back.start('click', event => {
-      event.preventDefault();
-      viewService.go('/');
-    });
+  _writeError(string) {
+    const span = this.findAll('span')[1];
 
-    return back;
+    span.innerHTML = string;
+    span.style.display = 'block';
+  }
+
+  _getStringByErrorType(status) {
+    switch (+status) {
+      case 404:
+        return 'User not found';
+      case 409:
+        return 'User already exist';
+    }
   }
 
   _submit(event, uri) {
@@ -191,17 +230,7 @@ export default class Form extends Block {
 
     const data = this._getData();
 
-    formService.sendRequest(uri, this._getSendPack(uri, data))
-      .then(response => {
-        console.log(response);
-        return +response.status === 200;
-      })
-      .then(status => {
-        userService.setState(status);
-        if (status) {
-          viewService.go('/');
-        }
-      });
+    return formService.sendRequest(uri, this._getSendPack(uri, data));
   }
 
   _getSendPack(uri, data) {

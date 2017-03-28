@@ -4,6 +4,7 @@
       <span>Soul Hunting</span>
     </div>
     <form class="form" name="{data.title}">
+      <span class="errorText__response"></span>
       <ul>
         <fest:for iterate="data.elements" index="i" value="input">
           <li name="{input.name}">

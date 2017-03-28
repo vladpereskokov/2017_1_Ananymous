@@ -120,6 +120,22 @@
   }
 }
 
+.close {
+  position: absolute;
+  font-family: 'Keep Calm' !important;
+  font-size: 22pt !important;
+  margin-top: -8px;
+  margin-left: 5px;
+  color: darkgrey !important;
+
+  &:hover,
+  &:focus {
+    color: white !important;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
 .ok {
   border: 2px solid limegreen !important;
   transition: 0.5s;
@@ -133,4 +149,9 @@
 .errorText {
   color: red !important;
   transition: 0.5s;
+}
+
+.errorText__response {
+  color: red !important;
+  display: none;
 }
