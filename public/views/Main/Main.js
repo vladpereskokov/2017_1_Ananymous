@@ -12,6 +12,7 @@ class Main extends Block {
       class: 'wrapper'
     });
 
+    this._state = false;
     this.toDocument(preLoader.render());
   }
 
@@ -42,7 +43,84 @@ class Main extends Block {
       this._setEventUnLoggedForm();
     }
 
+    this._setMainButtons();
+
     return this;
+  }
+
+  _setMainButtons() {
+    this._setButtons(this._getButtons());
+    this._setEventAppearanceControls();
+    this._setActive(this._buttons[0].button);
+  }
+
+  _setEventAppearanceControls() {
+    for (let i of this._buttons) {
+      const button = i.button[1];
+
+      button.onmouseover = event => {
+        if (event.type === 'mouseover') {
+          const activeButton = this._checkActiveButton();
+
+          if (activeButton[0] !== i.button[0]) {
+            this._setPassive(activeButton);
+            this._setActive(i.button);
+          }
+        }
+      };
+    }
+  }
+
+  _setPassive(button) {
+    const background = button[1].querySelector('div');
+    const text = button[1].querySelector('a');
+
+    background.classList.remove('start__background');
+    text.classList.remove('start__button');
+
+    button[2] = false;
+  }
+
+  _setActive(button) {
+    const background = button[1].querySelector('div');
+    const text = button[1].querySelector('a');
+
+    background.classList.add('start__background');
+    text.classList.add('start__button');
+
+    button[2] = true;
+  }
+
+  _checkActiveButton() {
+    for (let button of this._buttons) {
+      if (button.button[2]) {
+        return button.button;
+      }
+    }
+  }
+
+  _setButtons(buttons) {
+    this._buttons = [
+      {
+        button: [
+          '1',
+          buttons[0],
+          false
+        ]
+      }, {
+        button: [
+          '2',
+          buttons[1],
+          false
+        ]
+      }, {
+        button: [
+          '3',
+          buttons[2],
+          false
+        ]
+      }
+    ];
   }
 
   _setFormRotate() {
@@ -75,7 +153,7 @@ class Main extends Block {
   }
 
   _getButtons() {
-    return document.getElementsByClassName('wrapper__main__form__button');
+    return document.getElementsByClassName('wrapper__main__form-wrapper');
   }
 
   logout() {
@@ -93,12 +171,12 @@ class Main extends Block {
 
     if (button) {
       button.addEventListener('click', this.logout.bind(this));
-      button.style.display = 'block';
+      button.classList.remove('logout-off');
     }
   }
 
   _findLogoutButton() {
-    return (document.getElementsByName('logout'))[0];
+    return this._getButtons()[2];
   }
 
   _getUnLoggedForm() {
@@ -126,9 +204,6 @@ class Main extends Block {
   }
 
   hide() {
-    if (this._getDocument().querySelector('.wrapper__main__wrapper')) {
-      this._getDocument().querySelector('.wrapper__main__wrapper').style.display = 'none';
-    }
   }
 
   show() {
@@ -147,13 +222,8 @@ class Main extends Block {
       .then(status => {
         viewService.setState(status);
         if (!main) {
-          console.log('here');
-
           this.toDocument(this._createWrapperMain().render());
         } else {
-          console.log('here1');
-          console.log(main);
-
           this._builtMain(viewService.getState());
         }
 

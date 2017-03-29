@@ -3,6 +3,9 @@ import Button from '../../components/Button/Button';
 import Table from '../../components/Table/Table';
 import Popup from '../../animations/Popup/Popup';
 import Fade from '../../animations/Fade/Fade';
+import viewService from '../../services/ViewService/ViewService';
+
+import './Scoreboard.scss';
 
 const table = {
   head: ['Nickname', 'Score'],
@@ -19,27 +22,31 @@ const table = {
 class Scoreboard extends Table {
   constructor() {
     super(table);
+
+    this._background = this._createBackground();
   }
 
   init() {
-    this._background = this._createBackground();
     this._getElement().append(this._backButton().render());
+
     this._initAnimation();
-    this.globalFind('.wrapper').appendChild(this._background.render());
-    this.globalFind('.wrapper').appendChild(this._getElement());
+
+    this._scoreboardView = this._setUp();
+    this._getDocument().appendChild(this._scoreboardView.render());
+
     this._sortTable();
   }
 
   showMain() {
-    this.getRouter().go('/');
+    viewService.go('/');
   }
 
   show() {
     this._animationBackground.on();
     this._animationTable.on();
 
-    this._getElement().style.display = 'block';
-    this._background._getElement().style.display = 'block';
+    this._scoreboardView._getElement().style.display = 'block';
+
   }
 
   hide() {
@@ -47,8 +54,8 @@ class Scoreboard extends Table {
     this._animationTable.off();
 
     setTimeout(() => {
-      this._getElement().style.display = 'none';
-      this._background._getElement().style.display = 'none';
+      this._scoreboardView._getElement().style.display = 'none';
+
     }, 400);
   }
 
@@ -117,8 +124,19 @@ class Scoreboard extends Table {
 
   _createBackground() {
     return new Block('div', {
-      class: 'registration__back'
+      class: 'scoreboard__back'
     })
+  }
+
+  _setUp() {
+    const wrapper = new Block('div', {
+      class: 'scoreboard__wrapper'
+    });
+
+    wrapper.append(this._background.render());
+    wrapper.append(this.render());
+
+    return wrapper;
   }
 }
 

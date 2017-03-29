@@ -132,6 +132,7 @@ export default class Form extends Block {
   }
 
   _defaultError(element) {
+    this._setErrorResponse(0);
     const span = element.querySelector('span');
 
     element.classList.remove('error');
@@ -225,6 +226,8 @@ export default class Form extends Block {
         return 'User not found';
       case 409:
         return 'User already exist';
+      case 0:
+        return '';
     }
   }
 

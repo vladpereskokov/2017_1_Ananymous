@@ -49,29 +49,67 @@ body {
       }
 
       &-wrapper {
-        margin-bottom: 50px;
+        margin: 0 auto 50px;
         height: 40px;
+        width: 300px;
+        cursor: pointer;
+      }
+
+      &-wrapper:hover &__background {
+        background: #FF6C00;
+        box-shadow: 10px 10px 10px #FF6C00,
+        -10px 10px 10px #FF6C00,
+        -10px -10px 10px #FF6C00,
+        10px -10px 10px #FF6C00;
+      }
+
+      &-wrapper:hover &__button {
+        font-size: 33pt;
+        color: black;
+      }
+
+      &__background {
+        margin: 0 auto 50px;
+        height: 60px;
+        width: 300px;
+        opacity: 0.9;
+        background: #171717;
+        border-radius: 10px;
+        box-shadow: 10px 10px 10px #181818,
+        -10px -10px 10px #181818,
+        10px -10px 10px #181818,
+        -10px 10px 10px #181818;
+        position: absolute;
       }
 
       &__button {
         font-family: 'Keep Calm';
         font-size: 30pt;
+        top: 25%;
         color: white;
         cursor: pointer;
-
-        &:hover {
-          font-size: 33pt;
-          text-shadow: 3px 15px 100px #FF6C00;
-        }
+        position: relative;
 
         &-logout {
           margin-top: 150px;
           font-size: 25pt;
-          display: none;
         }
       }
     }
   }
+}
+
+.start__background {
+  background: #FF6C00 !important;
+  box-shadow: 10px 10px 10px #FF6C00,
+  -10px 10px 10px #FF6C00,
+  -10px -10px 10px #FF6C00,
+  10px -10px 10px #FF6C00 !important;
+}
+
+.start__button {
+  font-size: 33pt !important;
+  color: black !important;
 }
 
 .main-wrapper {
@@ -106,4 +144,8 @@ body {
     margin-top: -35px;
     margin-left: 220px;
   }
+}
+
+.logout-off {
+  display: none !important;
 }

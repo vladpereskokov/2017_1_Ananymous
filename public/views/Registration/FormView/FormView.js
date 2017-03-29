@@ -9,22 +9,22 @@ export default class FormView extends Block {
     });
 
     this._form = form;
+    this._background = this._createBackground();
+    this._form.renderTo(this._getElement());
   }
 
   init() {
-    this._background = this._createBackground();
-    this._form.renderTo(this._getElement());
     this._initAnimation();
-    this.globalFind('.main-wrapper').appendChild(this._background.render());
-    this.globalFind('.main-wrapper').appendChild(this.render());
+
+    this._formView = this._setUp();
+    this._getDocument().appendChild(this._formView.render());
   }
 
   show() {
     this._animationBackground.on();
     this._animationForm.on();
 
-    this._getElement().style.display = 'block';
-    this._background._getElement().style.display = 'block';
+    this._formView._getElement().style.display = 'block';
   }
 
   hide() {
@@ -32,16 +32,8 @@ export default class FormView extends Block {
     this._animationForm.off();
 
     setTimeout(() => {
-      this._getElement().style.display = 'none';
-      this._background._getElement().style.display = 'none';
+      this._formView._getElement().style.display = 'none';
     }, 400);
-  }
-
-  insertAfter(insertElement, referenceElement) {
-    const parent = referenceElement.parentNode;
-    const next = referenceElement.nextSibling;
-    return next ? parent.insertBefore(insertElement, next) :
-      parent.appendChild(insertElement);
   }
 
   getForm() {
@@ -55,7 +47,18 @@ export default class FormView extends Block {
 
   _createBackground() {
     return new Block('div', {
-      class: 'registration__back'
+      class: 'scoreboard__back'
     })
+  }
+
+  _setUp() {
+    const wrapper = new Block('div', {
+      class: 'wrapper__registration'
+    });
+
+    wrapper.append(this._background.render());
+    wrapper.append(this.render());
+
+    return wrapper;
   }
 }

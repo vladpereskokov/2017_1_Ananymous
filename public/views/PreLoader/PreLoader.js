@@ -14,7 +14,6 @@ class PreLoader extends Block {
 
   init() {
     this._getElement().innerHTML = template();
-    console.log(this.render());
   }
 }
 
