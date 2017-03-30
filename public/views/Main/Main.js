@@ -13,6 +13,7 @@ class Main extends Block {
     });
 
     this._state = false;
+    this._isAnimate = 0;
     this.toDocument(preLoader.render());
   }
 
@@ -33,6 +34,10 @@ class Main extends Block {
   _builtMain(state = false) {
     this._getElement().innerHTML = template(this._chooseForm(state));
 
+    if (this._isAnimate > 1) {
+      this.find('.wrapper__main__wrapper').classList.remove('animation-open');
+    }
+
     this.toDocument(this._getElement());
 
     if (state) {
@@ -46,6 +51,7 @@ class Main extends Block {
     }
 
     this._setMainButtons();
+    ++this._isAnimate;
 
     return this;
   }

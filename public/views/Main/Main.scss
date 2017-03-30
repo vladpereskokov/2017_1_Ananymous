@@ -20,8 +20,6 @@ body {
       width: 100%;
       margin: 0 auto;
       position: absolute;
-      animation-name: example;
-      animation-duration: 4s;
     }
 
     &__header {
@@ -165,7 +163,8 @@ body {
 }
 
 .animation-open {
-
+  animation-name: example;
+  animation-duration: 4s;
 }
 
 @keyframes example {
