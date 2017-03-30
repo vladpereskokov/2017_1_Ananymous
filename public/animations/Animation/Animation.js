@@ -12,7 +12,7 @@ export default class Animation {
   }
 
   getElement() {
-    return this._block._getElement();
+    return this._block;
   }
 
   _init(type) {

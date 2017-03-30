@@ -20,6 +20,8 @@ body {
       width: 100%;
       margin: 0 auto;
       position: absolute;
+      animation-name: example;
+      animation-duration: 4s;
     }
 
     &__header {
@@ -64,7 +66,7 @@ body {
       }
 
       &-wrapper:hover &__button {
-        font-size: 33pt;
+        font-size: 26pt;
         color: black;
       }
 
@@ -80,20 +82,20 @@ body {
         10px -10px 10px #181818,
         -10px 10px 10px #181818;
         position: absolute;
+        -webkit-transition-duration: 0.4s;
+        transition-duration: 0.4s;
       }
 
       &__button {
         font-family: 'Keep Calm';
-        font-size: 30pt;
+        font-size: 23pt;
         top: 25%;
         color: white;
         cursor: pointer;
         position: relative;
-
-        &-logout {
-          margin-top: 150px;
-          font-size: 25pt;
-        }
+        margin-left: -10px;
+        -webkit-transition-duration: 0.4s;
+        transition-duration: 0.4s;
       }
     }
   }
@@ -110,6 +112,14 @@ body {
 .start__button {
   font-size: 33pt !important;
   color: black !important;
+}
+
+.game__background {
+  width: 350px !important;
+}
+
+.game__button {
+  //margin-left: 40px !important;
 }
 
 .main-wrapper {
@@ -148,4 +158,22 @@ body {
 
 .logout-off {
   display: none !important;
+}
+
+.logout {
+  margin-top: 150px !important;
+}
+
+.animation-open {
+
+}
+
+@keyframes example {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

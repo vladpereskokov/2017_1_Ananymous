@@ -1,5 +1,5 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
-  <div class="wrapper__main__wrapper">
+  <div class="wrapper__main__wrapper animation-open">
     <div class="wrapper__main__header">
       SOUL HUNTING
       <p class="wrapper__main__header-register">&#174;</p>
@@ -22,7 +22,7 @@
           </a>
         </div>
       </fest:for>
-      <div class="wrapper__main__form-wrapper logout-off">
+      <div class="wrapper__main__form-wrapper logout-off logout">
         <div class="wrapper__main__form__background">
         </div>
         <a>

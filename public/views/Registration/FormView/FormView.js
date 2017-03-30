@@ -41,8 +41,8 @@ export default class FormView extends Block {
   }
 
   _initAnimation() {
-    this._animationForm = new Popup(this);
-    this._animationBackground = new Fade(this._background);
+    this._animationForm = new Popup(this.render());
+    this._animationBackground = new Fade(this._background.render());
   }
 
   _createBackground() {

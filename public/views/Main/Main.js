@@ -31,14 +31,16 @@ class Main extends Block {
   }
 
   _builtMain(state = false) {
-    this._getElement().innerHTML = template(this._changeForm(state));
+    this._getElement().innerHTML = template(this._chooseForm(state));
 
     this.toDocument(this._getElement());
 
     if (state) {
-      this._setEventLoggedForm();
-      this._logoutButton();
-      this._setFormRotate();
+      this._changeForm();
+    }
+
+    if (state) {
+      this._setLoggedForm();
     } else {
       this._setEventUnLoggedForm();
     }
@@ -46,6 +48,23 @@ class Main extends Block {
     this._setMainButtons();
 
     return this;
+  }
+
+  _changeForm() {
+    const buttons = this._getButtons();
+
+    buttons[0].querySelector('div').classList.add('game__background');
+    buttons[0].querySelector('a').classList.add('game__button');
+    buttons[1].querySelector('div').classList.add('game__background');
+    buttons[1].querySelector('a').classList.add('game__button');
+    buttons[2].querySelector('div').classList.add('game__background');
+    buttons[2].querySelector('a').classList.add('game__button');
+  }
+
+  _setLoggedForm() {
+    this._setEventLoggedForm();
+    this._logoutButton();
+    this._setFormRotate();
   }
 
   _setMainButtons() {
@@ -65,6 +84,10 @@ class Main extends Block {
           if (activeButton[0] !== i.button[0]) {
             this._setPassive(activeButton);
             this._setActive(i.button);
+
+            if (i.button[0] === '2') {
+              button.querySelector('a').style.marginLeft = '0px';
+            }
           }
         }
       };
@@ -132,7 +155,7 @@ class Main extends Block {
     return new Image().render();
   }
 
-  _changeForm(state) {
+  _chooseForm(state) {
     return state ? this._getLoggedForm() : this._getUnLoggedForm();
   }
 

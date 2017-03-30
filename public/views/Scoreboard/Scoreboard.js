@@ -60,8 +60,8 @@ class Scoreboard extends Table {
   }
 
   _initAnimation() {
-    this._animationTable = new Popup(this);
-    this._animationBackground = new Fade(this._background);
+    this._animationTable = new Popup(this.render());
+    this._animationBackground = new Fade(this._background.render());
   }
 
   _sortTable() {
