@@ -22,7 +22,7 @@
 
   &__text {
     font-family: 'Keep Calm';
-    font-size: 23pt;
+    font-size: 24pt;
     top: 25%;
     color: white;
     cursor: pointer;
@@ -58,6 +58,22 @@
 }
 
 .start__button {
-  font-size: 33pt !important;
+  font-size: 30pt !important;
   color: black !important;
 }
+
+.open__form__animation {
+  animation-name: open;
+  animation-duration: 3s;
+}
+
+@keyframes open__form {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+

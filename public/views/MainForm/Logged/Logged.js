@@ -12,6 +12,8 @@ export default class Logged extends MainForm {
   init() {
     this._setUrls(['/game', '/scoreboard', '']);
 
+    console.log(viewService.getUser());
+
     this._getElement().innerHTML = template({
       buttons: [{
         text: 'GAME'
@@ -19,7 +21,8 @@ export default class Logged extends MainForm {
         text: 'SCOREBOARD'
       }, {
         text: 'LOGOUT'
-      }]
+      }],
+      username: viewService.getUser().login
     });
 
     this._setMainButtons();

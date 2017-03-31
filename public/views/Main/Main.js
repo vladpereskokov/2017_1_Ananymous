@@ -39,11 +39,13 @@ export default class Main extends Block {
         data.json
           .then(user => {
             if (!user.message) {
+              console.log(user);
               viewService.setUser({
                 login: user.login,
                 email: user.email
               });
             }
+            console.log(viewService.getUser());
             viewService.setState(data.status);
             this._changeView();
 
@@ -57,6 +59,9 @@ export default class Main extends Block {
     const newView = mainViewService.getMainForm();
 
     if (!this._currentView || newView !== this._currentView) {
+      if (this._currentView) {
+        this._currentView._getElement().style.display = 'none';
+      }
       this._currentView = newView;
       this.append(this._currentView.render());
     }

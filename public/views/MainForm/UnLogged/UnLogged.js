@@ -1,6 +1,5 @@
 import MainForm from '../MainForm/MainForm';
 
-import './UnLogged.scss';
 import template from './UnLogged.tmpl.xml';
 
 export default class UnLogged extends MainForm {

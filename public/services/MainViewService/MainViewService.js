@@ -9,12 +9,10 @@ class MainViewService {
     }
 
     MainViewService.__instance = this;
-    this._loggedForm = new Logged();
-    this._unLoggedForm = new UnLogged();
   }
 
   getMainForm() {
-    return this._getState() ? this._loggedForm : this._unLoggedForm;
+    return this._getState() ? new Logged() : new UnLogged();
   }
 
   _getState() {

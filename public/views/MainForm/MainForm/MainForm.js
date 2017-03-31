@@ -48,7 +48,6 @@ export default class MainForm extends Block {
       button.button.addEventListener('mouseover', event => {
         if (event.type === 'mouseover') {
           const activeButton = this._checkActiveButton(buttons);
-          console.log(activeButton);
 
           if (activeButton.number !== button.number) {
             this._setPassive(activeButton);
@@ -106,7 +105,5 @@ export default class MainForm extends Block {
         });
       }
     }
-
-    console.log(this._buttons);
   }
 }
