@@ -4,40 +4,6 @@
       SOUL HUNTING
       <p class="wrapper__main__header-register">&#174;</p>
     </div>
-    <div class="wrapper__main__form">
-      <fest:for iterate="data.buttons" index="i" value="button">
-        <div class="wrapper__main__form-wrapper">
-          <div class="wrapper__main__form__background">
-          </div>
-          <a>
-            <fest:attributes>
-              <fest:attribute name="class">
-                wrapper__main__form__button
-              </fest:attribute>
-              <fest:attribute name="data-nav">
-                <fest:value>button.action</fest:value>
-              </fest:attribute>
-            </fest:attributes>
-            <fest:value>button.text</fest:value>
-          </a>
-        </div>
-      </fest:for>
-      <div class="wrapper__main__form-wrapper logout-off logout">
-        <div class="wrapper__main__form__background">
-        </div>
-        <a>
-          <fest:attributes>
-            <fest:attribute name="class">
-              wrapper__main__form__button wrapper__main__form__button-logout
-            </fest:attribute>
-            <fest:attribute name="name">
-              logout
-            </fest:attribute>
-          </fest:attributes>
-          LOGOUT
-        </a>
-      </div>
-    </div>
   </div>
   <div class="footer">
     <p class="footer-team">ANANYMOUS</p>

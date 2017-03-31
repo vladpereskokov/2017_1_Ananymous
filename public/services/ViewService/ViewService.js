@@ -56,6 +56,14 @@ class ViewService {
     userService.setState(state);
   }
 
+  setUser(user) {
+    userService.setData(user);
+  }
+
+  getUser() {
+    return userService.getData();
+  }
+
   showPreLoader() {
     preLoader.show();
   }
