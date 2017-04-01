@@ -44,10 +44,6 @@ class Router {
   }
 
   go(pathname) {
-    if (window.location.pathname === pathname) {
-      return;
-    }
-
     this.history.pushState({}, '', pathname);
     this._onRoute(pathname);
   }

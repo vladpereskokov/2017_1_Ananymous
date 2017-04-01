@@ -1,5 +1,6 @@
 import MainForm from '../MainForm/MainForm';
 import viewService from '../../../services/ViewService/ViewService';
+import mainViewService from '../../../services/MainViewService/MainViewService';
 
 import './Logged.scss';
 import template from './Logged.tmpl.xml';
@@ -32,7 +33,6 @@ export default class Logged extends MainForm {
 
     viewService.logout()
       .then(() => {
-        this.hide();
         viewService.go('/');
         viewService.hidePreLoader();
       });

@@ -64,6 +64,12 @@ class ViewService {
     return userService.getData();
   }
 
+  showMain() {
+    if (this._currentRoute) {
+      this._currentRoute
+    }
+  }
+
   showPreLoader() {
     preLoader.show();
   }
