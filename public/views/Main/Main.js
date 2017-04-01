@@ -56,7 +56,7 @@ export default class Main extends Block {
 
   _changeView() {
     const newView = mainViewService.getMainForm();
-    
+
     if (!this._currentView || newView._buttons.length !== this._currentView._buttons.length) {
       if (this._currentView) {
         this._currentView._getElement().style.display = 'none';

@@ -6,6 +6,7 @@ import Game from './views/Game/Game';
 import Main from './views/Main/Main';
 
 import './static/css/reset.scss';
+import './static/css/fonts.scss';
 
 const router = new Router();
 
