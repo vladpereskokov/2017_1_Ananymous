@@ -27,19 +27,20 @@ export default class Logged extends MainForm {
     this._setLogoutButton();
   }
 
-  _setLogoutButton() {
-    this._findLogoutButton()
-      .addEventListener('click', this.logout.bind(this));
-  }
-
   logout() {
     viewService.showPreLoader();
 
     viewService.logout()
       .then(() => {
-        viewService.hidePreLoader();
+        this.hide();
         viewService.go('/');
+        viewService.hidePreLoader();
       });
+  }
+
+  _setLogoutButton() {
+    this._findLogoutButton()
+      .addEventListener('click', this.logout.bind(this));
   }
 
   _findLogoutButton() {
