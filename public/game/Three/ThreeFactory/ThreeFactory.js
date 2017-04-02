@@ -62,6 +62,38 @@ class ThreeFactory {
   get flatShading() {
     return this._three.FlatShading;
   }
+
+  perspectiveCamera(...settings) {
+    const [fov, aspect, near, far] = settings;
+
+    return new this._three.PerspectiveCamera(fov, aspect, near, far);
+  }
+
+  scene() {
+    return new this._three.Scene();
+  }
+
+  fog(...settings) {
+    const [hex, near, far] = settings;
+
+    return new this._three.Fog(hex, near, far);
+  }
+
+  hemisphereLight(...settings) {
+    const [skyColor, groundColor, intensity] = settings;
+
+    return new this._three.HemisphereLight(skyColor, groundColor, intensity);
+  }
+
+  raycaster(...settings) {
+    const [origin, direction, near, far] = settings;
+
+    return new this._three.Raycaster(origin, direction, near, far);
+  }
+
+  webGLRender() {
+    return new this._three.WebGLRenderer();
+  }
 }
 
 const threeFactory = new ThreeFactory();

@@ -1,144 +1,149 @@
 import threeFactory from '../Three/ThreeFactory/ThreeFactory';
 import Floor from "../Three/Objects/Floor/Floor";
 import Box from "../Three/Objects/Box/Box";
+import Camera from "../Three/Objects/Camera/Camera";
 
 export default class Scene {
-  constructor(pointerLock, mouse1, keys1) {
-    var camera, scene, renderer;
-    var geometry, material, mesh;
-    var controls;
+  constructor(pointerLock, mouse, keys) {
+    this._mouse = mouse;
+    this._keys = keys;
+    this._previousTime = performance.now();
+    this._objects = [];
+    this._renderer = null;
 
-    var objects = [];
+    this._init(pointerLock);
+    this._animate();
+  }
 
-    var raycaster;
+  _init(pointerLock) {
+    this._camera = new Camera().getCamera;
 
-    var mouse = mouse1;
-    var keys = keys1;
+    this._setupFog();
+    this._setupLight();
+    this._setupControlls(pointerLock);
+    this._setupRaycaster();
 
+    this._appendFloor();
+    this._appendBoxes();
 
-    init();
-    animate();
+    this._render();
 
-    var prevTime = performance.now();
+    window.addEventListener('resize', this._onWindowResize, false);
+  }
 
-    function init() {
+  _setupFog() {
+    this._scene = threeFactory.scene();
+    this._scene.fog = threeFactory.fog(0xffffff, 0, 750);
+  }
 
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+  _setupLight() {
+    this._light = threeFactory.hemisphereLight(0xeeeeff, 0x777788, 0.75);
+    this._light.position.set(0.5, 1, 0.75);
+    this._scene.add(this._light);
+  }
 
-      scene = new THREE.Scene();
-      scene.fog = new THREE.Fog(0xffffff, 0, 750);
+  _setupControlls(pointerLock) {
+    this._controls = pointerLock(this._camera);
+    this._controls.setMouseMove(this._mouse
+      .onMouseMove(this._controls.getPitch, this._controls.getObject));
 
-      var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
-      light.position.set(0.5, 1, 0.75);
-      scene.add(light);
+    this._scene.add(this._controls.getObject);
+  }
 
-      controls = pointerLock(camera);
-      controls.setMouseMove(mouse
-        .onMouseMove(controls.getPitch, controls.getObject));
+  _setupRaycaster() {
+    this._raycaster = threeFactory
+      .raycaster(threeFactory.vector3D(),
+        threeFactory.vector3D(0, -1, 0), 0, 10);
+  }
 
-      scene.add(controls.getObject);
+  _appendFloor() {
+    this._scene.add(new Floor().getFloor);
+  }
 
-      raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+  _appendBoxes() {
+    for (let i = 0; i < 20; ++i) {
+      let box = new Box(0xC1876B, 20, 20, 20).getBox;
+      box.position.x = Math.floor(Math.random() * 20 - 10) * 2;
+      box.position.y = Math.floor(Math.random() * 20) * 2 + 10;
+      box.position.z = Math.floor(Math.random() * 20 - 10) * 2;
 
-      // floor
-      scene.add(new Floor().getFloor);
+      this._scene.add(box);
+      this._objects.push(box);
+    }
+  }
 
-      // objects
+  _render() {
+    this._renderer = threeFactory.webGLRender();
+    this._renderer.setClearColor(0xffffff);
+    this._renderer.setPixelRatio(window.devicePixelRatio);
+    this._renderer.setSize(window.innerWidth, window.innerHeight);
 
-      for (let i = 0; i < 20; ++i) {
-        let box = new Box(0xC1876B, 20, 20, 20).getBox;
-        box.position.x = Math.floor(Math.random() * 20 - 10) * 2;
-        box.position.y = Math.floor(Math.random() * 20) * 2 + 10;
-        box.position.z = Math.floor(Math.random() * 20 - 10) * 2;
+    document.body.appendChild(this._renderer.domElement);
+  }
 
-        scene.add(box);
-        objects.push(box);
-      }
+  _animate() {
+    requestAnimationFrame(this._animate.bind(this));
 
-      //
+    if (this._keys.getEnabled) {
+      this._raycaster.ray.origin.copy(this._controls.getObject.position);
+      this._raycaster.ray.origin.y -= 10;
 
-      renderer = new THREE.WebGLRenderer();
-      renderer.setClearColor(0xffffff);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
+      const intersections = this._raycaster.intersectObjects(this._objects);
 
-      //
-
-      window.addEventListener('resize', onWindowResize, false);
+      this._newAction((performance.now() - this._previousTime) / 1000,
+        intersections.length > 0);
 
     }
 
-    function onWindowResize() {
+    this._renderer.render(this._scene, this._camera);
+  }
 
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+  _newAction(delta, isOnObject) {
+    this._keys._velocity.x -= this._keys._velocity.x * 10.0 * delta;
+    this._keys._velocity.z -= this._keys._velocity.z * 10.0 * delta;
 
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    this._keys._velocity.y -= 9.8 * 100.0 * delta;
+
+    if (this._keys._forward) {
+      this._keys._velocity.z -= 400.0 * delta;
+    }
+    if (this._keys._backward) {
+      this._keys._velocity.z += 400.0 * delta;
+    }
+
+    if (this._keys._left) {
+      this._keys._velocity.x -= 400.0 * delta;
+    }
+    if (this._keys._right) {
+      this._keys._velocity.x += 400.0 * delta;
+    }
+
+    if (isOnObject === true) {
+      this._keys._velocity.y = Math.max(0, this._keys._velocity.y);
+
+      this._keys._jump = true;
+    }
+
+    this._controls.getObject.translateX(this._keys._velocity.x * delta);
+    this._controls.getObject.translateY(this._keys._velocity.y * delta);
+    this._controls.getObject.translateZ(this._keys._velocity.z * delta);
+
+    if (this._controls.getObject.position.y < 10) {
+
+      this._keys._velocity.y = 0;
+      this._controls.getObject.position.y = 10;
+
+      this._keys._jump = true;
 
     }
 
-    function animate() {
+    this._previousTime = performance.now();
+  }
 
-      requestAnimationFrame(animate);
+  _onWindowResize() {
+    this._camera.aspect = window.innerWidth / window.innerHeight;
+    this._camera.updateProjectionMatrix();
 
-
-      if (keys.getEnabled) {
-        raycaster.ray.origin.copy(controls.getObject.position);
-        raycaster.ray.origin.y -= 10;
-
-        var intersections = raycaster.intersectObjects(objects);
-
-        var isOnObject = intersections.length > 0;
-
-        var time = performance.now();
-        var delta = ( time - prevTime ) / 1000;
-
-        keys._velocity.x -= keys._velocity.x * 10.0 * delta;
-        keys._velocity.z -= keys._velocity.z * 10.0 * delta;
-
-
-        keys._velocity.y -= 9.8 * 100.0 * delta;
-
-        if (keys._forward) {
-          keys._velocity.z -= 400.0 * delta;
-        }
-        if (keys._backward) {
-          keys._velocity.z += 400.0 * delta;
-        }
-
-        if (keys._left) {
-          keys._velocity.x -= 400.0 * delta;
-        }
-        if (keys._right) {
-          keys._velocity.x += 400.0 * delta;
-        }
-
-        if (isOnObject === true) {
-          keys._velocity.y = Math.max(0, keys._velocity.y);
-
-          keys._jump = true;
-        }
-
-        controls.getObject.translateX(keys._velocity.x * delta);
-        controls.getObject.translateY(keys._velocity.y * delta);
-        controls.getObject.translateZ(keys._velocity.z * delta);
-
-        if (controls.getObject.position.y < 10) {
-
-          keys._velocity.y = 0;
-          controls.getObject.position.y = 10;
-
-          keys._jump = true;
-
-        }
-
-        prevTime = time;
-
-      }
-
-      renderer.render(scene, camera);
-
-    }
+    this._renderer.setSize(window.innerWidth, window.innerHeight);
   }
 }
