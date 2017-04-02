@@ -10,7 +10,7 @@ export default class Logged extends MainForm {
   }
 
   init() {
-    this._setUrls(['/game', '/scoreboard', '']);
+    this._setUrls(['/game', '/scoreboard', '/about', '']);
 
     this._getElement().innerHTML = template({
       buttons: [{
@@ -18,7 +18,10 @@ export default class Logged extends MainForm {
       }, {
         text: 'SCOREBOARD'
       }, {
-        text: 'LOGOUT'
+        text: 'ABOUT'
+      }, {
+        text: 'LOGOUT',
+        class: 'button-logout'
       }],
       username: viewService.getUser().login
     });
@@ -48,7 +51,7 @@ export default class Logged extends MainForm {
   }
 
   _setLogoutButton() {
-    this._getButton(2)
+    this._getButton(3)
       .addEventListener('click', this._logout.bind(this));
   }
 
