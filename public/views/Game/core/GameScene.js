@@ -1,4 +1,5 @@
 import PointerLock from '../../../game/Controlls/PointerLock/PointerLock';
+import CheckPointerLockApi from '../../../game/Controlls/PointerLock/CheckPointerLockApi/CheckPointerLockApi';
 import Mouse from '../../../game/Controlls/Mouse/Mouse';
 import './PointerLockControls';
 
@@ -16,12 +17,11 @@ export default class GameScene {
     var instructions = document.getElementById( 'instructions' );
 
     var mouse = new Mouse();
-
-    // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+    var checkpla = new CheckPointerLockApi();
 
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
-    if ( havePointerLock ) {
+    if (checkpla.isHave) {
 
       var element = document.body;
 
@@ -54,14 +54,8 @@ export default class GameScene {
 
       };
 
-      // Hook pointer lock state change events
-      document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-      document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-      document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
-
-      document.addEventListener( 'pointerlockerror', pointerlockerror, false );
-      document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
-      document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+      checkpla.addPointerLockChange(pointerlockchange);
+      checkpla.addPointerLockError(pointerlockerror);
 
       instructions.addEventListener( 'click', function ( event ) {
 

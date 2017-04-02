@@ -1,5 +1,5 @@
 import Block from '../../components/Block/Block';
-import GameScene from './core/GameScene';
+import Scene from '../../game/Scene/Scene';
 
 import template from './Game.tmpl.xml';
 import './Game.scss';
@@ -12,7 +12,7 @@ class Game extends Block {
   init() {
       this._getElement().innerHTML = template();
       this.toDocument(this.render());
-      new GameScene();
+      new Scene();
   }
 
   showMain() {
