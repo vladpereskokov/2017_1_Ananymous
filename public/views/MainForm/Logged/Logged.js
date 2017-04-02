@@ -1,6 +1,5 @@
 import MainForm from '../MainForm/MainForm';
 import viewService from '../../../services/ViewService/ViewService';
-import mainViewService from '../../../services/MainViewService/MainViewService';
 
 import './Logged.scss';
 import template from './Logged.tmpl.xml';
@@ -25,10 +24,35 @@ export default class Logged extends MainForm {
     });
 
     this._setMainButtons();
+    this._setGameButton();
     this._setLogoutButton();
   }
 
-  logout() {
+  _setGameButton() {
+    console.log(this._getButton(0));
+
+    this._getButton(0)
+      .addEventListener('click', this._game.bind(this));
+  }
+
+  _game() {
+    viewService.showPreLoader();
+
+    this._hideAll();
+    viewService.go('/game');
+    viewService.hidePreLoader();
+  }
+
+  _hideAll() {
+    this._getDocument().querySelector('.wrapper').style.display = 'none';
+  }
+
+  _setLogoutButton() {
+    this._getButton(2)
+      .addEventListener('click', this._logout.bind(this));
+  }
+
+  _logout() {
     viewService.showPreLoader();
 
     viewService.logout()
@@ -38,12 +62,7 @@ export default class Logged extends MainForm {
       });
   }
 
-  _setLogoutButton() {
-    this._findLogoutButton()
-      .addEventListener('click', this.logout.bind(this));
-  }
-
-  _findLogoutButton() {
-    return this._buttons[2].button;
+  _getButton(number) {
+    return this._buttons[number].button;
   }
 }
