@@ -31,6 +31,14 @@ class ThreeFactory {
       .PlaneGeometry(width, height, widthSegments, heightSegments);
   }
 
+  boxGeometry(...settings) {
+    const [width, height, depth,
+      widthSegments, heightSegments, depthSegments] = settings;
+
+    return new this._three.BoxGeometry(width, height, depth,
+      widthSegments, heightSegments, depthSegments);
+  }
+
   color(color = null) {
     return new this._three.Color(color);
   }
@@ -45,6 +53,14 @@ class ThreeFactory {
 
   mesh(geometry, material) {
     return new this._three.Mesh(geometry, material);
+  }
+
+  meshPhongMaterial(object) {
+    return new this._three.MeshPhongMaterial(object);
+  }
+
+  get flatShading() {
+    return this._three.FlatShading;
   }
 }
 

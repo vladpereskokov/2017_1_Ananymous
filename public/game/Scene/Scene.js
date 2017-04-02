@@ -1,5 +1,6 @@
 import threeFactory from '../Three/ThreeFactory/ThreeFactory';
 import Floor from "../Three/Objects/Floor/Floor";
+import Box from "../Three/Objects/Box/Box";
 
 export default class Scene {
   constructor(pointerLock, mouse1, keys1) {
@@ -44,35 +45,14 @@ export default class Scene {
 
       // objects
 
-      geometry = new THREE.BoxGeometry(20, 20, 20);
+      for (let i = 0; i < 20; ++i) {
+        let box = new Box(0xC1876B, 20, 20, 20).getBox;
+        box.position.x = Math.floor(Math.random() * 20 - 10) * 2;
+        box.position.y = Math.floor(Math.random() * 20) * 2 + 10;
+        box.position.z = Math.floor(Math.random() * 20 - 10) * 2;
 
-      for (var i = 0, l = geometry.faces.length; i < l; i++) {
-
-        var face = geometry.faces[i];
-        face.vertexColors[0] = new THREE.Color(0xC1876B);
-        face.vertexColors[1] = new THREE.Color(0xC1876B);
-        face.vertexColors[2] = new THREE.Color(0xC1876B);
-
-      }
-
-      for (var i = 0; i < 20; i++) {
-
-        material = new THREE.MeshPhongMaterial({
-          specular: 0xffffff,
-          shading: THREE.FlatShading,
-          vertexColors: THREE.VertexColors
-        });
-
-        var mesh = new THREE.Mesh(geometry, material);
-        mesh.position.x = Math.floor(Math.random() * 20 - 10) * 2;
-        mesh.position.y = Math.floor(Math.random() * 20) * 2 + 10;
-        mesh.position.z = Math.floor(Math.random() * 20 - 10) * 2;
-        scene.add(mesh);
-
-        material.color.setHex(0xC1876B);
-
-        objects.push(mesh);
-
+        scene.add(box);
+        objects.push(box);
       }
 
       //

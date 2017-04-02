@@ -8,7 +8,7 @@ export default class Floor {
   }
 
   get getFloor() {
-    return this._mesh;
+    return threeFactory.mesh(this._geometry, this._material);
   }
 
   _initGeometry() {
@@ -43,7 +43,5 @@ export default class Floor {
     this._material = threeFactory.meshBasicMaterial({
       vertexColors: threeFactory.vertexColors
     });
-
-    this._mesh = threeFactory.mesh(this._geometry, this._material);
   }
 }
