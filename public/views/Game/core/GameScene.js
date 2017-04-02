@@ -1,22 +1,9 @@
+import PointerLock from '../../../game/Controlls/PointerLock/PointerLock';
+import Mouse from '../../../game/Controlls/Mouse/Mouse';
 import './PointerLockControls';
 
 export default class GameScene {
   constructor() {
-    // let width = window.innerWidth;
-    // let height = window.innerHeight;
-    //
-    // this._canvas = document.getElementById('canvas');
-    // this._canvas.setAttribute('width', width);
-    // this._canvas.setAttribute('height', height);
-    //
-    // this._renderer = new THREE.WebGLRenderer({canvas: this._canvas});
-    // this._renderer.setClearColor(0x000000);
-    //
-    // this._scene = new THREE.Scene();
-    //
-    // this._camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000);
-    // this._camera.position.set(0, 0, 1000);
-
     var camera, scene, renderer;
     var geometry, material, mesh;
     var controls;
@@ -27,6 +14,8 @@ export default class GameScene {
 
     var blocker = document.getElementById( 'blocker' );
     var instructions = document.getElementById( 'instructions' );
+
+    var mouse = new Mouse();
 
     // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
@@ -41,13 +30,13 @@ export default class GameScene {
         if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
 
           controlsEnabled = true;
-          controls.enabled = true;
+          mouse.setEnabled = true;
 
           blocker.style.display = 'none';
 
         } else {
 
-          controls.enabled = false;
+          mouse.setEnabled = false;
 
           blocker.style.display = '-webkit-box';
           blocker.style.display = '-moz-box';
@@ -115,8 +104,11 @@ export default class GameScene {
       light.position.set( 0.5, 1, 0.75 );
       scene.add( light );
 
-      controls = new THREE.PointerLockControls( camera );
-      scene.add( controls.getObject() );
+      controls = new PointerLock(camera);
+      controls.setMouseMove(mouse
+        .onMouseMove(controls.getPitch, controls.getObject));
+
+      scene.add( controls.getObject );
 
       var onKeyDown = function ( event ) {
 
@@ -268,7 +260,7 @@ export default class GameScene {
       requestAnimationFrame( animate );
 
       if ( controlsEnabled ) {
-        raycaster.ray.origin.copy( controls.getObject().position );
+        raycaster.ray.origin.copy( controls.getObject.position );
         raycaster.ray.origin.y -= 10;
 
         var intersections = raycaster.intersectObjects( objects );
@@ -295,14 +287,14 @@ export default class GameScene {
           canJump = true;
         }
 
-        controls.getObject().translateX( velocity.x * delta );
-        controls.getObject().translateY( velocity.y * delta );
-        controls.getObject().translateZ( velocity.z * delta );
+        controls.getObject.translateX( velocity.x * delta );
+        controls.getObject.translateY( velocity.y * delta );
+        controls.getObject.translateZ( velocity.z * delta );
 
-        if ( controls.getObject().position.y < 10 ) {
+        if ( controls.getObject.position.y < 10 ) {
 
           velocity.y = 0;
-          controls.getObject().position.y = 10;
+          controls.getObject.position.y = 10;
 
           canJump = true;
 
