@@ -35,7 +35,6 @@ export default class PointerLock {
 
   _defaultCamera() {
     this._camera.rotation.set(0, 0, 0);
-    console.log(this._camera);
   }
 
   _setPitch() {

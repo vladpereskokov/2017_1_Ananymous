@@ -1,41 +1,110 @@
+import threeFactory from '../../ThreeFactory/ThreeFactory';
+
 export default class Controlls {
   constructor() {
+    this._enabled = false;
+    this._velocity = threeFactory.vector3D();
+    this._forward = false;
+    this._backward = false;
+    this._left = false;
+    this._right = false;
+    this._jump = false;
+
+    this._init();
   }
 
-  onKeyDown(buttons, velocity) {
+  _init() {
+    document.addEventListener('keydown', this._onKeyDown());
+    document.addEventListener('keyup', this._onKeyUp());
+  }
+
+  get x() {
+    return this._velocity.x;
+  }
+
+  get y() {
+    return this._velocity.y;
+  }
+
+  get z() {
+    return this._velocity.z;
+  }
+
+  set x(x) {
+    this._velocity.x = x;
+  }
+
+  set y(y) {
+    this._velocity.y = y;
+  }
+
+  set z(z) {
+    this._velocity.z = z;
+  }
+
+  set jump(jump) {
+    this._jump = jump;
+  }
+
+  set setEnabled(enabled) {
+    this._enabled = enabled;
+  }
+
+  get getEnabled() {
+    return this._enabled;
+  }
+
+  get forward() {
+    return this._forward;
+  }
+
+  get backward() {
+    return this._backward;
+  }
+
+  get left() {
+    return this._left;
+  }
+
+  get right() {
+    return this._right;
+  }
+
+  _onKeyDown() {
     return (event) => {
-      this._setKeyDown(buttons, event.keyCode, velocity);
+      this._setKeyDown(event.keyCode);
     }
   }
 
-  onKeyUp(buttons) {
+  _onKeyUp() {
     return (event) => {
-      this._setKeyUp(buttons, event.keyCode);
+      this._setKeyUp(event.keyCode);
     }
   }
 
-  _setKeyDown(buttons, code, velocity) {
+  _setKeyDown(code) {
     switch (code) {
       case 38: // up
       case 87: // w
-        buttons.forward = true;
+        this._forward = true;
         break;
       case 37: // left
       case 65: // a
-        buttons.left = true; break;
+        this._left = true;
+        break;
       case 40: // down
       case 83: // s
-        buttons.backward = true;
+        this._backward = true;
         break;
       case 39: // right
       case 68: // d
-        buttons.right = true;
+        this._right = true;
         break;
       case 32: // space
-        if (buttons.jump === true) {
-          velocity.y += 350;
+        if (this._jump === true) {
+          this._velocity.y += 350;
         }
-        buttons.jump = false;
+        this._jump = false;
         break;
 
       default:
@@ -43,23 +112,23 @@ export default class Controlls {
     }
   }
 
-  _setKeyUp(buttons, code) {
+  _setKeyUp(code) {
     switch(code) {
       case 38: // up
       case 87: // w
-        buttons.forward = false;
+        this._forward = false;
         break;
       case 37: // left
       case 65: // a
-        buttons.left = false;
+        this._left = false;
         break;
       case 40: // down
       case 83: // s
-        buttons.backward = false;
+        this._backward = false;
         break;
       case 39: // right
       case 68: // d
-        buttons.right = false;
+        this._right = false;
         break;
 
       default:

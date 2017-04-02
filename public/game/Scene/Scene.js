@@ -1,8 +1,5 @@
-import Mouse from '../Controlls/Mouse/Mouse';
-import PointerLockApiManager from '../Managers/PointerLockApiManager/PointerLockApiManager';
-
 export default class Scene {
-  constructor() {
+  constructor(pointerLock, mouse1, keys1) {
     var camera, scene, renderer;
     var geometry, material, mesh;
     var controls;
@@ -11,30 +8,14 @@ export default class Scene {
 
     var raycaster;
 
-    var mouse = new Mouse();
+    var mouse = mouse1;
+    var keys = keys1;
 
-    var blocker = document.getElementById( 'blocker' );
-    var instructions = document.getElementById( 'instructions' );
-
-    var controlsEnabled = false;
-
-
-    const pointerLockManager = new PointerLockApiManager({
-      blocker: blocker,
-      instructions: instructions
-    }, controlsEnabled, mouse);
 
     init();
     animate();
 
-    var moveForward = false;
-    var moveBackward = false;
-    var moveLeft = false;
-    var moveRight = false;
-    var canJump = false;
-
     var prevTime = performance.now();
-    var velocity = new THREE.Vector3();
 
     function init() {
 
@@ -47,74 +28,11 @@ export default class Scene {
       light.position.set( 0.5, 1, 0.75 );
       scene.add( light );
 
-      controls = pointerLockManager.getPointerLock(camera);
+      controls = pointerLock(camera);
       controls.setMouseMove(mouse
         .onMouseMove(controls.getPitch, controls.getObject));
 
       scene.add( controls.getObject );
-
-      var onKeyDown = function ( event ) {
-
-        switch ( event.keyCode ) {
-
-          case 38: // up
-          case 87: // w
-            moveForward = true;
-            break;
-
-          case 37: // left
-          case 65: // a
-            moveLeft = true; break;
-
-          case 40: // down
-          case 83: // s
-            moveBackward = true;
-            break;
-
-          case 39: // right
-          case 68: // d
-            moveRight = true;
-            break;
-
-          case 32: // space
-            if ( canJump === true ) velocity.y += 350;
-            canJump = false;
-            break;
-
-        }
-
-      };
-
-      var onKeyUp = function ( event ) {
-
-        switch( event.keyCode ) {
-
-          case 38: // up
-          case 87: // w
-            moveForward = false;
-            break;
-
-          case 37: // left
-          case 65: // a
-            moveLeft = false;
-            break;
-
-          case 40: // down
-          case 83: // s
-            moveBackward = false;
-            break;
-
-          case 39: // right
-          case 68: // d
-            moveRight = false;
-            break;
-
-        }
-
-      };
-
-      document.addEventListener( 'keydown', onKeyDown, false );
-      document.addEventListener( 'keyup', onKeyUp, false );
 
       raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 
@@ -202,7 +120,8 @@ export default class Scene {
 
       requestAnimationFrame( animate );
 
-      if ( controlsEnabled ) {
+
+      if ( keys.getEnabled ) {
         raycaster.ray.origin.copy( controls.getObject.position );
         raycaster.ray.origin.y -= 10;
 
@@ -213,33 +132,42 @@ export default class Scene {
         var time = performance.now();
         var delta = ( time - prevTime ) / 1000;
 
-        velocity.x -= velocity.x * 10.0 * delta;
-        velocity.z -= velocity.z * 10.0 * delta;
+        keys._velocity.x -= keys._velocity.x * 10.0 * delta;
+        keys._velocity.z -= keys._velocity.z * 10.0 * delta;
 
-        velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
-        if ( moveForward ) velocity.z -= 400.0 * delta;
-        if ( moveBackward ) velocity.z += 400.0 * delta;
+        keys._velocity.y -= 9.8 * 100.0 * delta;
 
-        if ( moveLeft ) velocity.x -= 400.0 * delta;
-        if ( moveRight ) velocity.x += 400.0 * delta;
-
-        if ( isOnObject === true ) {
-          velocity.y = Math.max( 0, velocity.y );
-
-          canJump = true;
+        if ( keys._forward ) {
+          keys._velocity.z -= 400.0 * delta;
+        }
+        if ( keys._backward ) {
+          keys._velocity.z += 400.0 * delta;
         }
 
-        controls.getObject.translateX( velocity.x * delta );
-        controls.getObject.translateY( velocity.y * delta );
-        controls.getObject.translateZ( velocity.z * delta );
+        if ( keys._left ) {
+          keys._velocity.x -= 400.0 * delta;
+        }
+        if ( keys._right ) {
+          keys._velocity.x += 400.0 * delta;
+        }
+
+        if ( isOnObject === true ) {
+          keys._velocity.y = Math.max( 0, keys._velocity.y );
+
+          keys._jump = true;
+        }
+
+        controls.getObject.translateX( keys._velocity.x * delta );
+        controls.getObject.translateY( keys._velocity.y * delta );
+        controls.getObject.translateZ( keys._velocity.z * delta );
 
         if ( controls.getObject.position.y < 10 ) {
 
-          velocity.y = 0;
+          keys._velocity.y = 0;
           controls.getObject.position.y = 10;
 
-          canJump = true;
+          keys._jump = true;
 
         }
 

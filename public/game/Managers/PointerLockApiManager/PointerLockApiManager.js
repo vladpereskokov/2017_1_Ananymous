@@ -37,7 +37,7 @@ export default class PointerLockApiManager {
   _pointerLockChange(controlls, mouse) {
     return (event) => {
       if (this._checkPointerLockElement()) {
-        controlls = true;
+        controlls.setEnabled = true;
         mouse.setEnabled = true;
 
         this._blocker.style.display = 'none';
