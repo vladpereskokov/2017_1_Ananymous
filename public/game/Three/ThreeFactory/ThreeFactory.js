@@ -23,6 +23,29 @@ class ThreeFactory {
 
     return new this._three.Euler(x, y, z, systemOfAxes);
   }
+
+  planeGeometry(...settings) {
+    const [width, height, widthSegments, heightSegments] = settings;
+
+    return new this._three
+      .PlaneGeometry(width, height, widthSegments, heightSegments);
+  }
+
+  color(color = null) {
+    return new this._three.Color(color);
+  }
+
+  meshBasicMaterial(object) {
+    return new this._three.MeshBasicMaterial(object);
+  }
+
+  get vertexColors() {
+    return this._three.VertexColors;
+  }
+
+  mesh(geometry, material) {
+    return new this._three.Mesh(geometry, material);
+  }
 }
 
 const threeFactory = new ThreeFactory();

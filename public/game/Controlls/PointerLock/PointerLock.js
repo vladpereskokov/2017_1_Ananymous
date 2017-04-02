@@ -1,4 +1,4 @@
-import threeFactory from '../../ThreeFactory/ThreeFactory';
+import threeFactory from '../../Three/ThreeFactory/ThreeFactory';
 
 export default class PointerLock {
   constructor(camera) {
