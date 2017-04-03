@@ -61,11 +61,11 @@ export default class Scene {
   }
 
   _appendBoxes() {
-    for (let i = 0; i < 20; ++i) {
+    for (let i = 0; i < 500; ++i) {
       let box = new Box(0xC1876B, 20, 20, 20).getBox;
-      box.position.x = Math.floor(Math.random() * 20 - 10) * 2;
-      box.position.y = Math.floor(Math.random() * 20) * 2 + 10;
-      box.position.z = Math.floor(Math.random() * 20 - 10) * 2;
+      box.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
+      box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
+      box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
 
       this._scene.add(box);
       this._objects.push(box);
