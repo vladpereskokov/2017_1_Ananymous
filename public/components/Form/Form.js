@@ -1,5 +1,4 @@
 import Block from '../Block/Block';
-import Button from '../Button/Button';
 import userService from '../../services/UserService/UserService';
 import formService from '../../services/FormService/FormService';
 import viewService from '../../services/ViewService/ViewService';
@@ -17,45 +16,41 @@ export default class Form extends Block {
   }
 
   _createForm(elements) {
-    const titleForm = elements.title;
-
     this._getElement().innerHTML = template({
-      title: titleForm,
-      elements: elements.fields
+      title: elements.title,
+      elements: elements.fields,
+      control: elements.controls[0].text
     });
 
-    this._appendClose();
-
-    this.find('form').appendChild((this._submitButton(elements.controls[0]).render()));
-    this._inputsFocusEvent();
+    this._submitButton(elements.controls[0].action);
+    this._inputsFocusEvent(this._setFocus.bind(this));
   }
 
-  _appendClose() {
-    const header = this.find('.form__header');
-
-    const close = new Block('span', {
-      class: 'close'
-    });
-
-    close._getElement().innerHTML = '&times;';
-
-    header.appendChild(close.render());
-    this._eventCloseButton(close);
-  }
-
-  _eventCloseButton(close) {
-    close._getElement().onclick = event => {
-      event.preventDefault();
-      viewService.go('/');
-    };
-  }
-
-  _inputsFocusEvent() {
-    const form = this.find('form').querySelector('ul').children;
+  _inputsFocusEvent(callback) {
+    const form = this._getForm();
 
     this._getKeys(form).forEach(input => {
-      this._setFocus(form[input]);
+      callback(form[input]);
     });
+  }
+
+  _checkByButton(element) {
+    const input = this._getInput(element);
+
+    if (input) {
+      const name = input.name;
+      const value = input.value;
+
+      const fill =
+        formService.checkFill(value,
+          this._getReadableNameByName(name)).response;
+
+      this._validate(element, input, name, value, fill);
+    }
+  }
+
+  _getForm() {
+    return this.find('form').querySelector('ul').children;
   }
 
   _getInput(element) {
@@ -65,49 +60,100 @@ export default class Form extends Block {
   _setFocus(element) {
     const input = this._getInput(element);
 
-    input.onblur = (() => {
-      const name = input.name;
-      const value = input.value;
-      const fill = formService.checkFill(value, this._getReadableNameByName(name)).response;
+    if (input) {
+      input.onblur = (() => {
+        const name = input.name;
+        const value = input.value;
 
-      if (fill) {
-        this._addError(element, fill);
-      } else {
-        const check = this._checkByName(name, value).response;
+        this._checkForm(element, input, name, value);
+      });
 
-        if (check) {
-          this._addError(element, check);
-          return;
-        }
+      input.onfocus = (() => {
+        this._defaultError(element);
+      });
+    }
+  }
 
-        if (name === 'password1') {
-          const secondPassword = this._getNextPassword(element);
+  _checkForm(...info) {
+    const [element, input, name, value] = info;
 
-          if (secondPassword && secondPassword.classList.contains('error') &&
-            formService.checkPasswords(input, secondPassword).response) {
-            this._defaultError(secondPassword);
-            this._addOK(secondPassword);
-          }
-        }
+    const fill =
+      formService.checkFill(value,
+        this._getReadableNameByName(name)).response;
 
-        if (input.name === 'password2') {
-          const firstPassword = this._getPreviousPassword(element).value;
-          const compare = formService.checkPasswords(value, firstPassword).response;
+    this._validate(element, input, name, value, fill);
+  }
 
-          if (compare) {
-            this._addError(element, compare);
-            return;
-          }
-        }
+  _validate(...settings) {
+    const [element, input, name, value, isFill] = settings;
 
-        this._addOK(element);
-        this._letGoSubmit(this._getFormByList(element), element.parentNode.querySelectorAll('li'));
+    if (isFill) {
+      this._addError(element, isFill);
+    } else {
+      const checkName = this._checkByName(name, value).response;
+
+      if (checkName) {
+        this._addError(element, checkName);
+
+        return;
       }
-    });
 
-    input.onfocus = (() => {
-      this._defaultError(element);
+      if (name === 'password1') {
+        this._checkPasswordsByFirst(element, input);
+      }
+
+      if (name === 'password2' &&
+        !this._checkPasswordsByLast(element, input, value)) {
+
+        return;
+      }
+
+      this._successCheck(element);
+    }
+  }
+
+  _checkPasswordsByFirst(element, input) {
+    const secondPassword = this._getNextPassword(element);
+
+    if (secondPassword && secondPassword.classList.contains('error') &&
+      formService.checkPasswords(input, secondPassword).response) {
+      this._defaultError(secondPassword);
+      this._addOK(secondPassword);
+
+      return false;
+    }
+
+    return true;
+  }
+
+  _checkPasswordsByLast(element, value) {
+    const firstPassword = this._getPreviousPassword(element).value;
+    const compare = formService.checkPasswords(value.value, firstPassword).response;
+    
+    if (compare) {
+      this._addError(element, compare);
+
+      return false;
+    }
+
+    return true;
+  }
+
+  _successCheck(element) {
+    this._addOK(element);
+    this._letGoSubmit(this._getFormByList(element), element.parentNode.querySelectorAll('li'));
+  }
+
+  _checkAllForm() {
+    const form = this._getForm();
+
+    this._getKeys(form).forEach(input => {
+      this._checkField(form[input]);
     });
+  }
+
+  _checkField(element) {
+
   }
 
   _getFormByList(element) {
@@ -170,29 +216,33 @@ export default class Form extends Block {
     }
   }
 
-  _letGoSubmit(element, list) {
+  _letGoSubmit(list) {
     for (let li of list) {
-      if (!li.classList.contains('ok')) {
-        return null;
+      if (li.classList.contains('error')) {
+        return false;
       }
     }
 
-    const submit = element.querySelector('button');
-    submit.disabled = false;
+    return true;
   }
 
-  _submitButton(button) {
-    const submit = new Button({
-      type: 'submit',
-      text: button.text
-    });
+  _submitButton(action) {
+    const submit = this.find('.form-button');
 
-    submit.setAttributeBlock('disabled', 'disabled');
-    submit.start('click', event => {
-      submit._getElement().disabled = false;
+    submit.addEventListener('click', event => {
+      event.preventDefault();
+
+      this._inputsFocusEvent(this._checkByButton.bind(this));
+
+      this._send(event, action);
+    });
+  }
+
+  _send(event, action) {
+    if (this._letGoSubmit(this._getForm())) {
       formService.showPreLoader();
 
-      this._submit(event, button.action)
+      this._submit(event, action)
         .then(response => {
           console.log(response);
           return +response.status;
@@ -204,9 +254,7 @@ export default class Form extends Block {
           state ? viewService.go('/') : this._setErrorResponse(status);
           formService.hidePreLoader();
         });
-    });
-
-    return submit;
+    }
   }
 
   _setErrorResponse(status) {

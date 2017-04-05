@@ -25,8 +25,6 @@ export default class FormView extends Block {
     this._animationBackground.on();
     this._animationForm.on();
 
-    this._hideAll();
-
     this._formView._getElement().style.display = 'block';
   }
 
@@ -35,7 +33,6 @@ export default class FormView extends Block {
     this._animationForm.off();
 
     viewService.go('/');
-    this._showAll();
 
     setTimeout(() => {
       this._formView._getElement().style.display = 'none';
@@ -65,14 +62,32 @@ export default class FormView extends Block {
     })
   }
 
+  _eventCloseButton(close) {
+    close.onclick = event => {
+      event.preventDefault();
+      viewService.go('/');
+    };
+  }
+
   _setUp() {
     const wrapper = new Block('div', {
       class: 'wrapper__registration'
     });
 
+    const close = new Block('span', {
+      class: 'close'
+    });
+
+    close._getElement().innerHTML = '&times;';
+
+    this._eventCloseButton(close.render());
+
+    wrapper.append(close.render());
     wrapper.append(this._background.render());
     wrapper.append(this.render());
 
     return wrapper;
   }
+
+
 }

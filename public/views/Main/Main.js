@@ -13,7 +13,6 @@ export default class Main extends Block {
     });
 
     this._currentView = null;
-    this._isAnimate = 0;
     this.toDocument(preLoader.render());
   }
 
@@ -63,7 +62,7 @@ export default class Main extends Block {
       }
 
       this._currentView = newView;
-      this.append(this._currentView.render());
+      this._getElement().querySelector('.wrapper__main__wrapper').appendChild(this._currentView.render());
     }
   }
 

@@ -120,19 +120,39 @@
   }
 }
 
-.close {
-  position: absolute;
-  font-family: 'Keep Calm' !important;
-  font-size: 22pt !important;
-  margin-top: -8px;
-  margin-left: 5px;
-  color: darkgrey !important;
+.form-button {
+  margin: 0 auto 50px;
+  height: 30px;
+  width: 300px;
+  position: relative;
+  cursor: pointer;
 
-  &:hover,
-  &:focus {
-    color: white !important;
-    text-decoration: none;
+  &__background {
+    margin: 0 auto 50px;
+    height: 60px;
+    width: 300px;
+    border: 1px solid #ccc !important;
+    border-radius: 16px !important;
+    background: #FF6C00 !important;
+    position: absolute;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+  }
+
+  &__text {
+    font-family: 'Keep Calm';
+    font-size: 24pt;
+    top: 25%;
+    color: #1b1e24;
     cursor: pointer;
+    position: relative;
+    margin-left: -10px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+  }
+
+  &:active, &__background:active, &__text:active {
+    opacity: 0.8;
   }
 }
 

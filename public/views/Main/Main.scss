@@ -43,21 +43,65 @@ body {
   bottom: 0;
   padding: 10px;
   background: #1b1e24;
-  opacity: 0.8;
   width: 100%;
   height: 32px;
-  font-family: 'Keep Calm';
-  color: white;
+
+  &__wrapper__team {
+    height: 100%;
+    float: right;
+    transform: scale(0.5);
+    opacity: 0.4;
+    font-family: 'Keep Calm';
+    color: white;
+    text-align: center;
+    margin-left: -20px;
+  }
+
+  &__wrapper__help {
+    position: absolute;
+    height: 100%;
+    float: left;
+    transform: scale(0.5);
+    opacity: 0.4;
+    font-family: 'Keep Calm';
+    color: white;
+    text-align: center;
+    margin-top: -6px;
+  }
+
+  &__help-enter {
+    position: absolute;
+    font-size: 20pt;
+    margin-top: -46px;
+    margin-left: 228px;
+  }
+
+  &__help-selector {
+    position: absolute;
+    font-size: 20pt;
+    margin-top: -46px;
+    margin-left: 36px;
+  }
+
+  .footer__help-img {
+    border: 3px solid white;
+    width: 55px;
+    height: 55px;
+    margin-top: -11px;
+    margin-left: -40px;
+
+    &-enter {
+      margin-left: 130px;
+    }
+  }
 
   &-team {
     font-size: 20pt;
-    opacity: 0.6;
     padding-top: 5px;
   }
 
   &-register {
     font-size: 8pt;
-    opacity: 0.6;
     margin-top: -35px;
     margin-left: 220px;
   }

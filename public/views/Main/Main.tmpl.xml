@@ -6,7 +6,15 @@
     </div>
   </div>
   <div class="footer">
-    <p class="footer-team">ANANYMOUS</p>
-    <p class="footer-register">&#174;</p>
+    <div class="footer__wrapper__help">
+      <img class="footer__help-img" src="../../static/images/upandown.png"></img>
+      <p class="footer__help-selector">Select</p>
+      <img class="footer__help-img footer__help-img-enter" src="../../static/images/enter.png"></img>
+      <p class="footer__help-enter">Enter</p>
+    </div>
+    <div class="footer__wrapper__team">
+      <p class="footer-team">ANANYMOUS</p>
+      <p class="footer-register">&#174;</p>
+    </div>
   </div>
 </fest:template>

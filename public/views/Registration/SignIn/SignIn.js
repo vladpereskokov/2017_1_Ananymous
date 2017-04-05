@@ -20,8 +20,7 @@ export default class SignIn extends FormView {
           type: 'password',
           description: 'Enter password',
           placeholder: '••••••••'
-        }
-        ],
+        }],
         controls: [{
           text: 'Sign In',
           action: '/signin'

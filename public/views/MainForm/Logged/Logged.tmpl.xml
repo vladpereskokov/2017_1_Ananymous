@@ -3,10 +3,10 @@
     <fest:for iterate="data.buttons" index="i" value="button">
       <div class="main__form-button {button.class}">
         <div class="main__form-button__background">
+          <a class="main__form-button__text">
+            <fest:value>button.text</fest:value>
+          </a>
         </div>
-        <a class="main__form-button__text">
-          <fest:value>button.text</fest:value>
-        </a>
       </div>
     </fest:for>
   </div>

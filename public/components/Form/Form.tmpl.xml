@@ -12,9 +12,18 @@
               <fest:value>input.title</fest:value>
             </label>
             <input name="{input.name}" type="{input.type}" placeholder="{input.placeholder}" maxlength="100"/>
-            <span name="{input.name}"><fest:value>input.description</fest:value></span>
+            <span name="{input.name}">
+              <fest:value>input.description</fest:value>
+            </span>
           </li>
         </fest:for>
+        <div class="form-button">
+          <div class="form-button__background">
+            <a class="form-button__text">
+              <fest:value>data.control</fest:value>
+            </a>
+          </div>
+        </div>
       </ul>
     </form>
   </div>
