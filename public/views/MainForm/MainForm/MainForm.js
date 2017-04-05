@@ -49,7 +49,7 @@ export default class MainForm extends Block {
   }
 
   _setEventGoButton(button, onClickFunction) {
-    button.addEventListener('click', () => onClickFunction());
+    button.onclick = () => onClickFunction();
   }
 
   _setActiveButtons(buttons) {
@@ -120,26 +120,33 @@ export default class MainForm extends Block {
     const buttons = this._getButtons();
 
     document.addEventListener('keydown', event => {
+      let current = this._checkActiveButton(this._buttons);
+
       switch (event.keyCode) {
         case 13:
-          console.log('enter');
+          buttons[current.number - 1].onclick();
           break;
         case 38:
-          console.log('up');
+          this._setPassive(current);
+
+          if (current.number === 1) {
+            this._setActive(this._buttons[this._buttons.length - 1])
+          } else {
+            this._setActive(this._buttons[current.number - 2]);
+          }
           break;
         case 40:
-          console.log('down');
+          this._setPassive(current);
+          
+          if (current.number < this._buttons.length) {
+            this._setActive(this._buttons[current.number])
+          } else {
+            this._setActive(this._buttons[0]);
+          }
           break;
         default:
           break;
       }
     });
-
-    // console.log(buttons);
-    // for (let button of buttons) {
-    //   button.addEventListener('keydown', event => {
-    //
-    //   });
-    // }
   }
 }
