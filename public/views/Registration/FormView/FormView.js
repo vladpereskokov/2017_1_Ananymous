@@ -69,11 +69,7 @@ export default class FormView extends Block {
     };
   }
 
-  _setUp() {
-    const wrapper = new Block('div', {
-      class: 'wrapper__registration'
-    });
-
+  _closeAppend() {
     const close = new Block('span', {
       class: 'close'
     });
@@ -82,6 +78,14 @@ export default class FormView extends Block {
 
     this._eventCloseButton(close.render());
 
+    return close;
+  }
+
+  _setUp() {
+    const wrapper = this._getWrapper();
+
+    const close = this._closeAppend();
+
     wrapper.append(close.render());
     wrapper.append(this._background.render());
     wrapper.append(this.render());
@@ -89,5 +93,9 @@ export default class FormView extends Block {
     return wrapper;
   }
 
-
+  _getWrapper() {
+    return new Block('div', {
+      class: 'wrapper__registration'
+    });
+  }
 }

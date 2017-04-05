@@ -19,6 +19,16 @@ class Game extends Block {
   showMain() {
     this.getRouter().go('/');
   }
+
+  hide() {
+    this._getDocument().querySelector('#blocker').parentNode.style.display = 'none';
+    this._getDocument().querySelector('canvas').style.display = 'none';
+  }
+
+  show() {
+    this._getDocument().querySelector('#blocker').parentNode.style.display = 'block';
+    this._getDocument().querySelector('canvas').style.display = 'block';
+  }
 }
 
 export default Game;

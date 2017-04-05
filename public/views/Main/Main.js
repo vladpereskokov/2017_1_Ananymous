@@ -27,6 +27,8 @@ export default class Main extends Block {
   show() {
     viewService.showPreLoader();
 
+    this._getDocument().querySelector('.wrapper').style.display = 'block';
+
     viewService.isLogin()
       .then(response => {
         return {

@@ -32,18 +32,13 @@ export default class Logged extends MainForm {
   }
 
   _setGameButton() {
-    console.log(this._getButton(0));
-
     this._getButton(0)
       .addEventListener('click', this._game.bind(this));
   }
 
   _game() {
-    viewService.showPreLoader();
-
     this._hideAll();
     viewService.go('/game');
-    viewService.hidePreLoader();
   }
 
   _hideAll() {

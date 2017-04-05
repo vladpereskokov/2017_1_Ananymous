@@ -12,6 +12,7 @@ export default class MainForm extends Block {
     this._urls = [];
     this._buttons = [];
     this.init();
+    this._setupKeys();
   }
 
   show() {
@@ -99,7 +100,7 @@ export default class MainForm extends Block {
   }
 
   _getButtons() {
-    return this._getElement().getElementsByClassName('main__form-button');
+    return [...this._getElement().getElementsByClassName('main__form-button')];
   }
 
   _setButtons(buttons) {
@@ -113,5 +114,32 @@ export default class MainForm extends Block {
         });
       }
     }
+  }
+
+  _setupKeys() {
+    const buttons = this._getButtons();
+
+    document.addEventListener('keydown', event => {
+      switch (event.keyCode) {
+        case 13:
+          console.log('enter');
+          break;
+        case 38:
+          console.log('up');
+          break;
+        case 40:
+          console.log('down');
+          break;
+        default:
+          break;
+      }
+    });
+
+    // console.log(buttons);
+    // for (let button of buttons) {
+    //   button.addEventListener('keydown', event => {
+    //
+    //   });
+    // }
   }
 }

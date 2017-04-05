@@ -27,8 +27,6 @@ class Scoreboard extends Table {
   }
 
   init() {
-    this._getElement().append(this._backButton().render());
-
     this._initAnimation();
 
     this._scoreboardView = this._setUp();
@@ -110,16 +108,23 @@ class Scoreboard extends Table {
     }
   }
 
-  _backButton() {
-    const back = new Button({
-      text: 'Back'
+  _eventCloseButton(close) {
+    close.onclick = event => {
+      event.preventDefault();
+      this.showMain();
+    };
+  }
+
+  _closeAppend() {
+    const close = new Block('span', {
+      class: 'close'
     });
 
-    back.setAttributeBlock('class', 'button__table');
+    close._getElement().innerHTML = '&times;';
 
-    back.start('click', this.showMain.bind(this));
+    this._eventCloseButton(close.render());
 
-    return back;
+    return close;
   }
 
   _createBackground() {
@@ -129,14 +134,21 @@ class Scoreboard extends Table {
   }
 
   _setUp() {
-    const wrapper = new Block('div', {
-      class: 'scoreboard__wrapper'
-    });
+    const wrapper = this._getWrapper();
 
+    const close = this._closeAppend();
+
+    wrapper.append(close.render());
     wrapper.append(this._background.render());
     wrapper.append(this.render());
 
     return wrapper;
+  }
+
+  _getWrapper() {
+    return new Block('div', {
+      class: 'scoreboard__wrapper'
+    });
   }
 }
 

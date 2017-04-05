@@ -129,7 +129,7 @@ export default class Form extends Block {
   _checkPasswordsByLast(element, value) {
     const firstPassword = this._getPreviousPassword(element).value;
     const compare = formService.checkPasswords(value.value, firstPassword).response;
-    
+
     if (compare) {
       this._addError(element, compare);
 
