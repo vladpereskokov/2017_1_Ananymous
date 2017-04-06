@@ -15,6 +15,27 @@ export default class MainForm extends Block {
     this._setupKeys();
   }
 
+  _getActive(buttons) {
+    for (let i in buttons) {
+      if (buttons[i].children[0].classList.contains('start__background')) {
+        return i;
+      }
+    }
+
+    return false;
+  }
+
+  _getExistButtons() {
+    return [...this._getDocument().getElementsByClassName('main__form-button')];
+  }
+
+  _activateButtons() {
+    const buttons = this._getExistButtons();
+    const i = this._getActive(!buttons.length ? this._getButtons() : buttons);
+
+    this._setActive(this._buttons[i ? i : 0]);
+  }
+
   show() {
     this._getElement().style.display = 'block';
   }
@@ -34,7 +55,6 @@ export default class MainForm extends Block {
   _setMainButtons() {
     this._setButtons(this._getButtons());
     this._setEvents();
-    this._setActive(this._buttons[0]);
   }
 
   _setEvents() {
@@ -44,12 +64,16 @@ export default class MainForm extends Block {
 
   _setEventGoButtons(buttons) {
     for (let button of buttons) {
-      this._setEventGoButton(button.button, () => viewService.go(button.url));
+      if (button.url) {
+        this._setEventGoButton(button.button, () => viewService.go(button.url));
+      }
     }
   }
 
   _setEventGoButton(button, onClickFunction) {
-    button.addEventListener('click', () => onClickFunction());
+    button.onclick = () => {
+      onClickFunction();
+    };
   }
 
   _setActiveButtons(buttons) {
@@ -117,19 +141,12 @@ export default class MainForm extends Block {
   }
 
   _setupKeys() {
-    const buttons = this._getButtons();
-
     document.addEventListener('keydown', event => {
       let current = this._checkActiveButton(this._buttons);
 
       switch (event.keyCode) {
         case 13:
-          // event.preventDefault();
-          // current.button.click();
-          console.log('');
-          console.log(current.button.click());
-          console.log('enter');
-          console.log('');
+          current.button.click();
           break;
         case 38:
           this._setPassive(current);

@@ -19,6 +19,7 @@ export default class UnLogged extends MainForm {
     });
 
     this._setMainButtons();
+    this._activateButtons();
   }
 }
 

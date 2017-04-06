@@ -28,14 +28,15 @@ export default class Logged extends MainForm {
 
     this._setMainButtons();
     this._setGameButton();
-    // this._setLogoutButton();
+    this._activateButtons();
+    this._setLogoutButton();
   }
 
   _setGameButton() {
     this._getButton(0)
       .addEventListener('click', (event) => {
         event.preventDefault();
-        this._game.bind(this);
+        this._game();
       });
   }
 
@@ -51,8 +52,7 @@ export default class Logged extends MainForm {
   _setLogoutButton() {
     this._getButton(3)
       .addEventListener('click', (event) => {
-        event.preventDefault();
-        this._logout.bind(this);
+        this._logout();
       });
   }
 

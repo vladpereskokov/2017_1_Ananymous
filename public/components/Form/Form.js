@@ -274,7 +274,7 @@ export default class Form extends Block {
         return 'User not found';
       case 409:
         return 'User already exist';
-      case 0:
+      default:
         return '';
     }
   }
