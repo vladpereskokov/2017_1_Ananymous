@@ -4,9 +4,15 @@
       <span>Soul Hunting</span>
     </div>
     <form class="about" name="{data.title}">
-      <span class="developer">DEVELOPERS</span>
+
+      <span class="developer">ANANYMOUS</span>
+      <!--<hr></hr>-->
+
+      <p class="field__develop">FrontEnd</p>
+      <hr></hr>
+
       <ul>
-        <fest:for iterate="data.elements" index="i" value="input">
+        <fest:for iterate="data.frontend" index="i" value="input">
           <li class="author__name">
             <label>
               <fest:value>input.name</fest:value>
@@ -14,6 +20,23 @@
           </li>
         </fest:for>
       </ul>
+
+      <!--<hr></hr>-->
+      <p class="field__develop">BackEnd</p>
+      <hr></hr>
+
+      <ul>
+        <fest:for iterate="data.backend" index="i" value="input">
+          <li class="author__name">
+            <label>
+              <fest:value>input.name</fest:value>
+            </label>
+          </li>
+        </fest:for>
+      </ul>
+
+      <!--<hr></hr>-->
+
     </form>
   </div>
 </fest:template>

@@ -14,12 +14,13 @@ export default class About extends Block {
 
     this._background = this._createBackground();
     this._getElement().innerHTML = template({
-      elements: [{
+      frontend: [{
         name: 'Pereskokov Vladislav'
       }, {
-        name: 'Nabokov Denis'
-      }, {
         name: 'Artyuhov Vladislav'
+      }],
+      backend: [{
+        name: 'Nabokov Denis'
       }]
     });
   }
