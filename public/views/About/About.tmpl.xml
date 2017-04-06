@@ -1,0 +1,19 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
+  <div class="about__wrapper-elements">
+    <div class="about__header">
+      <span>Soul Hunting</span>
+    </div>
+    <form class="about" name="{data.title}">
+      <span class="developer">DEVELOPERS</span>
+      <ul>
+        <fest:for iterate="data.elements" index="i" value="input">
+          <li class="author__name">
+            <label>
+              <fest:value>input.name</fest:value>
+            </label>
+          </li>
+        </fest:for>
+      </ul>
+    </form>
+  </div>
+</fest:template>

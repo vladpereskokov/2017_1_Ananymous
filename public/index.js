@@ -4,6 +4,7 @@ import SignUp from './views/Registration/SignUp/SignUp';
 import Scoreboard from './views/Scoreboard/Scoreboard';
 import Game from './views/Game/Game';
 import Main from './views/Main/Main';
+import About from "./views/About/About";
 
 import './static/css/fonts.scss';
 import './static/css/reset.scss';
@@ -29,4 +30,5 @@ router
   .use('/scoreboard', Scoreboard)
   .use('/signup', SignUp)
   .use('/signin', SignIn)
+  .use('/about', About)
   .start();
