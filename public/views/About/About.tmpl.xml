@@ -6,7 +6,6 @@
     <form class="about" name="{data.title}">
 
       <span class="developer">ANANYMOUS</span>
-      <!--<hr></hr>-->
 
       <p class="field__develop">FrontEnd</p>
       <hr></hr>
@@ -21,7 +20,6 @@
         </fest:for>
       </ul>
 
-      <!--<hr></hr>-->
       <p class="field__develop">BackEnd</p>
       <hr></hr>
 
@@ -34,8 +32,6 @@
           </li>
         </fest:for>
       </ul>
-
-      <!--<hr></hr>-->
 
     </form>
   </div>

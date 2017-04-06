@@ -94,6 +94,10 @@ class ThreeFactory {
   webGLRender() {
     return new this._three.WebGLRenderer();
   }
+
+  clock() {
+    return new this._three.Clock();
+  }
 }
 
 const threeFactory = new ThreeFactory();

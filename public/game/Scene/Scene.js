@@ -2,12 +2,14 @@ import threeFactory from '../Three/ThreeFactory/ThreeFactory';
 import Floor from "../Three/Objects/Floor/Floor";
 import Box from "../Three/Objects/Box/Box";
 import Camera from "../Three/Objects/Camera/Camera";
+import Player from '../Three/Objects/Player/Player';
 
 export default class Scene {
   constructor(pointerLock, mouse, keys) {
     this._mouse = mouse;
     this._keys = keys;
     this._previousTime = performance.now();
+    this._player = new Player(1.8, 0.2, Math.PI * 0.02, 10);
     this._objects = [];
     this._renderer = null;
 
@@ -89,8 +91,9 @@ export default class Scene {
       this._raycaster.ray.origin.y -= 10;
 
       const intersections = this._raycaster.intersectObjects(this._objects);
+      const time = performance.now();
 
-      this._newAction((performance.now() - this._previousTime) / 1000,
+      this._newAction(time, (time - this._previousTime) / 1000,
         intersections.length > 0);
 
     }
@@ -98,7 +101,7 @@ export default class Scene {
     this._renderer.render(this._scene, this._camera);
   }
 
-  _newAction(delta, isOnObject) {
+  _newAction(time, delta, isOnObject) {
     this._keys._velocity.x -= this._keys._velocity.x * 10.0 * delta;
     this._keys._velocity.z -= this._keys._velocity.z * 10.0 * delta;
 
@@ -137,7 +140,7 @@ export default class Scene {
 
     }
 
-    this._previousTime = performance.now();
+    this._previousTime = time;
   }
 
   _onWindowResize() {
