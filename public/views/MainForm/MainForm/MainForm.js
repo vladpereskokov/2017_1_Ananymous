@@ -49,7 +49,7 @@ export default class MainForm extends Block {
   }
 
   _setEventGoButton(button, onClickFunction) {
-    button.onclick = () => onClickFunction();
+    button.addEventListener('click', () => onClickFunction());
   }
 
   _setActiveButtons(buttons) {
@@ -124,7 +124,12 @@ export default class MainForm extends Block {
 
       switch (event.keyCode) {
         case 13:
-          buttons[current.number - 1].onclick();
+          // event.preventDefault();
+          // current.button.click();
+          console.log('');
+          console.log(current.button.click());
+          console.log('enter');
+          console.log('');
           break;
         case 38:
           this._setPassive(current);
@@ -137,12 +142,14 @@ export default class MainForm extends Block {
           break;
         case 40:
           this._setPassive(current);
-          
+
           if (current.number < this._buttons.length) {
             this._setActive(this._buttons[current.number])
           } else {
             this._setActive(this._buttons[0]);
           }
+          break;
+        case 70:
           break;
         default:
           break;

@@ -7,10 +7,13 @@ import template from './Logged.tmpl.xml';
 export default class Logged extends MainForm {
   constructor() {
     super();
+
+    this._getElement().classList.remove('wrapper__main__form');
+    this.addClass('main__form-logged');
   }
 
   init() {
-    this._setUrls(['/game', '/scoreboard', '/about', '']);
+    this._setUrls(['/game', '/scoreboard', '/about']);
 
     this._getElement().innerHTML = template({
       buttons: [{
@@ -19,21 +22,21 @@ export default class Logged extends MainForm {
         text: 'SCOREBOARD'
       }, {
         text: 'ABOUT'
-      }, {
-        text: 'LOGOUT',
-        class: 'button-logout'
       }],
       username: viewService.getUser().login
     });
 
     this._setMainButtons();
     this._setGameButton();
-    this._setLogoutButton();
+    // this._setLogoutButton();
   }
 
   _setGameButton() {
     this._getButton(0)
-      .addEventListener('click', this._game.bind(this));
+      .addEventListener('click', (event) => {
+        event.preventDefault();
+        this._game.bind(this);
+      });
   }
 
   _game() {
@@ -47,7 +50,10 @@ export default class Logged extends MainForm {
 
   _setLogoutButton() {
     this._getButton(3)
-      .addEventListener('click', this._logout.bind(this));
+      .addEventListener('click', (event) => {
+        event.preventDefault();
+        this._logout.bind(this);
+      });
   }
 
   _logout() {

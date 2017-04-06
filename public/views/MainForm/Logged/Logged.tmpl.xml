@@ -13,6 +13,15 @@
   <div class="main__game__userblock open__form__animation">
     <div class="main__game__userblock-background">
       <p class="main__game__userblock-text"><fest:value>data.username</fest:value></p>
+      <p class="main__game__userblock-text-description">Level: 10</p>
+      <p class="main__game__userblock-text-description">Kills: 42</p>
+    </div>
+  </div>
+  <div class="main__form-button button-logout">
+    <div class="main__form-button__background">
+      <a class="main__form-button__text">
+        LOGOUT
+      </a>
     </div>
   </div>
 </fest:template>

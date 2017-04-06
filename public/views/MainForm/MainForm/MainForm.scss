@@ -8,8 +8,8 @@
     margin: 0 auto 50px;
     height: 60px;
     width: 300px;
-    border: 1px solid #ccc!important;
-    border-radius: 16px!important;
+    border: 2px solid #ccc !important;
+    border-radius: 4px !important;
     position: absolute;
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
@@ -45,7 +45,7 @@
 
 .start__background {
   background: #FF6C00 !important;
-  border: 1px solid #FF6C00!important;
+  border: 2px solid #FF6C00!important;
 }
 
 .start__button {
