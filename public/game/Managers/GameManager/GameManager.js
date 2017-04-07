@@ -1,7 +1,7 @@
 import Mouse from '../../Controlls/Mouse/Mouse';
 import Controlls from '../../Controlls/Controlls/Controlls';
 import PointerLockApiManager from '../PointerLockApiManager/PointerLockApiManager';
-import Scene from "../../Scene/Scene";
+import GameScene from "../../GameScene/GameScene";
 
 export default class GameManager {
   constructor() {
@@ -13,7 +13,7 @@ export default class GameManager {
       instructions: document.getElementById('instructions')
     }, this._keys, this._mouse);
 
-    this._gameScene = new Scene((camera) =>
+    this._gameScene = new GameScene((camera) =>
         this._pointerLockManager.getPointerLock(camera),
       this._mouse, this._keys);
   }

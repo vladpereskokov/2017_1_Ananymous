@@ -98,6 +98,18 @@ class ThreeFactory {
   clock() {
     return new this._three.Clock();
   }
+
+  loadingManager() {
+    return new this._three.LoadingManager();
+  }
+
+  mtlLoader() {
+    return new this._three.MTLLoader();
+  }
+
+  objLoader() {
+    return new this._three.OBJLoader();
+  }
 }
 
 const threeFactory = new ThreeFactory();

@@ -13,7 +13,9 @@ export default class Camera {
     this._camera = threeFactory
       .perspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
-    this._camera.position.set(0, player.height, 0);
+    console.log(player);
+
+    this._camera.position.set(0, player.getHeight, 0);
     this._camera.lookAt(threeFactory.vector3D(0, player.getHeight, 0));
   }
 }

@@ -1,10 +1,14 @@
 import threeFactory from '../Three/ThreeFactory/ThreeFactory';
-import Floor from "../Three/Objects/Floor/Floor";
-import Box from "../Three/Objects/Box/Box";
-import Camera from "../Three/Objects/Camera/Camera";
+import sceneManager from '../Managers/SceneManager/SceneManager';
+import modelsManager from '../Managers/ModelsManager/ModelsManager';
+import Floor from '../Three/Objects/Floor/Floor';
+import Box from '../Three/Objects/Box/Box';
+import Camera from '../Three/Objects/Camera/Camera';
 import Player from '../Three/Objects/Player/Player';
+import LoadingObject from '../Three/ThreeModules/LoadingObject/LoadingObject';
+import Weapon from '../Three/Objects/Weapon/Weapon';
 
-export default class Scene {
+export default class GameScene {
   constructor(pointerLock, mouse, keys) {
     this._mouse = mouse;
     this._keys = keys;
@@ -18,11 +22,14 @@ export default class Scene {
   }
 
   _init(pointerLock) {
-    this._camera = new Camera().getCamera;
+    this._camera = new Camera(this._player).getCamera;
+
+    this._setupModels();
 
     this._setupFog();
     this._setupLight();
     this._setupControlls(pointerLock);
+    this._setupLoadModels(this._animate.bind(this));
     this._setupRaycaster();
 
     this._appendFloor();
@@ -33,15 +40,21 @@ export default class Scene {
     window.addEventListener('resize', this._onWindowResize, false);
   }
 
+  _setupModels() {
+    modelsManager.add({
+      title: 'uzi',
+      object: new Weapon()._getUziModel()
+    });
+  }
+
   _setupFog() {
-    this._scene = threeFactory.scene();
-    this._scene.fog = threeFactory.fog(0xffffff, 0, 750);
+    sceneManager.scene.fog = threeFactory.fog(0xffffff, 0, 750);
   }
 
   _setupLight() {
     this._light = threeFactory.hemisphereLight(0xeeeeff, 0x777788, 0.75);
     this._light.position.set(0.5, 1, 0.75);
-    this._scene.add(this._light);
+    sceneManager.add(this._light);
   }
 
   _setupControlls(pointerLock) {
@@ -49,7 +62,11 @@ export default class Scene {
     this._controls.setMouseMove(this._mouse
       .onMouseMove(this._controls.getPitch, this._controls.getObject));
 
-    this._scene.add(this._controls.getObject);
+    sceneManager.add(this._controls.getObject);
+  }
+
+  _setupLoadModels(callback) {
+    this._loadManager = new LoadingObject(modelsManager.models, callback);
   }
 
   _setupRaycaster() {
@@ -59,7 +76,7 @@ export default class Scene {
   }
 
   _appendFloor() {
-    this._scene.add(new Floor().getFloor);
+    sceneManager.add(new Floor().getFloor);
   }
 
   _appendBoxes() {
@@ -69,7 +86,7 @@ export default class Scene {
       box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
       box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
 
-      this._scene.add(box);
+      sceneManager.add(box);
       this._objects.push(box);
     }
   }
@@ -98,7 +115,7 @@ export default class Scene {
 
     }
 
-    this._renderer.render(this._scene, this._camera);
+    this._renderer.render(sceneManager.scene, this._camera);
   }
 
   _newAction(time, delta, isOnObject) {
