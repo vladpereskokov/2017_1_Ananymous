@@ -4,6 +4,7 @@ import modelsManager from '../Managers/ModelsManager/ModelsManager';
 import meshManager from '../Managers/MeshManager/MeshManager';
 import Floor from '../Three/Objects/Floor/Floor';
 import Box from '../Three/Objects/Box/Box';
+import Room from '../Three/Objects/Room/Room';
 import Camera from '../Three/Objects/Camera/Camera';
 import Player from '../Three/Objects/Player/Player';
 import LoadingObject from '../Three/ThreeModules/LoadingObject/LoadingObject';
@@ -45,6 +46,8 @@ export default class GameScene {
 
     this._appendFloor();
     this._appendBoxes();
+
+    this._appendRoom();
 
     this._render();
 
@@ -109,6 +112,14 @@ export default class GameScene {
 
       sceneManager.add(box);
       this._objects.push(box);
+    }
+  }
+
+  _appendRoom() {
+    const walls = new Room().create();
+
+    for (let wall of walls) {
+      sceneManager.add(wall);
     }
   }
 
