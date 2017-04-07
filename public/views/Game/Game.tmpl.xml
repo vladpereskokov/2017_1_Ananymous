@@ -6,7 +6,11 @@
     <div id="instructions">
       <span style="font-size:40px">Click to play</span>
       <br/>
-      (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+      <br/>
+      (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around, LMB = Shoot)
+      <br/>
+      <br/>
+      (F = Fullscreen)
     </div>
   </div>
   <div id="user-stats" class="user-stats">
