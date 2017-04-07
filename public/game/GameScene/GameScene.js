@@ -82,7 +82,7 @@ export default class GameScene {
   _onResourcesLoaded() {
     meshManager.meshes["playerweapon"] = modelsManager.models.uzi.mesh.clone();
     meshManager.meshes["playerweapon"].position.set(0, 2, 0);
-    meshManager.meshes["playerweapon"].scale.set(10, 10, 10);
+    meshManager.meshes["playerweapon"].scale.set(8, 8, 8);
     sceneManager.add(meshManager.meshes["playerweapon"]);
 
     this._animate();
@@ -104,15 +104,15 @@ export default class GameScene {
   }
 
   _appendBoxes() {
-    for (let i = 0; i < 500; ++i) {
-      let box = new Box(0xC1876B, 20, 20, 20).getBox;
-      box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
-      box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
-      box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
-
-      sceneManager.add(box);
-      this._objects.push(box);
-    }
+  //   for (let i = 0; i < 500; ++i) {
+  //     let box = new Box(0xC1876B, 10, 10, 10).getBox;
+  //     box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
+  //     box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
+  //     box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
+  //
+  //     sceneManager.add(box);
+  //     this._objects.push(box);
+  //   }
   }
 
   _appendRoom() {
@@ -152,7 +152,7 @@ export default class GameScene {
 
     meshManager.meshes["playerweapon"].position.set(
       this._controls.getObject.position.x - gunDistance * Math.sin(this._controls.getObject.rotation.y - Math.PI / 30),
-      this._controls.getObject.position.y + 1 + Math.sin(this._controls.getPitch.rotation.x),
+      this._controls.getObject.position.y + 1.3 + Math.sin(this._controls.getPitch.rotation.x),
       this._controls.getObject.position.z - gunDistance * Math.cos(this._controls.getObject.rotation.y - Math.PI / 30)
     );
     meshManager.meshes["playerweapon"].rotation.set(

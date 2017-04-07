@@ -2,7 +2,7 @@ import threeFactory from '../../ThreeFactory/ThreeFactory';
 
 export default class Room {
   constructor(...settings) {
-    const [width = 100, height = 50, len = 200, x = 0, y = 0, z = 0] = settings;
+    const [width = 100, height = 25, len = 200, x = 0, y = 0, z = 0] = settings;
 
     this._walls = this._getWallsObject(width, height, len, x, y, z)
   }
@@ -32,19 +32,19 @@ export default class Room {
     return [
       {
         position: [x, y + height/2, z + width/2],
-        geometry: [len, height, 1],
+        geometry: [len, height, 2],
         color: 0x000000
       }, {
         position: [x, y + height/2, z - width/2],
-        geometry: [len, height, 1],
+        geometry: [len, height, 2],
         color: 0xff0000
       }, {
         position: [x + len/2, y + height/2, z],
-        geometry: [1, height, width],
+        geometry: [2, height, width],
         color: 0x0000ff
       }, {
         position: [x - len/2, y + height/2, z],
-        geometry: [1, height, width],
+        geometry: [2, height, width],
         color: 0x00ffff
       }
     ];

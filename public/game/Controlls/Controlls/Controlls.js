@@ -102,7 +102,7 @@ export default class Controlls {
         break;
       case 32: // space
         if (this._jump === true) {
-          this._velocity.y += 350;
+          this._velocity.y += 150;
         }
         this._jump = false;
         break;
