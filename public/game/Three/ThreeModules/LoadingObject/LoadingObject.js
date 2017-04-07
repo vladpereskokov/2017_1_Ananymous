@@ -5,13 +5,13 @@ export default class LoadingObject {
   constructor(models, callback) {
     this._models = models;
     this._callback = callback;
-    this._resourcesLoaded = false;
     this._init();
   }
 
   load() {
     console.log(this._models);
-    for (let model of Object.keys(this._models)) {
+
+    for (let model in this._models) {
       this._loadModel(model);
     }
   }
@@ -19,30 +19,30 @@ export default class LoadingObject {
   _loadModel(model) {
     const mtlLoader = threeFactory.mtlLoader(this._loadManager);
 
-    mtlLoader.load(model.mtl, (materials) => {
+    mtlLoader.load(this._models[model].mtl, (materials) => {
       materials.preload();
 
       const objLoader = threeFactory.objLoader(this._loadManager);
 
       objLoader.setMaterials(materials);
-      objLoader.load(model.obj, (mesh) => {
+      objLoader.load(this._models[model].obj, (mesh) => {
         mesh.traverse((node) => {
           if (node instanceof THREE.Mesh) {
-            if ('castShadow' in model) {
-              node.castShadow = model.castShadow;
+            if ('castShadow' in this._models[model]) {
+              node.castShadow = this._models[model].castShadow;
             } else {
               node.castShadow = true;
             }
 
-            if ('receiveShadow' in model) {
-              node.receiveShadow = model.receiveShadow
+            if ('receiveShadow' in this._models[model]) {
+              node.receiveShadow = this._models[model].receiveShadow
             } else {
               node.receiveShadow = true;
             }
           }
         });
 
-        model.mesh = mesh;
+        this._models[model].mesh = mesh;
       });
     });
   }
@@ -53,7 +53,7 @@ export default class LoadingObject {
 
   _init(models) {
     this._loadManager = threeFactory.loadingManager();
-
+    this._setupLoadManager();
 
     this.load(models);
   }
@@ -71,17 +71,8 @@ export default class LoadingObject {
 
   _onLoad() {
     return () => {
-      console.log("loaded all resources");
-      this._resourcesLoaded = true;
-      this._onResourcesLoaded();
+        console.log("loaded all resources");
+      this._callback();
     };
-  }
-
-  _onResourcesLoaded() {
-    meshManager.meshes["playerweapon"] = this._models.uzi.mesh.clone();
-    meshManager.meshes["playerweapon"].position.set(0,2,0);
-    meshManager.meshes["playerweapon"].scale.set(10,10,10);
-
-    this._callback();
   }
 }

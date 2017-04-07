@@ -6,10 +6,10 @@ export default class Weapon {
 
   _getUziModel() {
     return {
-      obj: '../../../Models/UziGold/uziGold.obj',
-      mtl: '../../../Models/UziGold/uziGold.mtl',
+      obj: '/game/Models/UziGold/uziGold.obj',
+      mtl: '/game/Models/UziGold/uziGold.mtl',
       mesh: null,
       castShadow: false
-    }
+    };
   }
 }

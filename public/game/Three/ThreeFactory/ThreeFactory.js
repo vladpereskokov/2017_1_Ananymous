@@ -1,3 +1,6 @@
+import '../ThreeModules/MTLLoader/MTLLoader';
+import '../ThreeModules/OBJLoader/OBJLoader';
+
 class ThreeFactory {
   constructor() {
     if (ThreeFactory.__instance) {
@@ -103,12 +106,12 @@ class ThreeFactory {
     return new this._three.LoadingManager();
   }
 
-  mtlLoader() {
-    return new this._three.MTLLoader();
+  mtlLoader(manager) {
+    return new this._three.MTLLoader(manager);
   }
 
-  objLoader() {
-    return new this._three.OBJLoader();
+  objLoader(manager) {
+    return new this._three.OBJLoader(manager);
   }
 }
 

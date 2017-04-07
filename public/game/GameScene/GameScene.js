@@ -1,6 +1,7 @@
 import threeFactory from '../Three/ThreeFactory/ThreeFactory';
 import sceneManager from '../Managers/SceneManager/SceneManager';
 import modelsManager from '../Managers/ModelsManager/ModelsManager';
+import meshManager from '../Managers/MeshManager/MeshManager';
 import Floor from '../Three/Objects/Floor/Floor';
 import Box from '../Three/Objects/Box/Box';
 import Camera from '../Three/Objects/Camera/Camera';
@@ -29,7 +30,7 @@ export default class GameScene {
     this._setupFog();
     this._setupLight();
     this._setupControlls(pointerLock);
-    this._setupLoadModels(this._animate.bind(this));
+    this._setupLoadModels(this._onResourcesLoaded.bind(this));
     this._setupRaycaster();
 
     this._appendFloor();
@@ -65,8 +66,18 @@ export default class GameScene {
     sceneManager.add(this._controls.getObject);
   }
 
+  _onResourcesLoaded() {
+    // player weapon
+    meshManager.meshes["playerweapon"] = modelsManager.models.uzi.mesh.clone();
+    meshManager.meshes["playerweapon"].position.set(0, 2, 0);
+    meshManager.meshes["playerweapon"].scale.set(10, 10, 10);
+    sceneManager.add(meshManager.meshes["playerweapon"]);
+    this._animate();
+  }
+
   _setupLoadModels(callback) {
-    this._loadManager = new LoadingObject(modelsManager.models, callback);
+    this._loadManager = new LoadingObject(modelsManager.models,
+      callback);
   }
 
   _setupRaycaster() {
@@ -82,9 +93,9 @@ export default class GameScene {
   _appendBoxes() {
     for (let i = 0; i < 500; ++i) {
       let box = new Box(0xC1876B, 20, 20, 20).getBox;
-      box.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
-      box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
-      box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
+      box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
+      box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
+      box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
 
       sceneManager.add(box);
       this._objects.push(box);
@@ -103,6 +114,8 @@ export default class GameScene {
   _animate() {
     requestAnimationFrame(this._animate.bind(this));
 
+    const gunDistance = 1.4;
+
     if (this._keys.getEnabled) {
       this._raycaster.ray.origin.copy(this._controls.getObject.position);
       this._raycaster.ray.origin.y -= 10;
@@ -114,6 +127,17 @@ export default class GameScene {
         intersections.length > 0);
 
     }
+
+    meshManager.meshes["playerweapon"].position.set(
+      this._controls.getObject.position.x - gunDistance * Math.sin(this._controls.getObject.rotation.y - Math.PI / 30),
+      this._controls.getObject.position.y + 1 + Math.sin(this._controls.getPitch.rotation.x),
+      this._controls.getObject.position.z - gunDistance * Math.cos(this._controls.getObject.rotation.y - Math.PI / 30)
+    );
+    meshManager.meshes["playerweapon"].rotation.set(
+      this._controls.getPitch.rotation.x,
+      this._controls.getObject.rotation.y - Math.PI,
+      0,
+    );
 
     this._renderer.render(sceneManager.scene, this._camera);
   }
@@ -154,7 +178,6 @@ export default class GameScene {
       this._controls.getObject.position.y = 10;
 
       this._keys._jump = true;
-
     }
 
     this._previousTime = time;
