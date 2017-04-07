@@ -1,91 +1,82 @@
-import View from '../../modules/View/View';
-import userService from '../../services/UserService/UserService';
+import Block from '../../components/Block/Block';
+import viewService from '../../services/ViewService/ViewService';
+import mainViewService from '../../services/MainViewService/MainViewService';
+import preLoader from '../PreLoader/PreLoader';
+import FullScreen from "../../modules/FullScreen/FullScreen";
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
 
-class Main extends View {
+export default class Main extends Block {
   constructor() {
-    super();
+    super('div', {
+      class: 'wrapper'
+    });
+
+    this._currentView = null;
+    this.toDocument(preLoader.render());
+
+    document.addEventListener('keydown', (event) => {
+      if (event.keyCode === 70) {
+        console.log('ffff');
+        new FullScreen().toggle(document.body);
+      }
+    });
   }
 
-  _makeMain(state) {
-    this._el.innerHTML = template(this._changeForm(state));
-    document.body.appendChild(this._el);
-
-    if (state) {
-      this._logoutButton();
-    }
+  init() {
+    this._builtBase(template());
+    this.toDocument(this.render());
   }
 
-  _changeForm(state) {
-    return state ? this._getLoggedForm() : this._getUnLoggedForm();
+  hide() {
   }
 
-  logout() {
-    if (userService.getState()) {
-      userService.logout()
-        .then(state => {
-          userService.setState(!state);
-          this.resume();
-        });
-    }
-  }
+  show() {
+    viewService.showPreLoader();
 
-  _logoutButton() {
-    const button = this._findLogoutButton();
+    this._getDocument().querySelector('.wrapper').style.display = 'block';
 
-    if (button) {
-      button.addEventListener('click', this.logout.bind(this));
-      button.style.display = 'block';
-    }
-  }
-
-  _findLogoutButton() {
-    return (document.getElementsByName('logout'))[0];
-  }
-
-  _getUnLoggedForm() {
-    return {
-      buttons: [{
-        text: 'Sign Up',
-        action: '/signup'
-      }, {
-        text: 'Sign In',
-        action: '/signin'
-      }]
-    };
-  }
-
-  _getLoggedForm() {
-    return {
-      buttons: [{
-        text: 'Game',
-        action: '/game'
-      }, {
-        text: 'Scoreboard',
-        action: '/scoreboard'
-      }]
-    };
-  }
-
-  _createMain() {
-    const state = userService.getState();
-
-    this._makeMain(state);
-    this.show();
-  }
-
-  resume() {
-    userService.isLogin()
+    viewService.isLogin()
       .then(response => {
-        if (+response.status === 200) {
-          userService.setState(true);
+        return {
+          status: +response.status === 200,
+          json: response.json()
         }
+      })
+      .then(data => {
+        data.json
+          .then(user => {
+            if (!user.message) {
+              viewService.setUser({
+                login: user.login,
+                email: user.email
+              });
+            }
 
-        this._createMain();
+            viewService.setState(data.status);
+            this._changeView();
+
+            viewService.hidePreLoader();
+          });
+
       });
   }
-}
 
-export default Main;
+  _changeView() {
+    const newView = mainViewService.getMainForm();
+
+    if (!this._currentView || newView._buttons.length !== this._currentView._buttons.length) {
+      if (this._currentView) {
+        this._currentView.hide();
+      }
+
+      this._currentView = newView;
+      this._getElement().querySelector('.wrapper__main__wrapper').appendChild(this._currentView.render());
+    }
+  }
+
+  _builtBase(template) {
+    this._getElement().innerHTML = template;
+  }
+}

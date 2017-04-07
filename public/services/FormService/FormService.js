@@ -4,6 +4,7 @@ import isFill from '../../modules/OtherScripts/Validators/isFill/isFill';
 import isLogin from '../../modules/OtherScripts/Validators/isLogin/isLogin';
 import isPassword from '../../modules/OtherScripts/Validators/isPassword/isPassword';
 import transport from '../../modules/Transport/Transport';
+import viewService from '../ViewService/ViewService';
 
 class FormService {
   constructor() {
@@ -20,31 +21,31 @@ class FormService {
 
   checkFill(field, type) {
     return {
-      response: this._getStringByCondition(isFill(field), `Заполните поле ${type}!`)
+      response: this._getStringByCondition(isFill(field), `Fill ${type}!`)
     };
   }
 
   checkLogin(login) {
     return {
-      response: this._getStringByCondition(!isLogin(login), 'Введите корректный логин!')
+      response: this._getStringByCondition(!isLogin(login), 'Enter correct login!')
     };
   }
 
   checkEmail(email) {
     return {
-      response: this._getStringByCondition(!isEmail(email), 'Введите корректный e-mail!')
+      response: this._getStringByCondition(!isEmail(email), 'Enter correct e-mail!')
     };
   }
 
   checkPassword(password) {
     return {
-      response: this._getStringByCondition(isPassword(password), 'Введите корректный пароль!')
+      response: this._getStringByCondition(isPassword(password), 'Enter correct password!')
     };
   }
 
   checkPasswords(lhs, rhs) {
     return {
-      response: this._getStringByCondition(!isCompare(lhs, rhs), 'Пароли не совпадают!')
+      response: this._getStringByCondition(!isCompare(lhs, rhs), 'Passwords don\'t match!')
     };
   }
 
@@ -64,6 +65,14 @@ class FormService {
 
   _getStringByCondition(condition, string) {
     return condition ? string : '';
+  }
+
+  showPreLoader() {
+    viewService.showPreLoader();
+  }
+
+  hidePreLoader() {
+    viewService.hidePreLoader();
   }
 }
 

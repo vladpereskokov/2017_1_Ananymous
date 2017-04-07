@@ -1,0 +1,27 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
+  <div class="main__game__form open__form__animation">
+    <fest:for iterate="data.buttons" index="i" value="button">
+      <div class="main__form-button {button.class}">
+        <div class="main__form-button__background">
+          <a class="main__form-button__text">
+            <fest:value>button.text</fest:value>
+          </a>
+        </div>
+      </div>
+    </fest:for>
+  </div>
+  <div class="main__game__userblock open__form__animation">
+    <div class="main__game__userblock-background">
+      <p class="main__game__userblock-text"><fest:value>data.username</fest:value></p>
+      <p class="main__game__userblock-text-description">Level: 10</p>
+      <p class="main__game__userblock-text-description">Kills: 42</p>
+    </div>
+  </div>
+  <div class="main__form-button button-logout">
+    <div class="main__form-button__background">
+      <a class="main__form-button__text">
+        LOGOUT
+      </a>
+    </div>
+  </div>
+</fest:template>

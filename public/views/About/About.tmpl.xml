@@ -1,0 +1,38 @@
+<fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
+  <div class="about__wrapper-elements">
+    <div class="about__header">
+      <span>Soul Hunting</span>
+    </div>
+    <form class="about" name="{data.title}">
+
+      <span class="developer">ANANYMOUS</span>
+
+      <p class="field__develop">FrontEnd</p>
+      <hr></hr>
+
+      <ul>
+        <fest:for iterate="data.frontend" index="i" value="input">
+          <li class="author__name">
+            <label>
+              <fest:value>input.name</fest:value>
+            </label>
+          </li>
+        </fest:for>
+      </ul>
+
+      <p class="field__develop">BackEnd</p>
+      <hr></hr>
+
+      <ul>
+        <fest:for iterate="data.backend" index="i" value="input">
+          <li class="author__name">
+            <label>
+              <fest:value>input.name</fest:value>
+            </label>
+          </li>
+        </fest:for>
+      </ul>
+
+    </form>
+  </div>
+</fest:template>

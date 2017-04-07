@@ -1,28 +1,20 @@
 <fest:template xmlns:fest="http://fest.mail.ru" context_name="data">
-  <div class="main z-depth-2">
-    <fest:for iterate="data.buttons" index="i" value="button">
-      <button>
-        <fest:attributes>
-          <fest:attribute name="class">
-            btn button
-          </fest:attribute>
-          <fest:attribute name="data-nav">
-            <fest:value>button.action</fest:value>
-          </fest:attribute>
-        </fest:attributes>
-        <fest:value>button.text</fest:value>
-      </button>
-    </fest:for>
-    <button>
-      <fest:attributes>
-        <fest:attribute name="class">
-          btn button logout
-        </fest:attribute>
-        <fest:attribute name="name">
-          logout
-        </fest:attribute>
-      </fest:attributes>
-      Logout
-    </button>
+  <div class="wrapper__main__wrapper animation-open">
+    <div class="wrapper__main__header">
+      SOUL HUNTING
+      <p class="wrapper__main__header-register">&#174;</p>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer__wrapper__help">
+      <img class="footer__help-img" src="../../static/images/upandown.png"></img>
+      <p class="footer__help-selector">Select</p>
+      <img class="footer__help-img footer__help-img-enter" src="../../static/images/enter.png"></img>
+      <p class="footer__help-enter">Enter</p>
+    </div>
+    <div class="footer__wrapper__team">
+      <p class="footer-team">ANANYMOUS</p>
+      <p class="footer-register">&#174;</p>
+    </div>
   </div>
 </fest:template>

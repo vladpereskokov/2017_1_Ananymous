@@ -5,12 +5,12 @@ import template from './Table.tmpl.xml';
 
 class Table extends Block {
   constructor(elements = {}) {
-    super('div', { class: 'z-depth-2 scoreboard' });
+    super('div', { class: 'table' });
     this._createTable(elements);
   }
 
   _createTable(elements) {
-    this._getElement().innerHTML = template({
+    return this._getElement().innerHTML = template({
       head: elements.head,
       body: elements.body
     });

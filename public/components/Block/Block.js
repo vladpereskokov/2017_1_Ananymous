@@ -1,5 +1,5 @@
 export default class Block {
-  constructor(name, attributes = {}) {
+  constructor(name = 'div', attributes = {}) {
     this._name = name;
     this._element = this._createDocumentElement(this._getNameElement());
     delete attributes.block;
@@ -7,7 +7,7 @@ export default class Block {
   }
 
   setAttributeBlock(name, value) {
-    this._getElement().setAttribute(name, value);
+    name === 'class' ? this.addClass(value) : this._getElement().setAttribute(name, value);
   }
 
   setAttributes(attributes) {
@@ -25,6 +25,10 @@ export default class Block {
     this._getElement().appendChild(child);
   }
 
+  addClass(className) {
+    this._getElement().classList.add(className);
+  }
+
   render() {
     return this._getElement();
   }
@@ -33,12 +37,16 @@ export default class Block {
     element.appendChild(this.render());
   }
 
-  remove() {
-    document.querySelector(this._getNameElement()).remove();
+  find(tag) {
+    return this._getElement().querySelector(tag);
   }
 
-  search(block) {
-    return this._getElement().querySelector(block);
+  globalFind(tag) {
+    return this._getDocument().querySelector(tag);
+  }
+
+  findAll(tag) {
+    return this._getDocument().querySelectorAll(tag);
   }
 
   _createDocumentElement(name) {
@@ -76,7 +84,54 @@ export default class Block {
     return Object.keys(data);
   }
 
-  _find(tag) {
-    return this._getElement().querySelector(tag);
+  init() {}
+
+  pause() {
+    this.hide();
+  }
+
+  resume() {
+    this.show();
+  }
+
+  show() {
+    this._getElement().style.display = 'block';
+  }
+
+  hide() {
+    this._getElement().style.display = 'none';
+  }
+
+  appendTo(element) {
+    element.appendChild(this._getElement());
+  }
+
+  setElement(el) {
+    this._getElement() && this._getElement().remove();
+    this._element = el;
+  }
+
+  setRouter(router) {
+    this._router = router;
+  }
+
+  getRouter() {
+    return this._router;
+  }
+
+  toString() {
+    return this._getElement().outerHTML;
+  }
+
+  start(event, callback) {
+    this._getElement().addEventListener(event, callback);
+  }
+
+  toDocument(element) {
+    this._getDocument().appendChild(element);
+  }
+
+  _getDocument() {
+    return document.body;
   }
 }
