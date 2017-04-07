@@ -28,7 +28,7 @@ export default class GameScene {
 
   _setShootMouse() {
     document.addEventListener('mousedown', (event) => {
-      bulletsManager.shoot(this._player, this._controls.getObject.rotation.x,
+      bulletsManager.shoot(this._player, this._controls.getPitch.rotation.x,
         this._controls.getObject.rotation.y);
     });
   }
