@@ -30,4 +30,10 @@ export default class Mouse {
         Math.min(this._PI_2, pitch.rotation.x));
     };
   }
+
+  onMouseDown(callback) {
+    return (event) => {
+      callback();
+    }
+  }
 }

@@ -1,7 +1,5 @@
 export default class Weapon {
-  constructor(distance) {
-    this._distance = distance;
-    this._model = this._getUziModel();
+  constructor() {
   }
 
   _getUziModel() {

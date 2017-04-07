@@ -42,6 +42,13 @@ class ThreeFactory {
       widthSegments, heightSegments, depthSegments);
   }
 
+  sphereGeometry(...settings) {
+    const [radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength] = settings;
+
+    return new this._three.SphereGeometry(radius, widthSegments,
+      heightSegments, phiStart, phiLength, thetaStart, thetaLength);
+  }
+
   color(color = null) {
     return new this._three.Color(color);
   }

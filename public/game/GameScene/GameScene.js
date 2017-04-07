@@ -8,18 +8,28 @@ import Camera from '../Three/Objects/Camera/Camera';
 import Player from '../Three/Objects/Player/Player';
 import LoadingObject from '../Three/ThreeModules/LoadingObject/LoadingObject';
 import Weapon from '../Three/Objects/Weapon/Weapon';
+import bulletsManager from '../Managers/BulletsManager/BulletsManager';
 
 export default class GameScene {
   constructor(pointerLock, mouse, keys) {
     this._mouse = mouse;
     this._keys = keys;
     this._previousTime = performance.now();
-    this._player = new Player(1.8, 0.2, Math.PI * 0.02, 10);
+    this._player = new Player(1.8, 0.2, Math.PI * 0.02, 100000);
     this._objects = [];
     this._renderer = null;
 
+    this._setShootMouse();
+
     this._init(pointerLock);
     this._animate();
+  }
+
+  _setShootMouse() {
+    document.addEventListener('mousedown', (event) => {
+      bulletsManager.shoot(this._player, this._controls.getObject.rotation.x,
+        this._controls.getObject.rotation.y);
+    });
   }
 
   _init(pointerLock) {
@@ -67,11 +77,11 @@ export default class GameScene {
   }
 
   _onResourcesLoaded() {
-    // player weapon
     meshManager.meshes["playerweapon"] = modelsManager.models.uzi.mesh.clone();
     meshManager.meshes["playerweapon"].position.set(0, 2, 0);
     meshManager.meshes["playerweapon"].scale.set(10, 10, 10);
     sceneManager.add(meshManager.meshes["playerweapon"]);
+
     this._animate();
   }
 
@@ -114,6 +124,8 @@ export default class GameScene {
   _animate() {
     requestAnimationFrame(this._animate.bind(this));
 
+    bulletsManager.bulletsService();
+
     const gunDistance = 1.4;
 
     if (this._keys.getEnabled) {
@@ -125,7 +137,6 @@ export default class GameScene {
 
       this._newAction(time, (time - this._previousTime) / 1000,
         intersections.length > 0);
-
     }
 
     meshManager.meshes["playerweapon"].position.set(

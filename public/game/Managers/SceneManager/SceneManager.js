@@ -17,6 +17,10 @@ class SceneManager {
   add(element) {
     this.scene.add(element);
   }
+
+  remove(element) {
+    this.scene.remove(element);
+  }
 }
 
 const sceneManager = new SceneManager();
