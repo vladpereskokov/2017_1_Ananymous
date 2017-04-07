@@ -5,6 +5,7 @@ import Scoreboard from './views/Scoreboard/Scoreboard';
 import Game from './views/Game/Game';
 import Main from './views/Main/Main';
 import About from "./views/About/About";
+import FullScreen from './modules/FullScreen/FullScreen';
 
 import './static/css/fonts.scss';
 import './static/css/reset.scss';
@@ -32,3 +33,10 @@ router
   .use('/signin', SignIn)
   .use('/about', About)
   .start();
+
+document.addEventListener('keydown', (event) => {
+  if (event.keyCode === 70) {
+    console.log('ffff');
+    new FullScreen().toggle(document);
+  }
+});

@@ -2,6 +2,7 @@ import Block from '../../components/Block/Block';
 import viewService from '../../services/ViewService/ViewService';
 import mainViewService from '../../services/MainViewService/MainViewService';
 import preLoader from '../PreLoader/PreLoader';
+import FullScreen from "../../modules/FullScreen/FullScreen";
 
 import './Main.scss';
 import template from './Main.tmpl.xml';
@@ -14,6 +15,13 @@ export default class Main extends Block {
 
     this._currentView = null;
     this.toDocument(preLoader.render());
+
+    document.addEventListener('keydown', (event) => {
+      if (event.keyCode === 70) {
+        console.log('ffff');
+        new FullScreen().toggle(document.body);
+      }
+    });
   }
 
   init() {
