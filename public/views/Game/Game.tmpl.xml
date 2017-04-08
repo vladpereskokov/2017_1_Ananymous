@@ -10,7 +10,7 @@
       (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around, LMB = Shoot)
       <br/>
       <br/>
-      (F = Fullscreen)
+      (F = Fullscreen, ESC - Exit)
     </div>
   </div>
   <div id="user-stats" class="user-stats">

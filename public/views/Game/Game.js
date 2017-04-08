@@ -11,7 +11,6 @@ class Game extends Block {
 
     document.addEventListener('keydown', (event) => {
       if (event.keyCode === 70) {
-        console.log('ffff');
         new FullScreen().toggle(document.body);
       }
     });
