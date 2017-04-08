@@ -23,7 +23,7 @@ export default class GameScene {
     this._setShootMouse();
 
     this._init(pointerLock);
-    this._animate();
+    //this._animate();
   }
 
   _setShootMouse() {
@@ -80,10 +80,18 @@ export default class GameScene {
   }
 
   _onResourcesLoaded() {
+    Physijs.scripts.worker = '/lib/physijs_worker.js';
+    Physijs.scripts.ammo = '/lib/ammo.js';
+
     meshManager.meshes["playerweapon"] = modelsManager.models.uzi.mesh.clone();
     meshManager.meshes["playerweapon"].position.set(0, 2, 0);
     meshManager.meshes["playerweapon"].scale.set(8, 8, 8);
     sceneManager.add(meshManager.meshes["playerweapon"]);
+
+    meshManager.meshes["playerobject"] = new Physijs.SphereMesh(threeFactory.sphereGeometry(1, 12, 12),
+        threeFactory.meshBasicMaterial({color: 0x000000}), 0);
+    meshManager.meshes["playerobject"].position.set(0, 2, 0);
+    sceneManager.add(meshManager.meshes["playerobject"]);
 
     this._animate();
   }
@@ -104,15 +112,15 @@ export default class GameScene {
   }
 
   _appendBoxes() {
-  //   for (let i = 0; i < 500; ++i) {
-  //     let box = new Box(0xC1876B, 10, 10, 10).getBox;
-  //     box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
-  //     box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
-  //     box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
-  //
-  //     sceneManager.add(box);
-  //     this._objects.push(box);
-  //   }
+    for (let i = 0; i < 300; ++i) {
+      let box = new Box(0xC1876B, 10, 10, 10).getBox;
+      box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
+      box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
+      box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
+
+      sceneManager.add(box);
+      this._objects.push(box);
+    }
   }
 
   _appendRoom() {
@@ -134,6 +142,7 @@ export default class GameScene {
 
   _animate() {
     requestAnimationFrame(this._animate.bind(this));
+    sceneManager.scene.simulate();
 
     bulletsManager.bulletsService();
 
@@ -160,6 +169,13 @@ export default class GameScene {
       this._controls.getObject.rotation.y - Math.PI,
       0,
     );
+
+    meshManager.meshes["playerobject"].position.set(
+        this._controls.getObject.position.x,
+        this._controls.getObject.position.y - this._player.getHeight,
+        this._controls.getObject.position.z
+    );
+
 
     this._renderer.render(sceneManager.scene, this._camera);
   }
