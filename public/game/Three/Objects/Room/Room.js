@@ -34,19 +34,19 @@ export default class Room {
       {
         position: [x, y + height/2, z + width/2],
         geometry: [len, height, 2],
-        color: 0x000000
+        color: 0x999999
       }, {
         position: [x, y + height/2, z - width/2],
         geometry: [len, height, 2],
-        color: 0xff0000
+        color: 0x999999
       }, {
         position: [x + len/2, y + height/2, z],
         geometry: [2, height, width],
-        color: 0x0000ff
+        color: 0x999999
       }, {
         position: [x - len/2, y + height/2, z],
         geometry: [2, height, width],
-        color: 0x00ffff
+        color: 0x999999
       }
     ];
   }

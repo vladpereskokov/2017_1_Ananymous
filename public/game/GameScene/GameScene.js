@@ -112,8 +112,8 @@ export default class GameScene {
   }
 
   _appendBoxes() {
-    for (let i = 0; i < 300; ++i) {
-      let box = new Box(0xC1876B, 10, 10, 10).getBox;
+    for (let i = 0; i < 500; ++i) {
+      let box = new Box(0xC1876B, 3, 3, 3).getBox;
       box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
       box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
       box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
@@ -124,7 +124,7 @@ export default class GameScene {
   }
 
   _appendRoom() {
-    const walls = new Room().create();
+    const walls = new Room(300, 30, 500).create();
 
     for (let wall of walls) {
       sceneManager.add(wall);
