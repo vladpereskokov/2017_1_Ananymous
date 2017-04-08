@@ -12,7 +12,9 @@ export default class Box {
   }
 
   get getBox() {
-    return threeFactory.mesh(this._geometry, this._material);
+      Physijs.scripts.worker = '/lib/physijs_worker.js';
+      Physijs.scripts.ammo = '/lib/ammo.js';
+    return new Physijs.BoxMesh(this._geometry, this._material);
   }
 
   _initGeometry(color) {

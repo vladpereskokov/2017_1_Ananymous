@@ -2,13 +2,14 @@ import threeFactory from '../../ThreeFactory/ThreeFactory';
 
 export default class Room {
   constructor(...settings) {
-    const [width = 100, height = 50, len = 200, x = 0, y = 0, z = 0] = settings;
-
+    const [width = 100, height = 25, len = 200, x = 0, y = 0, z = 0] = settings;
     this._walls = this._getWallsObject(width, height, len, x, y, z)
   }
 
   create() {
     let result = [];
+     Physijs.scripts.worker = '/lib/physijs_worker.js';
+     Physijs.scripts.ammo = '/lib/ammo.js';
 
     this._walls.forEach(element => {
       const geometry = threeFactory.boxGeometry(
@@ -16,7 +17,7 @@ export default class Room {
         element.geometry[1],
         element.geometry[2]);
       const material = threeFactory.meshBasicMaterial({color: element.color});
-      const mesh = threeFactory.mesh(geometry, material);
+      const mesh = new Physijs.BoxMesh(geometry, material, 0);
 
       mesh.position.x = element.position[0];
       mesh.position.y = element.position[1];
@@ -32,20 +33,20 @@ export default class Room {
     return [
       {
         position: [x, y + height/2, z + width/2],
-        geometry: [len, height, 1],
-        color: 0x000000
+        geometry: [len, height, 2],
+        color: 0x999999
       }, {
         position: [x, y + height/2, z - width/2],
-        geometry: [len, height, 1],
-        color: 0xff0000
+        geometry: [len, height, 2],
+        color: 0x999999
       }, {
         position: [x + len/2, y + height/2, z],
-        geometry: [1, height, width],
-        color: 0x0000ff
+        geometry: [2, height, width],
+        color: 0x999999
       }, {
         position: [x - len/2, y + height/2, z],
-        geometry: [1, height, width],
-        color: 0x00ffff
+        geometry: [2, height, width],
+        color: 0x999999
       }
     ];
   }

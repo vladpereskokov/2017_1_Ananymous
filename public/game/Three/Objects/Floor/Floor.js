@@ -8,7 +8,9 @@ export default class Floor {
   }
 
   get getFloor() {
-    return threeFactory.mesh(this._geometry, this._material);
+    Physijs.scripts.worker = '/lib/physijs_worker.js';
+    Physijs.scripts.ammo = '/lib/ammo.js';
+    return new Physijs.PlaneMesh(this._geometry, this._material, 0);
   }
 
   _initGeometry() {
@@ -24,24 +26,25 @@ export default class Floor {
   }
 
   _setupVertices() {
-    for (let vertex of this._geometry.vertices) {
-      vertex.x += Math.random() * 20 - 10;
-      vertex.y += Math.random() * 2;
-      vertex.z += Math.random() * 20 - 10;
-    }
+    // for (let vertex of this._geometry.vertices) {
+    //   vertex.x += Math.random() * 20 - 10;
+    //   vertex.y += Math.random() * 2;
+    //   vertex.z += Math.random() * 20 - 10;
+    // }
   }
 
   _setupFaces() {
-    for (let face of this._geometry.faces) {
-      face.vertexColors[0] = threeFactory.color().setHSL(0.4, 0.75, 0.5);
-      face.vertexColors[1] = threeFactory.color().setHSL(0.4, 0.75, 0.5);
-      face.vertexColors[2] = threeFactory.color().setHSL(0.4, 0.75, 0.5);
-    }
+    // for (let face of this._geometry.faces) {
+    //   face.vertexColors[0] = threeFactory.color().setHSL(0.4, 0.75, 0.5);
+    //   face.vertexColors[1] = threeFactory.color().setHSL(0.4, 0.75, 0.5);
+    //   face.vertexColors[2] = threeFactory.color().setHSL(0.4, 0.75, 0.5);
+    // }
   }
 
   _setMaterial() {
     this._material = threeFactory.meshBasicMaterial({
-      vertexColors: threeFactory.vertexColors
+     // vertexColors: threeFactory.vertexColors
+        color: threeFactory.color().setHSL(0.4, 0.75, 0.5)
     });
   }
 }

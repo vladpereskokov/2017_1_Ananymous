@@ -23,12 +23,12 @@ export default class GameScene {
     this._setShootMouse();
 
     this._init(pointerLock);
-    this._animate();
+    //this._animate();
   }
 
   _setShootMouse() {
     document.addEventListener('mousedown', (event) => {
-      bulletsManager.shoot(this._player, this._controls.getObject.rotation.x,
+      bulletsManager.shoot(this._player, this._controls.getPitch.rotation.x,
         this._controls.getObject.rotation.y);
     });
   }
@@ -80,10 +80,18 @@ export default class GameScene {
   }
 
   _onResourcesLoaded() {
+    Physijs.scripts.worker = '/lib/physijs_worker.js';
+    Physijs.scripts.ammo = '/lib/ammo.js';
+
     meshManager.meshes["playerweapon"] = modelsManager.models.uzi.mesh.clone();
     meshManager.meshes["playerweapon"].position.set(0, 2, 0);
-    meshManager.meshes["playerweapon"].scale.set(10, 10, 10);
+    meshManager.meshes["playerweapon"].scale.set(8, 8, 8);
     sceneManager.add(meshManager.meshes["playerweapon"]);
+
+    meshManager.meshes["playerobject"] = new Physijs.SphereMesh(threeFactory.sphereGeometry(1, 12, 12),
+        threeFactory.meshBasicMaterial({color: 0x000000}), 0);
+    meshManager.meshes["playerobject"].position.set(0, 2, 0);
+    sceneManager.add(meshManager.meshes["playerobject"]);
 
     this._animate();
   }
@@ -105,7 +113,7 @@ export default class GameScene {
 
   _appendBoxes() {
     for (let i = 0; i < 500; ++i) {
-      let box = new Box(0xC1876B, 20, 20, 20).getBox;
+      let box = new Box(0xC1876B, 3, 3, 3).getBox;
       box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
       box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
       box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
@@ -116,7 +124,7 @@ export default class GameScene {
   }
 
   _appendRoom() {
-    const walls = new Room().create();
+    const walls = new Room(300, 30, 500).create();
 
     for (let wall of walls) {
       sceneManager.add(wall);
@@ -134,6 +142,7 @@ export default class GameScene {
 
   _animate() {
     requestAnimationFrame(this._animate.bind(this));
+    sceneManager.scene.simulate();
 
     bulletsManager.bulletsService();
 
@@ -152,7 +161,7 @@ export default class GameScene {
 
     meshManager.meshes["playerweapon"].position.set(
       this._controls.getObject.position.x - gunDistance * Math.sin(this._controls.getObject.rotation.y - Math.PI / 30),
-      this._controls.getObject.position.y + 1 + Math.sin(this._controls.getPitch.rotation.x),
+      this._controls.getObject.position.y + 1.3 + Math.sin(this._controls.getPitch.rotation.x),
       this._controls.getObject.position.z - gunDistance * Math.cos(this._controls.getObject.rotation.y - Math.PI / 30)
     );
     meshManager.meshes["playerweapon"].rotation.set(
@@ -160,6 +169,13 @@ export default class GameScene {
       this._controls.getObject.rotation.y - Math.PI,
       0,
     );
+
+    meshManager.meshes["playerobject"].position.set(
+        this._controls.getObject.position.x,
+        this._controls.getObject.position.y - this._player.getHeight,
+        this._controls.getObject.position.z
+    );
+
 
     this._renderer.render(sceneManager.scene, this._camera);
   }

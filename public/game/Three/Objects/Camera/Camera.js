@@ -11,7 +11,7 @@ export default class Camera {
 
   _init(player) {
     this._camera = threeFactory
-      .perspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+      .perspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
 
     console.log(player);
 
