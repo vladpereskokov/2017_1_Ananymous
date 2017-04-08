@@ -14,7 +14,7 @@ export default class Box {
   get getBox() {
       Physijs.scripts.worker = '/lib/physijs_worker.js';
       Physijs.scripts.ammo = '/lib/ammo.js';
-    return new Physijs.BoxMesh(this._geometry, this._material);
+    return new Physijs.BoxMesh(this._geometry, this._material, 100);
   }
 
   _initGeometry(color) {
