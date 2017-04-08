@@ -15,7 +15,9 @@
   </div>
   <div id="user-stats" class="user-stats">
     <div id="ammo-bar" class="user-stats__ammo-bar">
-      <span id="ammo-bar__bullets-amount">10/10</span>
+      <img src="/static/images/infinity-icon.png" width="20" alt="Infinity"></img>
+      <span id="ammo-bar__bullets-amount" class="user-stats__ammo-bar__bullets-amount">/</span>
+      <img src="/static/images/infinity-icon.png" width="20" alt="Infinity"></img>
       <img src="/static/images/bullet-icon.png" width="20" alt="Bullet"></img>
     </div>
 

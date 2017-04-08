@@ -89,7 +89,7 @@ export default class GameScene {
     sceneManager.add(meshManager.meshes["playerweapon"]);
 
     meshManager.meshes["playerobject"] = new Physijs.SphereMesh(threeFactory.sphereGeometry(1, 12, 12),
-        threeFactory.meshBasicMaterial({color: 0x000000}), 0);
+        threeFactory.meshBasicMaterial({color: 0x000000}), 100);
     meshManager.meshes["playerobject"].position.set(0, 2, 0);
     sceneManager.add(meshManager.meshes["playerobject"]);
 
