@@ -1,0 +1,36 @@
+// ------------------------------------------------------------------
+// Question
+// ------------------------------------------------------------------
+
+&.question {
+
+	background-color:white;
+
+	&::after,
+	&::before {
+		visibility:hidden;
+	}
+
+	h2 {
+		// Text
+
+		position:absolute;
+		padding-right: 36px;
+		padding-left:96px;
+		top:50%;
+		left:0;
+		transform: translateY(-60%);
+		z-index:1;
+		width:100%;
+		color:black;
+		line-height:1.1;
+		font-size:104px;
+
+		// Link
+
+		a {
+			@include underline(currentColor, 0.06);
+			color:inherit;
+		}
+	}
+}

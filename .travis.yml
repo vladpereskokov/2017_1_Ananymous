@@ -1,11 +1,10 @@
 language: node_js
 sudo: required
 node_js:
-- '6'
 - '7'
 branches:
   only:
-  - develop
+  - presentation
 deploy:
   provider: heroku
   api_key:
@@ -13,10 +12,7 @@ deploy:
   app: hunt-develop
   on:
     repo: vladpereskokov/2017_1_Ananymous
-    branch: develop
+    branch: presentation
   skip_cleanup: true
 install:
   - npm install
-  - npm run eslint
-  - npm run test
-  - npm run webpack

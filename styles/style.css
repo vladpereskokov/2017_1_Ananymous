@@ -1,0 +1,177 @@
+@font-face {
+  font-family: "Astakhov Skin";
+  src: url(../fonts/AstakhovSkin.otf);
+}
+
+@font-face {
+  font-family: "Keep Calm";
+  src: url(../fonts/KeepCalm-Medium.ttf);
+}
+
+.header {
+	background: #1b1e24;
+}
+
+.title {
+	font-family: "Astakhov Skin" !important;
+}
+
+.team {
+	font-family: "KeepCalm" !important;
+}
+
+.shout::after {
+	background: #1b1e24 !important;
+}
+
+.progress {
+	background: #1b1e24 !important;
+}
+
+.start {
+	padding-left: 72px !important;
+}
+
+.slide::before {
+	font-family: "Astakhov Skin" !important;
+	background-image: none !important;
+	content: 'SOUL HUNTING';
+	font-size: 24pt;
+	right: 5px !important;
+}
+
+.who_is_who {
+	margin: 5%;
+}
+
+.who_is_who-images-developer {
+	height: 28%;
+	width: 28%;
+	margin-right: 4.5%;
+}
+
+.who_is_who-names {
+	font-size: 16pt;
+	margin-left: -9%;
+}
+
+.who_is_who-names-property {
+	font-size: 14pt;
+	margin-left: 8%;
+	margin-top: -3%;
+}
+
+.who_is_who-names-property-den {
+	font-size: 14pt;
+	margin-top: -4.3%;
+	margin-left: 8%;
+}
+
+.who_is_who-names-denis {
+	margin-left: 35%;
+	margin-top: -10.7%;
+}
+
+.who_is_who-names-vlados {
+	margin-left: 64%;
+	margin-top: -10.7%;
+}
+
+.who_is_who-names-property-vlados {
+	font-size: 14pt;
+	margin-top: -8%;
+	margin-left: 20%;
+}
+
+.idea {
+	margin-left: -169px;
+	transform: scale(0.7);
+}
+
+.idea2 {
+	margin-left: -169px;
+	margin-top: -130px;
+	transform: scale(0.5);
+}
+
+.idea3 {
+	margin-left: -169px;
+	margin-top: -200px;
+	transform: scale(0.5);
+}
+
+.idea4 {
+	margin-left: -270px;
+	margin-top: -160px;
+	transform: scale(0.5);
+}
+
+.idea5 {
+	margin-left: -80px;
+	margin-top: -110px;
+	transform: scale(0.6);
+}
+
+.idea6 {
+	margin-left: -270px;
+	margin-top: -220px;
+	transform: scale(0.5);
+}
+
+.idea7 {
+	margin-left: -130px;
+	margin-top: -220px;
+	transform: scale(0.5);
+}
+
+.tech {
+	font-family: "KeepCalm" !important;
+}
+
+.idea8 {
+	margin-left: 120px;
+	margin-top: -260px;
+	transform: scale(0.2);
+}
+
+.idea10 {
+	margin-left: -360px;
+	transform: scale(0.5);
+}
+
+.idea11 {
+	margin-top: -900px;
+	margin-left: -1360px;
+	transform: scale(0.1);
+}
+
+.idea12 {
+	margin-top: 100px;
+	margin-left: 100px;
+}
+
+.idea13 {
+	margin-top: 100px;
+	margin-left: 300px;
+	transform: scale(1.3);
+}
+
+.idea14 {
+	margin-top: 20px;
+	margin-left: 140px;
+	transform: scale(1.1);
+}
+
+.idea15 {
+	margin-left: 100px;
+}
+
+.idea16 {
+	margin-left: 180px;
+}
+
+.idea17 {
+	margin-left: -170px;
+	margin-top: -400px;
+	transform: scale(0.2);
+}
