@@ -61,6 +61,27 @@ export default class GameScene {
     });
   }
 
+  _init() {
+    this._setUpClock();
+    this._setUpScene();
+    this._setUpFog();
+    this._setUpCamera();
+    this._setUpControls();
+
+    this._makeScene();
+    this._setUpAI();
+
+    this._setUpRender();
+  }
+
+  _animate() {
+    if (runAnim) {
+      requestAnimationFrame(this._animate.bind(this));
+    }
+
+    this._render();
+  }
+
   _setUpClock() {
     this._clock = threeFactory.clock();
   }
@@ -93,55 +114,98 @@ export default class GameScene {
     document.body.appendChild(this._renderer.domElement);
   }
 
-  _init() {
-    this._setUpClock();
-    this._setUpScene();
-    this._setUpFog();
-    this._setUpCamera();
-    this._setUpControls();
+  _makeScene() {
+    this._setUpFloor(mapW * UNITSIZE);
 
-    this._setupScene();
-    this._setupAI();
+    this._setUpWalls();
 
-    this._setUpRender();
+    this._setUpLight(0xF7EFBE, 0.7, 0.5, 1, 0.5);
+    this._setUpLight(0xF7EFBE, 0.5, -0.5, -1, -0.5);
   }
 
-  _animate() {
-    if (runAnim) {
-      requestAnimationFrame(this._animate.bind(this));
+  _setUpFloor(size) {
+    this._scene.add(new Floor(size).object);
+  }
+
+  _setUpWalls() {
+    for (let i = 0; i < mapW; i++) {
+      for (let j = 0, m = map[i].length; j < m; j++) {
+        if (map[i][j]) {
+          const wall = new Walls(map[i][j] - 1, UNITSIZE, WALLHEIGHT, UNITSIZE).object;
+
+          wall.position.x = (i - mapW / 2) * UNITSIZE;
+          wall.position.y = WALLHEIGHT / 2;
+          wall.position.z = (j - mapW / 2) * UNITSIZE;
+
+          this._scene.add(wall);
+        }
+      }
+    }
+  }
+
+  _setUpLight(hex, intensity, x, y, z) {
+    const directionalLight = threeFactory.directionalLight(hex, intensity);
+    directionalLight.position.set(x, y, z);
+
+    this._scene.add(directionalLight);
+  }
+
+  _setUpAI() {
+    for (let i = 0; i < 16; i++) {
+      this._addAI();
+    }
+  }
+
+  _addAI() {
+    const position = this._getMapSector(this._camera.position);
+    const player = new Player().object;
+
+    let [x, z] = this._getPosition();
+    while (map[x][z] > 0 || (x === position.x && z === position.z)) {
+      [x, z] = this._getPosition();
     }
 
-    this._render();
+    x = Math.floor(x - mapW / 2) * UNITSIZE;
+    z = Math.floor(z - mapW / 2) * UNITSIZE;
+
+    player.position.set(x, UNITSIZE * 0.15, z);
+    player.health = 100;
+    player.pathPos = 1;
+    player.lastRandomX = Math.random();
+    player.lastRandomZ = Math.random();
+    player.lastShot = Date.now();
+
+    ai.push(player);
+    this._scene.add(player);
   }
 
-  _render() {
-    var delta = this._clock.getDelta(), speed = delta * BULLETMOVESPEED;
-    var aispeed = delta * MOVESPEED;
-    this._controls.update(delta, this._checkWallCollision.bind(this));
+  _updateBullets(delta) {
+    for (let i in bullets) {
+      const bullet = bullets[i];
+      const position = bullet.position;
 
-    // Update bullets. Walk backwards through the list so we can remove items.
-    for (var i = bullets.length - 1; i >= 0; i--) {
-      var b = bullets[i], p = b.position, d = b.ray.direction;
-      if (this._checkWallCollision(p)) {
+      if (this._checkWallCollision(position)) {
         bullets.splice(i, 1);
-        this._scene.remove(b);
+        this._scene.remove(bullet);
+
         continue;
       }
+
       // Collide with AI
       var hit = false;
-      for (var j = ai.length - 1; j >= 0; j--) {
+      for (let j in ai) {
         var a = ai[j];
         var v = a.geometry.vertices[0];
         var c = a.position;
         var x = Math.abs(v.x), z = Math.abs(v.z);
         //console.log(Math.round(p.x), Math.round(p.z), c.x, c.z, x, z);
-        if (p.x < c.x + x && p.x > c.x - x &&
-          p.z < c.z + z && p.z > c.z - z &&
-          b.owner != a) {
+        if (position.x < c.x + x && position.x > c.x - x &&
+          position.z < c.z + z && position.z > c.z - z &&
+          bullet.owner !== a) {
           bullets.splice(i, 1);
-          this._scene.remove(b);
+          this._scene.remove(bullet);
           a.health -= PROJECTILEDAMAGE;
-          var color = a.material.color, percent = a.health / 100;
+          const color = a.material.color, percent = a.health / 100;
           a.material.color.setRGB(
             Math.max(percent, 1) * color.r,
             percent * color.g,
@@ -151,23 +215,37 @@ export default class GameScene {
           break;
         }
       }
+
       // Bullet hits player
-      if (this._distance(p.x, p.z, this._camera.position.x, this._camera.position.z) < 25 && b.owner != this._camera) {
+      if (this._distance(position.x, position.z, this._camera.position.x, this._camera.position.z) < 25
+        && bullet.owner !== this._camera) {
         $('#hurt').fadeIn(75);
         health -= 10;
         if (health < 0) health = 0;
         var val = health < 25 ? '<span style="color: darkRed">' + health + '</span>' : health;
         $('#health').html(val);
         bullets.splice(i, 1);
-        this._scene.remove(b);
+        this._scene.remove(bullet);
         $('#hurt').fadeOut(350);
       }
+
       if (!hit) {
-        b.translateX(speed * d.x);
-        //bullets[i].translateY(speed * bullets[i].direction.y);
-        b.translateZ(speed * d.z);
+        const speed = delta * BULLETMOVESPEED;
+        const direction = bullet.ray.direction;
+
+        bullet.translateX(speed * direction.x);
+        bullet.translateZ(speed * direction.z);
       }
     }
+  }
+
+  _render() {
+    const delta = this._clock.getDelta();
+    var aispeed = delta * MOVESPEED;
+    this._controls.update(delta, this._checkWallCollision.bind(this));
+
+    // Update bullets. Walk backwards through the list so we can remove items.
+    this._updateBullets(delta);
 
     // Update AI.
     for (var i = ai.length - 1; i >= 0; i--) {
@@ -194,6 +272,7 @@ export default class GameScene {
         a.lastRandomX = Math.random() * 2 - 1;
         a.lastRandomZ = Math.random() * 2 - 1;
       }
+
       if (c.x < -1 || c.x > mapW || c.z < -1 || c.z > mapH) {
         ai.splice(i, 1);
         this._scene.remove(a);
@@ -231,72 +310,6 @@ export default class GameScene {
         this._camera.translateZ(-this._camera.position.z);
       });
     }
-  }
-
-
-  _setupScene() {
-    this._setUpFloor(mapW * UNITSIZE);
-
-    this._setUpWalls();
-
-    this._setUpLight(0xF7EFBE, 0.7, 0.5, 1, 0.5);
-    this._setUpLight(0xF7EFBE, 0.5, -0.5, -1, -0.5);
-  }
-
-  _setUpFloor(size) {
-    this._scene.add(new Floor(size).object);
-  }
-
-  _setUpWalls() {
-    for (let i = 0; i < mapW; i++) {
-      for (let j = 0, m = map[i].length; j < m; j++) {
-        if (map[i][j]) {
-          const wall = new Walls(map[i][j] - 1, UNITSIZE, WALLHEIGHT, UNITSIZE).object;
-
-          wall.position.x = (i - mapW / 2) * UNITSIZE;
-          wall.position.y = WALLHEIGHT / 2;
-          wall.position.z = (j - mapW / 2) * UNITSIZE;
-
-          this._scene.add(wall);
-        }
-      }
-    }
-  }
-
-  _setUpLight(hex, intensity, x, y, z) {
-    const directionalLight = threeFactory.directionalLight(hex, intensity);
-    directionalLight.position.set(x, y, z);
-
-    this._scene.add(directionalLight);
-  }
-
-  _setupAI() {
-    for (let i = 0; i < 16; i++) {
-      this._addAI();
-    }
-  }
-
-  _addAI() {
-    const position = this._getMapSector(this._camera.position);
-    const player = new Player().object;
-
-    let [x, z] = this._getPosition();
-    while (map[x][z] > 0 || (x === position.x && z === position.z)) {
-      [x, z] = this._getPosition();
-    }
-
-    x = Math.floor(x - mapW / 2) * UNITSIZE;
-    z = Math.floor(z - mapW / 2) * UNITSIZE;
-
-    player.position.set(x, UNITSIZE * 0.15, z);
-    player.health = 100;
-    player.pathPos = 1;
-    player.lastRandomX = Math.random();
-    player.lastRandomZ = Math.random();
-    player.lastShot = Date.now();
-
-    ai.push(player);
-    this._scene.add(player);
   }
 
   _getPosition() {
