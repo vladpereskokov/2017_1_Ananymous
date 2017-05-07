@@ -1,6 +1,3 @@
-import '../ThreeModules/MTLLoader/MTLLoader';
-import '../ThreeModules/OBJLoader/OBJLoader';
-
 class ThreeFactory {
   constructor() {
     if (ThreeFactory.__instance) {
@@ -119,23 +116,21 @@ class ThreeFactory {
     return new this._three.LoadingManager();
   }
 
-  mtlLoader(manager) {
-    return new this._three.MTLLoader(manager);
-  }
+  cubeGeometry(...settings) {
+    const [a, b, c, d, e, f] = settings;
 
-  objLoader(manager) {
-    return new this._three.OBJLoader(manager);
-  }
-
-  cubeGeometry(a, b, c, d, e, f) {
     return new this._three.CubeGeometry(a, b, c, d, e, f);
+  }
+
+  sphereGeometry(...settings) {
+    const [a, b, c, d, e, f, g] = settings;
+
+    return new this._three.SphereGeometry(a, b, c, d, e, f, g);
   }
 
   meshLambertMaterial(settings) {
     return new this._three.MeshLambertMaterial(settings);
   }
-
-
 }
 
 const threeFactory = new ThreeFactory();

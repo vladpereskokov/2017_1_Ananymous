@@ -1,43 +1,28 @@
 import threeFactory from '../../ThreeFactory/ThreeFactory';
+import Objects from '../Objects/Objects';
 
-export default class Walls {
-  constructor(color = 0xffffff, ...settings) {
-    const [a, b, c, d, e, f] = settings;
+export default class Walls extends Objects {
+  constructor(color = 1, ...settings) {
+    super();
 
-    this._geometry = threeFactory.cubeGeometry(a, b, c, d, e, f);
+    this._color = color;
 
-    this._initGeometry(color);
+    this._materials = [
+      0x00CCAA,
+      0xC5EDA0,
+      0xFBEBCD
+    ];
+
+    this._initGeometry(settings);
   }
 
-  get getBox() {
-
-    // return new threeFactory.mesh();
+  _setGeometry(settings) {
+    this._geometry = threeFactory.cubeGeometry(...settings);
   }
 
-  _initGeometry(color) {
-    this._createObject(color);
-  }
-
-  _createObject(color) {
-    this._setupFaces(color);
-    this._setMaterial(color);
-  }
-
-  _setupFaces(color) {
-    for (let face of this._geometry.faces) {
-      face.vertexColors[0] = threeFactory.color(color);
-      face.vertexColors[1] = threeFactory.color(color);
-      face.vertexColors[2] = threeFactory.color(color);
-    }
-  }
-
-  _setMaterial(color) {
-    this._material = threeFactory.meshPhongMaterial({
-      specular: 0xffffff,
-      shading: threeFactory.flatShading,
-      vertexColors: threeFactory.vertexColors
+  _setMaterial() {
+    this._material = threeFactory.meshBasicMaterial({
+      color: this._materials[this._color]
     });
-
-    this._material.color.setHex(color);
   }
 }
