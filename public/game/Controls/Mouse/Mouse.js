@@ -5,6 +5,8 @@ export default class Mouse {
 
     this.viewHalfX = window.innerWidth / 2;
     this.viewHalfY = window.innerHeight / 2;
+
+    this._isGame = false;
   }
 
   onMouseMove() {
@@ -17,8 +19,10 @@ export default class Mouse {
   onClickMouse(callback) {
     return event => {
       event.preventDefault();
-      if (event.which === 1) {
+      if (this._isGame && event.which === 1) {
         callback();
+      } else {
+        this._isGame = true;
       }
     }
   }
