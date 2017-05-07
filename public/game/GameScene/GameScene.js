@@ -1,230 +1,370 @@
 import threeFactory from '../Three/ThreeFactory/ThreeFactory';
-import sceneManager from '../Managers/SceneManager/SceneManager';
-import modelsManager from '../Managers/ModelsManager/ModelsManager';
-import meshManager from '../Managers/MeshManager/MeshManager';
-import Floor from '../Three/Objects/Floor/Floor';
-import Box from '../Three/Objects/Box/Box';
-import Room from '../Three/Objects/Room/Room';
-import Camera from '../Three/Objects/Camera/Camera';
-import Player from '../Three/Objects/Player/Player';
-import LoadingObject from '../Three/ThreeModules/LoadingObject/LoadingObject';
-import Weapon from '../Three/Objects/Weapon/Weapon';
-import bulletsManager from '../Managers/BulletsManager/BulletsManager';
+import FirstPersonControl from "../FirstPersonControl";
+import Camera from "../Three/Objects/Camera/Camera";
+
+var map = [ // 1  2  3  4  5  6  7  8  9
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 0
+  [1, 1, 0, 0, 0, 0, 0, 1, 1, 1,], // 1
+  [1, 1, 0, 0, 2, 0, 0, 0, 0, 1,], // 2
+  [1, 0, 0, 0, 0, 2, 0, 0, 0, 1,], // 3
+  [1, 0, 0, 2, 0, 0, 2, 0, 0, 1,], // 4
+  [1, 0, 0, 0, 2, 0, 0, 0, 1, 1,], // 5
+  [1, 1, 1, 0, 0, 0, 0, 1, 1, 1,], // 6
+  [1, 1, 1, 0, 0, 1, 0, 0, 1, 1,], // 7
+  [1, 1, 1, 1, 1, 1, 0, 0, 1, 1,], // 8
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 9
+], mapW = map.length, mapH = map[0].length;
+
+// Semi-constants
+var WIDTH = window.innerWidth,
+  HEIGHT = window.innerHeight,
+  ASPECT = WIDTH / HEIGHT,
+  UNITSIZE = 250,
+  WALLHEIGHT = UNITSIZE / 3,
+  MOVESPEED = 100,
+  LOOKSPEED = 0.075,
+  BULLETMOVESPEED = MOVESPEED * 10,
+  NUMAI = 5,
+  PROJECTILEDAMAGE = 20;
+// Global vars
+var t = THREE, scene, cam, renderer, controls, clock, projector, model, skin;
+var runAnim = true, mouse = {x: 0, y: 0}, kills = 0, health = 100;
+var healthcube, lastHealthPickup = 0;
+
+
+var ai = [];
+var aiGeo = new t.CubeGeometry(40, 40, 40);
+
+
+var bullets = [];
+var sphereMaterial = new t.MeshBasicMaterial({color: 0x333333});
+var sphereGeo = new t.SphereGeometry(3, 6, 6);
 
 export default class GameScene {
-  constructor(pointerLock, mouse, keys) {
-    this._mouse = mouse;
-    this._keys = keys;
-    this._previousTime = performance.now();
-    this._player = new Player(1.8, 0.2, Math.PI * 0.02, 100000);
-    this._objects = [];
-    this._renderer = null;
-
-    this._setShootMouse();
-
-    this._init(pointerLock);
-    //this._animate();
+  constructor() {
+    this._start(this._init.bind(this), this._animate.bind(this));
   }
 
-  _setShootMouse() {
-    document.addEventListener('mousedown', (event) => {
-      bulletsManager.shoot(this._player, this._controls.getPitch.rotation.x,
-        this._controls.getObject.rotation.y);
+  _start(init, animate) {
+    $(document).ready(function () {
+      $('body').append('<div id="intro">Click to start</div>');
+      $('#intro').css({width: WIDTH, height: HEIGHT}).one('click', function (e) {
+        e.preventDefault();
+        // $(this).fadeOut();
+        init();
+        // setInterval(drawRadar, 1000);
+        animate();
+      });
     });
   }
 
-  _init(pointerLock) {
-    this._camera = new Camera(this._player).getCamera;
-
-    this._setupModels();
-
-    this._setupFog();
-    this._setupLight();
-    this._setupControlls(pointerLock);
-    this._setupLoadModels(this._onResourcesLoaded.bind(this));
-    this._setupRaycaster();
-
-    this._appendFloor();
-    this._appendBoxes();
-
-    this._appendRoom();
-
-    this._render();
-
-    window.addEventListener('resize', this._onWindowResize, false);
+  _setUpClock() {
+    this._clock = threeFactory.clock();
   }
 
-  _setupModels() {
-    modelsManager.add({
-      title: 'uzi',
-      object: new Weapon()._getUziModel()
-    });
+  _setUpScene() {
+    this._scene = threeFactory.scene();
   }
 
-  _setupFog() {
-    sceneManager.scene.fog = threeFactory.fog(0xffffff, 0, 750);
+  _setUpFog() {
+    this._scene.fog = threeFactory.fogExp2(0xD6F1FF, 0.0005);
   }
 
-  _setupLight() {
-    this._light = threeFactory.hemisphereLight(0xeeeeff, 0x777788, 0.75);
-    this._light.position.set(0.5, 1, 0.75);
-    sceneManager.add(this._light);
-  }
+  _setUpCamera();
 
-  _setupControlls(pointerLock) {
-    this._controls = pointerLock(this._camera);
-    this._controls.setMouseMove(this._mouse
-      .onMouseMove(this._controls.getPitch, this._controls.getObject));
+  _init() {
+    this._setUpClock();
+    this._setUpScene();
+    this._setUpFog();
+    this._setUpCamera();
 
-    sceneManager.add(this._controls.getObject);
-  }
+    cam = new Camera({
+      getHeight: UNITSIZE * 0.2
+    }).getCamera;
+    scene.add(cam);
 
-  _onResourcesLoaded() {
-    Physijs.scripts.worker = '/lib/physijs_worker.js';
-    Physijs.scripts.ammo = '/lib/ammo.js';
+    // Camera moves with mouse, flies around with WASD/arrow keys
+    controls = new FirstPersonControl(cam, this._checkWallCollision.bind(this), this._createBullet.bind(this));
+    controls.movementSpeed = MOVESPEED;
+    controls.lookSpeed = LOOKSPEED;
+    controls.lookVertical = false; // Temporary solution; play on flat surfaces only
+    // controls.noFly = true;
 
-    meshManager.meshes["playerweapon"] = modelsManager.models.uzi.mesh.clone();
-    meshManager.meshes["playerweapon"].position.set(0, 2, 0);
-    meshManager.meshes["playerweapon"].scale.set(8, 8, 8);
-    sceneManager.add(meshManager.meshes["playerweapon"]);
+    // World objects
+    this._setupScene();
 
-    meshManager.meshes["playerobject"] = new Physijs.SphereMesh(threeFactory.sphereGeometry(1, 12, 12),
-        threeFactory.meshBasicMaterial({color: 0x000000}), 100);
-    meshManager.meshes["playerobject"].position.set(0, 2, 0);
-    sceneManager.add(meshManager.meshes["playerobject"]);
+    // Artificial Intelligence
+    this._setupAI();
 
-    this._animate();
-  }
+    // Handle drawing as WebGL (faster than Canvas but less supported)
+    renderer = new t.WebGLRenderer();
+    renderer.setSize(WIDTH, HEIGHT);
 
-  _setupLoadModels(callback) {
-    this._loadManager = new LoadingObject(modelsManager.models,
-      callback);
-  }
+    // Add the canvas to the document
+    renderer.domElement.style.backgroundColor = '#D6F1FF'; // easier to see
+    document.body.appendChild(renderer.domElement);
 
-  _setupRaycaster() {
-    this._raycaster = threeFactory
-      .raycaster(threeFactory.vector3D(),
-        threeFactory.vector3D(0, -1, 0), 0, 10);
-  }
+    // Track mouse position so we know where to shoot
+    // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    // Display HUD
+    $('body').append('<div id="hud"><p>Health: <span id="health">100</span><br />Score: <span id="score">0</span></p></div>');
 
-  _appendFloor() {
-    sceneManager.add(new Floor().getFloor);
-  }
-
-  _appendBoxes() {
-    for (let i = 0; i < 500; ++i) {
-      let box = new Box(0xC1876B, 3, 3, 3).getBox;
-      box.position.x = Math.floor(Math.random() * 20 - 10) * 20;
-      box.position.y = Math.floor(Math.random() * 20) * 20 + 10;
-      box.position.z = Math.floor(Math.random() * 20 - 10) * 20;
-
-      sceneManager.add(box);
-      this._objects.push(box);
-    }
-  }
-
-  _appendRoom() {
-    const walls = new Room(300, 30, 500).create();
-
-    for (let wall of walls) {
-      sceneManager.add(wall);
-    }
-  }
-
-  _render() {
-    this._renderer = threeFactory.webGLRender();
-    this._renderer.setClearColor(0xffffff);
-    this._renderer.setPixelRatio(window.devicePixelRatio);
-    this._renderer.setSize(window.innerWidth, window.innerHeight);
-
-    document.body.appendChild(this._renderer.domElement);
+    // Set up "hurt" flash
+    $('body').append('<div id="hurt"></div>');
+    $('#hurt').css({width: WIDTH, height: HEIGHT,});
   }
 
   _animate() {
-    requestAnimationFrame(this._animate.bind(this));
-    sceneManager.scene.simulate();
-
-    bulletsManager.bulletsService();
-
-    const gunDistance = 1.4;
-
-    if (this._keys.getEnabled) {
-      this._raycaster.ray.origin.copy(this._controls.getObject.position);
-      this._raycaster.ray.origin.y -= 10;
-
-      const intersections = this._raycaster.intersectObjects(this._objects);
-      const time = performance.now();
-
-      this._newAction(time, (time - this._previousTime) / 1000,
-        intersections.length > 0);
+    if (runAnim) {
+      requestAnimationFrame(this._animate.bind(this));
     }
-
-    meshManager.meshes["playerweapon"].position.set(
-      this._controls.getObject.position.x - gunDistance * Math.sin(this._controls.getObject.rotation.y - Math.PI / 30),
-      this._controls.getObject.position.y + 1.3 + Math.sin(this._controls.getPitch.rotation.x),
-      this._controls.getObject.position.z - gunDistance * Math.cos(this._controls.getObject.rotation.y - Math.PI / 30)
-    );
-    meshManager.meshes["playerweapon"].rotation.set(
-      this._controls.getPitch.rotation.x,
-      this._controls.getObject.rotation.y - Math.PI,
-      0,
-    );
-
-    meshManager.meshes["playerobject"].position.set(
-        this._controls.getObject.position.x,
-        this._controls.getObject.position.y - this._player.getHeight,
-        this._controls.getObject.position.z
-    );
-
-
-    this._renderer.render(sceneManager.scene, this._camera);
+    this._render();
   }
 
-  _newAction(time, delta, isOnObject) {
-    this._keys._velocity.x -= this._keys._velocity.x * 10.0 * delta;
-    this._keys._velocity.z -= this._keys._velocity.z * 10.0 * delta;
+  _render() {
+    var delta = clock.getDelta(), speed = delta * BULLETMOVESPEED;
+    var aispeed = delta * MOVESPEED;
+    controls.update(delta, this._checkWallCollision.bind(this)); // Move camera
 
-    this._keys._velocity.y -= 9.8 * 100.0 * delta;
-
-    if (this._keys._forward) {
-      this._keys._velocity.z -= 400.0 * delta;
+    // Rotate the health cube
+    healthcube.rotation.x += 0.004;
+    healthcube.rotation.y += 0.008;
+    // Allow picking it up once per minute
+    if (Date.now() > lastHealthPickup + 60000) {
+      if (this._distance(cam.position.x, cam.position.z, healthcube.position.x, healthcube.position.z) < 15 && health != 100) {
+        health = Math.min(health + 50, 100);
+        $('#health').html(health);
+        lastHealthPickup = Date.now();
+      }
+      healthcube.material.wireframe = false;
     }
-    if (this._keys._backward) {
-      this._keys._velocity.z += 400.0 * delta;
-    }
-
-    if (this._keys._left) {
-      this._keys._velocity.x -= 400.0 * delta;
-    }
-    if (this._keys._right) {
-      this._keys._velocity.x += 400.0 * delta;
-    }
-
-    if (isOnObject === true) {
-      this._keys._velocity.y = Math.max(0, this._keys._velocity.y);
-
-      this._keys._jump = true;
+    else {
+      healthcube.material.wireframe = true;
     }
 
-    this._controls.getObject.translateX(this._keys._velocity.x * delta);
-    this._controls.getObject.translateY(this._keys._velocity.y * delta);
-    this._controls.getObject.translateZ(this._keys._velocity.z * delta);
-
-    if (this._controls.getObject.position.y < 10) {
-
-      this._keys._velocity.y = 0;
-      this._controls.getObject.position.y = 10;
-
-      this._keys._jump = true;
+    // Update bullets. Walk backwards through the list so we can remove items.
+    for (var i = bullets.length - 1; i >= 0; i--) {
+      var b = bullets[i], p = b.position, d = b.ray.direction;
+      if (this._checkWallCollision(p)) {
+        bullets.splice(i, 1);
+        scene.remove(b);
+        continue;
+      }
+      // Collide with AI
+      var hit = false;
+      for (var j = ai.length - 1; j >= 0; j--) {
+        var a = ai[j];
+        var v = a.geometry.vertices[0];
+        var c = a.position;
+        var x = Math.abs(v.x), z = Math.abs(v.z);
+        //console.log(Math.round(p.x), Math.round(p.z), c.x, c.z, x, z);
+        if (p.x < c.x + x && p.x > c.x - x &&
+          p.z < c.z + z && p.z > c.z - z &&
+          b.owner != a) {
+          bullets.splice(i, 1);
+          scene.remove(b);
+          a.health -= PROJECTILEDAMAGE;
+          var color = a.material.color, percent = a.health / 100;
+          a.material.color.setRGB(
+            Math.max(percent, 1) * color.r,
+            percent * color.g,
+            percent * color.b
+          );
+          hit = true;
+          break;
+        }
+      }
+      // Bullet hits player
+      if (this._distance(p.x, p.z, cam.position.x, cam.position.z) < 25 && b.owner != cam) {
+        $('#hurt').fadeIn(75);
+        health -= 10;
+        if (health < 0) health = 0;
+        var val = health < 25 ? '<span style="color: darkRed">' + health + '</span>' : health;
+        $('#health').html(val);
+        bullets.splice(i, 1);
+        scene.remove(b);
+        $('#hurt').fadeOut(350);
+      }
+      if (!hit) {
+        b.translateX(speed * d.x);
+        //bullets[i].translateY(speed * bullets[i].direction.y);
+        b.translateZ(speed * d.z);
+      }
     }
 
-    this._previousTime = time;
+    // Update AI.
+    for (var i = ai.length - 1; i >= 0; i--) {
+      var a = ai[i];
+      if (a.health <= 0) {
+        ai.splice(i, 1);
+        scene.remove(a);
+        kills++;
+        $('#score').html(kills * 100);
+        this._addAI();
+      }
+      // Move AI
+      var r = Math.random();
+      if (r > 0.995) {
+        a.lastRandomX = Math.random() * 2 - 1;
+        a.lastRandomZ = Math.random() * 2 - 1;
+      }
+      a.translateX(aispeed * a.lastRandomX);
+      a.translateZ(aispeed * a.lastRandomZ);
+      var c = this._getMapSector(a.position);
+      if (c.x < 0 || c.x >= mapW || c.y < 0 || c.y >= mapH || this._checkWallCollision(a.position)) {
+        a.translateX(-2 * aispeed * a.lastRandomX);
+        a.translateZ(-2 * aispeed * a.lastRandomZ);
+        a.lastRandomX = Math.random() * 2 - 1;
+        a.lastRandomZ = Math.random() * 2 - 1;
+      }
+      if (c.x < -1 || c.x > mapW || c.z < -1 || c.z > mapH) {
+        ai.splice(i, 1);
+        scene.remove(a);
+        this._addAI();
+      }
+      // var cc = getMapSector(cam.position);
+      // if (Date.now() > a.lastShot + 750 && distance(c.x, c.z, cc.x, cc.z) < 2) {
+      // 	createBullet(a);
+      // 	a.lastShot = Date.now();
+      // }
+    }
+
+    renderer.render(scene, cam); // Repaint
+
+    // Death
+    if (health <= 0) {
+      runAnim = false;
+      $(renderer.domElement).fadeOut();
+      $('#radar, #hud, #credits').fadeOut();
+      $('#intro').fadeIn();
+      $('#intro').html('Ouch! Click to restart...');
+      $('#intro').one('click', function () {
+        location = location;
+        $(renderer.domElement).fadeIn();
+        $('#radar, #hud, #credits').fadeIn();
+        $(this).fadeOut();
+        runAnim = true;
+        animate();
+        health = 100;
+        $('#health').html(health);
+        kills--;
+        if (kills <= 0) kills = 0;
+        $('#score').html(kills * 100);
+        cam.translateX(-cam.position.x);
+        cam.translateZ(-cam.position.z);
+      });
+    }
   }
 
-  _onWindowResize() {
-    this._camera.aspect = window.innerWidth / window.innerHeight;
-    this._camera.updateProjectionMatrix();
 
-    this._renderer.setSize(window.innerWidth, window.innerHeight);
+  _setupScene() {
+    var UNITSIZE = 250, units = mapW;
+
+    // Geometry: floor
+    var floor = new t.Mesh(
+      new t.CubeGeometry(units * UNITSIZE, 10, units * UNITSIZE),
+      new t.MeshLambertMaterial({color: 0xffffff, /*map: t.ImageUtils.loadTexture('images/floor-1.jpg')*/})
+    );
+    scene.add(floor);
+
+    // Geometry: walls
+    var cube = new t.CubeGeometry(UNITSIZE, WALLHEIGHT, UNITSIZE);
+    var materials = [
+      new t.MeshLambertMaterial({/*color: 0x00CCAA,*/map: t.ImageUtils.loadTexture('images/wall-1.jpg')}),
+      new t.MeshLambertMaterial({/*color: 0xC5EDA0,*/map: t.ImageUtils.loadTexture('images/wall-2.jpg')}),
+      new t.MeshLambertMaterial({color: 0xFBEBCD}),
+    ];
+    for (var i = 0; i < mapW; i++) {
+      for (var j = 0, m = map[i].length; j < m; j++) {
+        if (map[i][j]) {
+          var wall = new t.Mesh(cube, materials[map[i][j] - 1]);
+          wall.position.x = (i - units / 2) * UNITSIZE;
+          wall.position.y = WALLHEIGHT / 2;
+          wall.position.z = (j - units / 2) * UNITSIZE;
+          scene.add(wall);
+        }
+      }
+    }
+
+    // Health cube
+    healthcube = new t.Mesh(
+      new t.CubeGeometry(30, 30, 30),
+      new t.MeshBasicMaterial({map: t.ImageUtils.loadTexture('images/health.png')})
+    );
+    healthcube.position.set(-UNITSIZE - 15, 35, -UNITSIZE - 15);
+    scene.add(healthcube);
+
+    // Lighting
+    var directionalLight1 = new t.DirectionalLight(0xF7EFBE, 0.7);
+    directionalLight1.position.set(0.5, 1, 0.5);
+    scene.add(directionalLight1);
+    var directionalLight2 = new t.DirectionalLight(0xF7EFBE, 0.5);
+    directionalLight2.position.set(-0.5, -1, -0.5);
+    scene.add(directionalLight2);
+  }
+
+  _setupAI() {
+    for (var i = 0; i < 16; i++) {
+      this._addAI();
+    }
+  }
+
+  _addAI() {
+    var c = this._getMapSector(cam.position);
+    var aiMaterial = new t.MeshBasicMaterial({color: 0xffffff});
+    // map: t.ImageUtils.loadTexture('images/face.png')
+    var o = new t.Mesh(aiGeo, aiMaterial);
+    do {
+      var x = this._getRandBetween(0, mapW - 1);
+      var z = this._getRandBetween(0, mapH - 1);
+    } while (map[x][z] > 0 || (x == c.x && z == c.z));
+    x = Math.floor(x - mapW / 2) * UNITSIZE;
+    z = Math.floor(z - mapW / 2) * UNITSIZE;
+    o.position.set(x, UNITSIZE * 0.15, z);
+    o.health = 100;
+    o.pathPos = 1;
+    o.lastRandomX = Math.random();
+    o.lastRandomZ = Math.random();
+    o.lastShot = Date.now(); // Higher-fidelity timers aren't a big deal here.
+    ai.push(o);
+    scene.add(o);
+  }
+
+  _checkWallCollision(v) {
+    var c = this._getMapSector(v);
+    return map[c.x][c.z] > 0;
+  }
+
+  _createBullet() {
+    var sphere = new t.Mesh(sphereGeo, sphereMaterial);
+    sphere.position.set(cam.position.x, cam.position.y * 0.8, cam.position.z);
+
+    var vector = new t.Vector3(mouse.x, mouse.y, 1);
+    vector.unproject(cam);
+    sphere.ray = new t.Ray(
+      cam.position,
+      vector.sub(cam.position).normalize()
+    );
+
+    sphere.owner = cam;
+
+    bullets.push(sphere);
+    scene.add(sphere);
+
+    return sphere;
+  }
+
+  _getRandBetween(lo, hi) {
+    return parseInt(Math.floor(Math.random() * (hi - lo + 1)) + lo, 10);
+  }
+
+  _distance(x1, y1, x2, y2) {
+    return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+  }
+
+  _getMapSector(v) {
+    var x = Math.floor((v.x + UNITSIZE / 2) / UNITSIZE + mapW / 2);
+    var z = Math.floor((v.z + UNITSIZE / 2) / UNITSIZE + mapW / 2);
+    return {x: x, z: z};
   }
 }

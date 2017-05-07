@@ -89,12 +89,6 @@ class ThreeFactory {
     return new this._three.Fog(hex, near, far);
   }
 
-  fogExp2(...settings) {
-    const [color, destiny] = settings;
-
-    return new this._three.FogExp2(color, destiny);
-  }
-
   hemisphereLight(...settings) {
     const [skyColor, groundColor, intensity] = settings;
 
