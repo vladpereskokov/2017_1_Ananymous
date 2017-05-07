@@ -3,6 +3,8 @@ import ControlsManager from "../Managers/ControlsManager/ControlsManager";
 import Camera from "../Three/Objects/Camera/Camera";
 import Floor from "../Three/Objects/Floor/Floor";
 import Walls from "../Three/Objects/Walls/Walls";
+import Player from "../Three/Objects/Player/Player";
+import Bullet from "../Three/Objects/Bullet/Bullet";
 
 var map = [ // 1  2  3  4  5  6  7  8  9
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 0
@@ -197,9 +199,9 @@ export default class GameScene {
         this._scene.remove(a);
         this._addAI();
       }
-      // var cc = getMapSector(this._camera.position);
-      // if (Date.now() > a.lastShot + 750 && distance(c.x, c.z, cc.x, cc.z) < 2) {
-      // 	createBullet(a);
+      // var cc = this._getMapSector(this._camera.position);
+      // if (Date.now() > a.lastShot + 750 && this._distance(c.x, c.z, cc.x, cc.z) < 2) {
+      // 	this._createBullet(a);
       // 	a.lastShot = Date.now();
       // }
     }
@@ -233,58 +235,72 @@ export default class GameScene {
 
 
   _setupScene() {
-    const units = mapW;
+    this._setUpFloor(mapW * UNITSIZE);
 
-    // floor
-    this._scene.add(new Floor(mapW * UNITSIZE).object);
+    this._setUpWalls();
 
-    // Geometry: walls
+    this._setUpLight(0xF7EFBE, 0.7, 0.5, 1, 0.5);
+    this._setUpLight(0xF7EFBE, 0.5, -0.5, -1, -0.5);
+  }
+
+  _setUpFloor(size) {
+    this._scene.add(new Floor(size).object);
+  }
+
+  _setUpWalls() {
     for (let i = 0; i < mapW; i++) {
       for (let j = 0, m = map[i].length; j < m; j++) {
         if (map[i][j]) {
-          var wall = new Walls(map[i][j] - 1, UNITSIZE, WALLHEIGHT, UNITSIZE).object;
-          wall.position.x = (i - units / 2) * UNITSIZE;
+          const wall = new Walls(map[i][j] - 1, UNITSIZE, WALLHEIGHT, UNITSIZE).object;
+
+          wall.position.x = (i - mapW / 2) * UNITSIZE;
           wall.position.y = WALLHEIGHT / 2;
-          wall.position.z = (j - units / 2) * UNITSIZE;
+          wall.position.z = (j - mapW / 2) * UNITSIZE;
+
           this._scene.add(wall);
         }
       }
     }
+  }
 
-    // Lighting
-    var directionalLight1 = new t.DirectionalLight(0xF7EFBE, 0.7);
-    directionalLight1.position.set(0.5, 1, 0.5);
-    this._scene.add(directionalLight1);
-    var directionalLight2 = new t.DirectionalLight(0xF7EFBE, 0.5);
-    directionalLight2.position.set(-0.5, -1, -0.5);
-    this._scene.add(directionalLight2);
+  _setUpLight(hex, intensity, x, y, z) {
+    const directionalLight = threeFactory.directionalLight(hex, intensity);
+    directionalLight.position.set(x, y, z);
+
+    this._scene.add(directionalLight);
   }
 
   _setupAI() {
-    for (var i = 0; i < 16; i++) {
+    for (let i = 0; i < 16; i++) {
       this._addAI();
     }
   }
 
   _addAI() {
-    var c = this._getMapSector(this._camera.position);
-    var aiMaterial = new t.MeshBasicMaterial({color: 0xffffff});
-    // map: t.ImageUtils.loadTexture('images/face.png')
-    var o = new t.Mesh(aiGeo, aiMaterial);
-    do {
-      var x = this._getRandBetween(0, mapW - 1);
-      var z = this._getRandBetween(0, mapH - 1);
-    } while (map[x][z] > 0 || (x == c.x && z == c.z));
+    const position = this._getMapSector(this._camera.position);
+    const player = new Player().object;
+
+    let [x, z] = this._getPosition();
+    while (map[x][z] > 0 || (x === position.x && z === position.z)) {
+      [x, z] = this._getPosition();
+    }
+
     x = Math.floor(x - mapW / 2) * UNITSIZE;
     z = Math.floor(z - mapW / 2) * UNITSIZE;
-    o.position.set(x, UNITSIZE * 0.15, z);
-    o.health = 100;
-    o.pathPos = 1;
-    o.lastRandomX = Math.random();
-    o.lastRandomZ = Math.random();
-    o.lastShot = Date.now(); // Higher-fidelity timers aren't a big deal here.
-    ai.push(o);
-    this._scene.add(o);
+
+    player.position.set(x, UNITSIZE * 0.15, z);
+    player.health = 100;
+    player.pathPos = 1;
+    player.lastRandomX = Math.random();
+    player.lastRandomZ = Math.random();
+    player.lastShot = Date.now();
+
+    ai.push(player);
+    this._scene.add(player);
+  }
+
+  _getPosition() {
+    return [this._getRandBetween(0, mapW - 1), this._getRandBetween(0, mapH - 1)]
   }
 
   _checkWallCollision(v) {
@@ -292,23 +308,32 @@ export default class GameScene {
     return map[c.x][c.z] > 0;
   }
 
-  _createBullet() {
-    var sphere = new t.Mesh(sphereGeo, sphereMaterial);
-    sphere.position.set(this._camera.position.x, this._camera.position.y * 0.8, this._camera.position.z);
+  _createBullet(object) {
+    if (object === undefined) {
+      object = this._camera;
+    }
 
-    var vector = new t.Vector3(mouse.x, mouse.y, 1);
-    vector.unproject(this._camera);
-    sphere.ray = new t.Ray(
-      this._camera.position,
-      vector.sub(this._camera.position).normalize()
+    const sphere = new Bullet().object;
+    sphere.position.set(object.position.x, object.position.y * 0.8, object.position.z);
+
+    let vector = null;
+
+    if (object instanceof t.Camera) {
+      vector = threeFactory.vector3D(mouse.x, mouse.y, 1);
+      vector.unproject(object);
+    }
+    else {
+      vector = this._camera.position.clone();
+    }
+
+    sphere.ray = threeFactory.ray(
+      object.position,
+      vector.sub(object.position).normalize()
     );
-
-    sphere.owner = this._camera;
+    sphere.owner = object;
 
     bullets.push(sphere);
     this._scene.add(sphere);
-
-    return sphere;
   }
 
   _getRandBetween(lo, hi) {

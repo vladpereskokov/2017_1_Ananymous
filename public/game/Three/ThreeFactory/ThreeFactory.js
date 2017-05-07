@@ -122,14 +122,16 @@ class ThreeFactory {
     return new this._three.CubeGeometry(a, b, c, d, e, f);
   }
 
-  sphereGeometry(...settings) {
-    const [a, b, c, d, e, f, g] = settings;
-
-    return new this._three.SphereGeometry(a, b, c, d, e, f, g);
-  }
-
   meshLambertMaterial(settings) {
     return new this._three.MeshLambertMaterial(settings);
+  }
+
+  directionalLight(hex, intensity) {
+    return new this._three.DirectionalLight(hex, intensity);
+  }
+
+  ray(position, normalize) {
+    return new this._three.Ray(position, normalize);
   }
 }
 
