@@ -1,4 +1,4 @@
-import PlayerService from "../Services/PlayerService/PlayerService";
+import PlayerService from "../../Services/PlayerService/PlayerService";
 
 class PlayerStats {
   constructor(object = null) {

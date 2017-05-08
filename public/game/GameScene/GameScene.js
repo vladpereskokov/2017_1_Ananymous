@@ -9,20 +9,9 @@ import PlayerService from '../Services/PlayerService/PlayerService';
 import playersService from '../Services/PlayersService/PlayersService';
 import BulletService from '../Services/BulletService/BulletService';
 import bulletsService from '../Services/BulletsService/BulletsService';
-import playerStats from '../PlayerStats/PlayerStats';
-
-var map = [ // 1  2  3  4  5  6  7  8  9
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 0
-  [1, 1, 0, 0, 0, 0, 0, 1, 1, 1,], // 1
-  [1, 1, 0, 0, 2, 0, 0, 0, 0, 1,], // 2
-  [1, 0, 0, 0, 0, 2, 0, 0, 0, 1,], // 3
-  [1, 0, 0, 2, 0, 0, 2, 0, 0, 1,], // 4
-  [1, 0, 0, 0, 2, 0, 0, 0, 1, 1,], // 5
-  [1, 1, 1, 0, 0, 0, 0, 1, 1, 1,], // 6
-  [1, 1, 1, 0, 0, 1, 0, 0, 1, 1,], // 7
-  [1, 1, 1, 1, 1, 1, 0, 0, 1, 1,], // 8
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 9
-], mapW = map.length, mapH = map[0].length;
+import playerStats from '../Tools/PlayerStats/PlayerStats';
+import map from '../Tools/Map/Map';
+import Helper from "../Tools/Helper/Helper";
 
 // Semi-constants
 var WIDTH = window.innerWidth,
@@ -104,11 +93,12 @@ export default class GameScene {
     this._renderer = threeFactory.webGLRender();
     this._renderer.setClearColor(0xD6F1FF);
     this._renderer.setSize(WIDTH, HEIGHT);
+
     document.body.appendChild(this._renderer.domElement);
   }
 
   _makeScene() {
-    this._setUpFloor(mapW * UNITSIZE);
+    this._setUpFloor(map.width * UNITSIZE);
 
     this._setUpWalls();
 
@@ -121,14 +111,14 @@ export default class GameScene {
   }
 
   _setUpWalls() {
-    for (let i = 0; i < mapW; i++) {
-      for (let j = 0, m = map[i].length; j < m; j++) {
-        if (map[i][j]) {
-          const wall = new Walls(map[i][j] - 1, UNITSIZE, WALLHEIGHT, UNITSIZE).object;
+    for (let i = 0; i < map.width; i++) {
+      for (let j = 0, m = map.getLine(i).length; j < m; j++) {
+        if (map.getField(i, j)) {
+          const wall = new Walls(map.getField(i, j) - 1, UNITSIZE, WALLHEIGHT, UNITSIZE).object;
 
-          wall.position.x = (i - mapW / 2) * UNITSIZE;
+          wall.position.x = (i - map.width / 2) * UNITSIZE;
           wall.position.y = WALLHEIGHT / 2;
-          wall.position.z = (j - mapW / 2) * UNITSIZE;
+          wall.position.z = (j - map.width / 2) * UNITSIZE;
 
           this._scene.add(wall);
         }
@@ -144,21 +134,21 @@ export default class GameScene {
   }
 
   _setUpAI() {
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 5; i++) {
       this._addAI();
     }
   }
 
   _addAI() {
-    const position = this._getMapSector(this._camera.position);
+    const position = Helper.getMapSector(this._camera.position);
 
-    let [x, z] = this._getPosition();
-    while (map[x][z] > 0 || (x === position.x && z === position.z)) {
-      [x, z] = this._getPosition();
+    let [x, z] = Helper.getRandomPosition();
+    while (map.getField(x, z) > 0 || (x === position.x && z === position.z)) {
+      [x, z] = Helper.getRandomPosition();
     }
 
-    x = Math.floor(x - mapW / 2) * UNITSIZE;
-    z = Math.floor(z - mapW / 2) * UNITSIZE;
+    x = Math.floor(x - map.width / 2) * UNITSIZE;
+    z = Math.floor(z - map.width / 2) * UNITSIZE;
 
     const playerObject = new Player().object;
     playerObject.position.set(x, UNITSIZE * 0.15, z);
@@ -172,7 +162,7 @@ export default class GameScene {
       const bullet = bulletsService.getBullet(i);
       const position = bullet.object.position;
 
-      if (this._checkWallCollision(position)) {
+      if (Helper.checkWallCollision(position)) {
         bulletsService.remove(i);
         this._scene.remove(bullet.object);
 
@@ -216,7 +206,7 @@ export default class GameScene {
       }
 
       // Bullet hits player
-      if (this._distance(position.x, position.z, this._camera.position.x, this._camera.position.z) < 25
+      if (Helper.distance(position.x, position.z, this._camera.position.x, this._camera.position.z) < 25
         && bullet.owner !== this._camera) {
         $('#hurt').fadeIn(75);
 
@@ -250,7 +240,7 @@ export default class GameScene {
   _render() {
     const delta = this._clock.getDelta();
     var aispeed = delta * MOVESPEED;
-    this._controls.update(delta, this._checkWallCollision.bind(this));
+    this._controls.update(delta, Helper.checkWallCollision.bind(this));
 
     // Update bullets. Walk backwards through the list so we can remove items.
     this._updateBullets(delta);
@@ -280,27 +270,27 @@ export default class GameScene {
       player.translateZ(aispeed * player.z);
 
       const position = player.object.position;
-      const sector = this._getMapSector(position);
+      const sector = Helper.getMapSector(position);
 
-      if (sector.x < 0 || sector.x >= mapW || sector.y < 0 || sector.y >= mapH ||
-        this._checkWallCollision(position)) {
+      if (sector.x < 0 || sector.x >= map.width || sector.y < 0 || sector.y >= map.height ||
+        Helper.checkWallCollision(position)) {
         player.translateX(-2 * aispeed * player.x);
         player.translateZ(-2 * aispeed * player.z);
         player.x = Math.random() * 2 - 1;
         player.z = Math.random() * 2 - 1;
       }
 
-      if (sector.x < -1 || sector.x > mapW || sector.z < -1 || sector.z > mapH) {
+      if (sector.x < -1 || sector.x > map.width || sector.z < -1 || sector.z > map.height) {
         playersService.remove(i);
         this._scene.remove(player.object);
         this._addAI();
       }
 
-      const cameraPosition = this._getMapSector(this._camera.position);
-      if (Date.now() > player.lastShot + 750 && this._distance(sector.x, sector.z, cameraPosition.x, cameraPosition.z) < 2) {
-        this._createBullet(player.object);
-        player.lastShot = Date.now();
-      }
+      // const cameraPosition = Helper.getMapSector(this._camera.position);
+      // if (Date.now() > player.lastShot + 1300 && Helper.distance(sector.x, sector.z, cameraPosition.x, cameraPosition.z) < 2) {
+      //   this._createBullet(player.object);
+      //   player.lastShot = Date.now();
+      // }
     }
 
     this._renderer.render(this._scene, this._camera); // Repaint
@@ -335,15 +325,6 @@ export default class GameScene {
     }
   }
 
-  _getPosition() {
-    return [this._getRandBetween(0, mapW - 1), this._getRandBetween(0, mapH - 1)]
-  }
-
-  _checkWallCollision(v) {
-    var c = this._getMapSector(v);
-    return map[c.x][c.z] > 0;
-  }
-
   _createBullet(object) {
     if (object === undefined) {
       object = this._camera;
@@ -353,19 +334,5 @@ export default class GameScene {
 
     bulletsService.add(bullet);
     this._scene.add(bullet.object);
-  }
-
-  _getRandBetween(lo, hi) {
-    return parseInt(Math.floor(Math.random() * (hi - lo + 1)) + lo, 10);
-  }
-
-  _distance(x1, y1, x2, y2) {
-    return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-  }
-
-  _getMapSector(v) {
-    var x = Math.floor((v.x + UNITSIZE / 2) / UNITSIZE + mapW / 2);
-    var z = Math.floor((v.z + UNITSIZE / 2) / UNITSIZE + mapW / 2);
-    return {x: x, z: z};
   }
 }
