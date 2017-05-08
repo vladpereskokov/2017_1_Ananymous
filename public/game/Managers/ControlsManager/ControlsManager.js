@@ -13,8 +13,6 @@ export default class ControlsManager {
     this.movementSpeed = 100;
     this.lookSpeed = 0.075;
 
-    this.clickMove = false;
-
     this.heightSpeed = false;
     this.heightCoef = 1.0;
     this.heightMin = 0.0;

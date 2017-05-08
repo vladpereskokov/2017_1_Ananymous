@@ -7,6 +7,8 @@ import Player from "../Three/Objects/Player/Player";
 import Bullet from "../Three/Objects/Bullet/Bullet";
 import PlayerService from '../Services/PlayerService/PlayerService';
 import playersService from '../Services/PlayersService/PlayersService';
+import BulletService from '../Services/BulletService/BulletService';
+import bulletsService from '../Services/BulletsService/BulletsService';
 
 var map = [ // 1  2  3  4  5  6  7  8  9
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 0
@@ -177,20 +179,20 @@ export default class GameScene {
   }
 
   _updateBullets(delta) {
-    for (let i in bullets) {
-      const bullet = bullets[i];
-      const position = bullet.position;
+    for (let i in bulletsService.all) {
+      const bullet = bulletsService.getBullet(i);
+      const position = bullet.object.position;
 
       if (this._checkWallCollision(position)) {
-        bullets.splice(i, 1);
-        this._scene.remove(bullet);
+        bulletsService.remove(i);
+        this._scene.remove(bullet.object);
 
         continue;
       }
 
       // Collide with AI
       let hit = false;
-      
+
       for (let j in playersService.all) {
         const player = playersService.getPlayer(j);
 
@@ -206,9 +208,8 @@ export default class GameScene {
           position.z > playerPosition.z - z &&
           bullet.owner !== player.object) {
 
-          bullets.splice(i, 1);
-
-          this._scene.remove(bullet);
+          bulletsService.remove(i);
+          this._scene.remove(bullet.object);
           player.health = player.health - PROJECTILEDAMAGE;
 
           const color = player.object.material.color;
@@ -233,17 +234,17 @@ export default class GameScene {
         if (health < 0) health = 0;
         var val = health < 25 ? '<span style="color: darkRed">' + health + '</span>' : health;
         $('#health').html(val);
-        bullets.splice(i, 1);
+        bulletsService.remove(i);
         this._scene.remove(bullet);
         $('#hurt').fadeOut(350);
       }
 
       if (!hit) {
         const speed = delta * BULLETMOVESPEED;
-        const direction = bullet.ray.direction;
+        const direction = bullet.object.ray.direction;
 
-        bullet.translateX(speed * direction.x);
-        bullet.translateZ(speed * direction.z);
+        bullet.object.translateX(speed * direction.x);
+        bullet.object.translateZ(speed * direction.z);
       }
     }
   }
@@ -346,26 +347,28 @@ export default class GameScene {
     }
 
     const sphere = new Bullet().object;
-    sphere.position.set(object.position.x, object.position.y * 0.8, object.position.z);
+    // sphere.position.set(object.position.x, object.position.y * 0.8, object.position.z);
+    //
+    // let vector = null;
+    //
+    // if (object instanceof t.Camera) {
+    //   vector = threeFactory.vector3D(0, 0, 1);
+    //   vector.unproject(object);
+    // }
+    // else {
+    //   vector = this._camera.position.clone();
+    // }
+    //
+    // sphere.ray = threeFactory.ray(
+    //   object.position,
+    //   vector.sub(object.position).normalize()
+    // );
+    // sphere.owner = object;
 
-    let vector = null;
+    const bullet = new BulletService(sphere, object);
 
-    if (object instanceof t.Camera) {
-      vector = threeFactory.vector3D(mouse.x, mouse.y, 1);
-      vector.unproject(object);
-    }
-    else {
-      vector = this._camera.position.clone();
-    }
-
-    sphere.ray = threeFactory.ray(
-      object.position,
-      vector.sub(object.position).normalize()
-    );
-    sphere.owner = object;
-
-    bullets.push(sphere);
-    this._scene.add(sphere);
+    bulletsService.add(bullet);
+    this._scene.add(bullet.object);
   }
 
   _getRandBetween(lo, hi) {
