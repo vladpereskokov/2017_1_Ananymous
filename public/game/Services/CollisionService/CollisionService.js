@@ -1,4 +1,3 @@
-import map from '../../Tools/Map/Map';
 import Helper from "../../Tools/Helper/Helper";
 import { DAMAGE } from '../../Constants/Constants';
 
@@ -9,8 +8,6 @@ export default class CollisionService {
 
   static collisionBulletWithAi(scene, playersService, bulletsService, bullet,
                                bulletPosition, bulletNumber) {
-    let hit = false;
-
     for (let j in playersService.all) {
       const player = playersService.getPlayer(j);
 
@@ -39,11 +36,39 @@ export default class CollisionService {
           percent * color.b
         );
 
-        hit = true;
-        break;
+        return true;
       }
     }
 
-    return hit;
+    return false;
+  }
+
+  static collisionBulletWithPlayer(scene, playerStats, bulletsService,
+                                   bulletPosition, camera, bullet, bulletIndex) {
+    if (Helper.distance(
+      bulletPosition.x,
+        bulletPosition.z,
+        camera.position.x,
+        camera.position.z
+      ) < 25 &&
+      bullet.owner !== camera) {
+      $('#hurt').fadeIn(75);
+
+      playerStats.health = playerStats.health - 10;
+
+      if (playerStats.health < 0) {
+        playerStats.health = 0;
+      }
+
+      const health = playerStats.health < 25 ?
+        '<span style="color: darkRed">' + playerStats.health + '</span>' :
+        playerStats.health;
+      $('#health').html(health);
+
+      bulletsService.remove(bulletIndex);
+      scene.remove(bullet.object);
+
+      $('#hurt').fadeOut(350);
+    }
   }
 }

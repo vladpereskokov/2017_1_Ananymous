@@ -13,6 +13,7 @@ import playerStats from '../Tools/PlayerStats/PlayerStats';
 import map from '../Tools/Map/Map';
 import Helper from "../Tools/Helper/Helper";
 import CollisionService from "../Services/CollisionService/CollisionService";
+import AIService from '../Services/AIService/AIService';
 
 // Semi-constants
 var WIDTH = window.innerWidth,
@@ -22,12 +23,11 @@ var WIDTH = window.innerWidth,
   MOVESPEED = 100,
   BULLETMOVESPEED = MOVESPEED * 30,
   PROJECTILEDAMAGE = 20;
-// Global vars
-var runAnim = true, kills = 0, health = 100;
-
 
 export default class GameScene {
   constructor() {
+    this._isAnimate = true;
+
     this._start(this._init.bind(this), this._animate.bind(this));
   }
 
@@ -36,9 +36,9 @@ export default class GameScene {
       $('body').append('<div id="intro">Click to start</div>');
       $('#intro').css({width: WIDTH, height: HEIGHT}).one('click', function (e) {
         e.preventDefault();
-        // $(this).fadeOut();
+        $(this).fadeOut();
+
         init();
-        // setInterval(drawRadar, 1000);
         animate();
       });
     });
@@ -58,7 +58,7 @@ export default class GameScene {
   }
 
   _animate() {
-    if (runAnim) {
+    if (this._isAnimate) {
       requestAnimationFrame(this._animate.bind(this));
     }
 
@@ -180,60 +180,16 @@ export default class GameScene {
         i
       );
 
-      // for (let j in playersService.all) {
-      //   const player = playersService.getPlayer(j);
-      //
-      //   const vertices = player.object.geometry.vertices[0];
-      //   const playerPosition = player.object.position;
-      //
-      //   const x = Math.abs(vertices.x);
-      //   const z = Math.abs(vertices.z);
-      //
-      //   if (position.x < playerPosition.x + x &&
-      //     position.x > playerPosition.x - x &&
-      //     position.z < playerPosition.z + z &&
-      //     position.z > playerPosition.z - z &&
-      //     bullet.owner !== player.object) {
-      //
-      //     bulletsService.remove(i);
-      //     this._scene.remove(bullet.object);
-      //     player.health = player.health - PROJECTILEDAMAGE;
-      //
-      //     const color = player.object.material.color;
-      //     const percent = player.health / 100;
-      //
-      //     player.object.material.color.setRGB(
-      //       Math.max(percent, 1) * color.r,
-      //       percent * color.g,
-      //       percent * color.b
-      //     );
-      //
-      //     hit = true;
-      //     break;
-      //   }
-      // }
-
       // Bullet hits player
-      if (Helper.distance(position.x, position.z, this._camera.position.x, this._camera.position.z) < 25
-        && bullet.owner !== this._camera) {
-        $('#hurt').fadeIn(75);
-
-        playerStats.health = playerStats.health - 10;
-
-        if (playerStats.health < 0) {
-          playerStats.health = 0;
-        }
-
-        const health = playerStats.health < 25 ?
-          '<span style="color: darkRed">' + playerStats.health + '</span>' :
-          playerStats.health;
-        $('#health').html(health);
-
-        bulletsService.remove(i);
-        this._scene.remove(bullet.object);
-
-        $('#hurt').fadeOut(350);
-      }
+      CollisionService.collisionBulletWithPlayer(
+        this._scene,
+        playerStats,
+        bulletsService,
+        position,
+        this._camera,
+        bullet,
+        i
+      );
 
       if (!hit) {
         const speed = delta * BULLETMOVESPEED;
@@ -247,65 +203,41 @@ export default class GameScene {
 
   _render() {
     const delta = this._clock.getDelta();
-    var aispeed = delta * MOVESPEED;
     this._controls.update(delta, Helper.checkWallCollision.bind(this));
 
-    // Update bullets. Walk backwards through the list so we can remove items.
+    // Update bullets.
     this._updateBullets(delta);
 
-    // Update AI.
     for (let i in playersService.all) {
-      let player = playersService.getPlayer(i);
+      AIService.updateAI(
+        this._scene,
+        playersService,
+        playerStats,
+        delta * MOVESPEED,
+        i,
+        this._addAI.bind(this)
+      );
 
-      if (player.health <= 0) {
-        playersService.remove(i);
+      const player = playersService.getPlayer(i);
+      const sector = Helper.getMapSector(player.object.position);
 
-        this._scene.remove(player.object);
-        playerStats.kills = ++playerStats.kills;
-
-        $('#score').html(playerStats.kills * 100);
-        this._addAI();
-      }
-
-      const step = Math.random();
-
-      if (step > 0.995) {
-        player.x = Math.random() * 2 - 1;
-        player.z = Math.random() * 2 - 1;
-      }
-
-      player.translateX(aispeed * player.x);
-      player.translateZ(aispeed * player.z);
-
-      const position = player.object.position;
-      const sector = Helper.getMapSector(position);
-
-      if (sector.x < 0 || sector.x >= map.width || sector.y < 0 || sector.y >= map.height ||
-        Helper.checkWallCollision(position)) {
-        player.translateX(-2 * aispeed * player.x);
-        player.translateZ(-2 * aispeed * player.z);
-        player.x = Math.random() * 2 - 1;
-        player.z = Math.random() * 2 - 1;
-      }
-
-      if (sector.x < -1 || sector.x > map.width || sector.z < -1 || sector.z > map.height) {
-        playersService.remove(i);
-        this._scene.remove(player.object);
-        this._addAI();
-      }
-
-      // const cameraPosition = Helper.getMapSector(this._camera.position);
-      // if (Date.now() > player.lastShot + 1300 && Helper.distance(sector.x, sector.z, cameraPosition.x, cameraPosition.z) < 2) {
-      //   this._createBullet(player.object);
-      //   player.lastShot = Date.now();
-      // }
+      AIService.shoot(
+        this._camera,
+        player,
+        sector,
+        this._createBullet.bind(this)
+      );
     }
 
-    this._renderer.render(this._scene, this._camera); // Repaint
+    this._renderer.render(this._scene, this._camera);
 
     // Death
+    this._death();
+  }
+
+  _death() {
     if (playerStats.health <= 0) {
-      runAnim = false;
+      this._isAnimate = false;
       $(this._renderer.domElement).fadeOut();
       $('#radar, #hud, #credits').fadeOut();
       $('#intro').fadeIn();
@@ -316,7 +248,7 @@ export default class GameScene {
         $('#radar, #hud, #credits').fadeIn();
         $(this).fadeOut();
 
-        runAnim = true;
+        this._isAnimate = true;
         this._animate();
 
         playerStats.health = 100;
