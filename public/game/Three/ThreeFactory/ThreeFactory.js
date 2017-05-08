@@ -133,6 +133,10 @@ class ThreeFactory {
   ray(position, normalize) {
     return new this._three.Ray(position, normalize);
   }
+
+  clamp(x, a, b) {
+    return this._three.clamp(x, a, b);
+  }
 }
 
 const threeFactory = new ThreeFactory();

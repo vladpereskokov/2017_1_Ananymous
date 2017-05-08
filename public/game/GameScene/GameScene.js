@@ -14,15 +14,15 @@ import map from '../Tools/Map/Map';
 import Helper from "../Tools/Helper/Helper";
 import CollisionService from "../Services/CollisionService/CollisionService";
 import AIService from '../Services/AIService/AIService';
-
-// Semi-constants
-var WIDTH = window.innerWidth,
-  HEIGHT = window.innerHeight,
-  UNITSIZE = 250,
-  WALLHEIGHT = UNITSIZE / 3,
-  MOVESPEED = 100,
-  BULLETMOVESPEED = MOVESPEED * 30,
-  PROJECTILEDAMAGE = 20;
+import {
+  WIDTH,
+  HEIGHT,
+  UNITSIZE,
+  WALLHEIGHT,
+  MOVESPEED,
+  MOVESPEEDAI,
+  BULLETMOVESPEED
+} from '../Constants/Constants';
 
 export default class GameScene {
   constructor() {
@@ -213,7 +213,7 @@ export default class GameScene {
         this._scene,
         playersService,
         playerStats,
-        delta * MOVESPEED,
+        delta * MOVESPEEDAI,
         i,
         this._addAI.bind(this)
       );

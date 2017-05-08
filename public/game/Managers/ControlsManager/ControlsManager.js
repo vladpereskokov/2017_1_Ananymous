@@ -1,6 +1,7 @@
 import threeFactory from '../../Three/ThreeFactory/ThreeFactory';
 import Mouse from "../../Controls/Mouse/Mouse";
 import Keyboard from "../../Controls/Keyboard/Keyboard";
+import { MOVESPEED, LOOKSPEED } from '../../Constants/Constants';
 
 export default class ControlsManager {
   constructor(camera) {
@@ -10,11 +11,10 @@ export default class ControlsManager {
     this.mouse = new Mouse();
     this.keyboard = new Keyboard();
 
-    this.movementSpeed = 100;
+    this.movementSpeed = 200;
     this.lookSpeed = 0.075;
 
     this.heightSpeed = false;
-    this.heightCoef = 1.0;
     this.heightMin = 0.0;
 
     this.constrainVertical = true;
@@ -42,21 +42,22 @@ export default class ControlsManager {
   update(delta, checkCollision) {
     if (this.heightSpeed) {
 
-      var y = THREE.Math.clamp(this.camera.position.y, this.heightMin, this.heightMax);
-      var heightDelta = y - this.heightMin;
+      const y = threeFactory.clamp(
+        this.camera.position.y,
+        this.heightMin,
+        this.heightMax
+      );
+      const heightDelta = y - this.heightMin;
 
-      this.autoSpeedFactor = delta * ( heightDelta * this.heightCoef );
-
+      this.autoSpeedFactor = delta * heightDelta;
     } else {
-
       this.autoSpeedFactor = 0.0;
-
     }
 
-    var actualMoveSpeed = delta * this.movementSpeed;
+    const actualMoveSpeed = delta * MOVESPEED;
 
     if (this.keyboard.forward) {
-      this.camera.translateZ(-( actualMoveSpeed + this.autoSpeedFactor ));
+      this.camera.translateZ(-(actualMoveSpeed + this.autoSpeedFactor));
       if (checkCollision(this.camera.position)) {
         this.camera.translateZ(actualMoveSpeed + this.autoSpeedFactor);
       }
@@ -81,37 +82,29 @@ export default class ControlsManager {
       }
     }
 
-    var actualLookSpeed = delta * this.lookSpeed;
+    const targetPosition = this.target;
+    const position = this.camera.position;
+    const lookSpeed = delta * LOOKSPEED;
 
-    this.lon += this.mouse.mouseX * actualLookSpeed;
+    this._changeAngles(lookSpeed);
+    this._changeTarget(targetPosition, position);
 
-    this.lat = Math.max(-85, Math.min(85, this.lat));
-    this.phi = ( 90 - this.lat ) * Math.PI / 180;
-    this.theta = this.lon * Math.PI / 180;
-
-    let targetPosition = this.target;
-    let position = this.camera.position;
-
-    targetPosition.x = position.x + 100 * Math.sin(this.phi) * Math.cos(this.theta);
-    targetPosition.y = position.y + 100 * Math.cos(this.phi);
-    targetPosition.z = position.z + 100 * Math.sin(this.phi) * Math.sin(this.theta);
-
-
-    this.lon += this.mouse.mouseX * actualLookSpeed;
-
-    this.lat = Math.max(-85, Math.min(85, this.lat));
-    this.phi = ( 90 - this.lat ) * Math.PI / 180;
-
-    this.theta = this.lon * Math.PI / 180;
-
-
-    targetPosition = this.target;
-    position = this.camera.position;
-
-    targetPosition.x = position.x + 100 * Math.sin(this.phi) * Math.cos(this.theta);
-    targetPosition.y = position.y + 100 * Math.cos(this.phi);
-    targetPosition.z = position.z + 100 * Math.sin(this.phi) * Math.sin(this.theta);
+    this._changeAngles(lookSpeed);
+    this._changeTarget(targetPosition, position);
 
     this.camera.lookAt(targetPosition);
+  }
+
+  _changeTarget(targetPosition, cameraPosition) {
+    targetPosition.x = cameraPosition.x + 100 * Math.sin(this.phi) * Math.cos(this.theta);
+    targetPosition.y = cameraPosition.y + 100 * Math.cos(this.phi);
+    targetPosition.z = cameraPosition.z + 100 * Math.sin(this.phi) * Math.sin(this.theta);
+  }
+
+  _changeAngles(lookSpeed) {
+    this.lon += this.mouse.mouseX * lookSpeed;
+    this.lat = Math.max(-85, Math.min(85, this.lat));
+    this.phi = ( 90 - this.lat ) * Math.PI / 180;
+    this.theta = this.lon * Math.PI / 180;
   }
 }
