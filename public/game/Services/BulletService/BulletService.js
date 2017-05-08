@@ -1,14 +1,14 @@
 import threeFactory from '../../Three/ThreeFactory/ThreeFactory';
 
 export default class BulletService {
-  constructor(bulletObject, owner) {
+  constructor(bulletObject, owner, camera) {
     this._bulletObject = bulletObject;
     this._owner = owner;
 
-    this._createBullet();
+    this._createBullet(camera);
   }
 
-  _createBullet() {
+  _createBullet(camera) {
     this._bulletObject.position.set(
       this._owner.position.x,
       this._owner.position.y * 0.8,
@@ -17,11 +17,11 @@ export default class BulletService {
 
     this._bulletObject.ray = threeFactory.ray(
       this._owner.position,
-      this._getVectorBullet().sub(this._owner.position).normalize()
+      this._getVectorBullet(camera).sub(this._owner.position).normalize()
     );
   }
 
-  _getVectorBullet() {
+  _getVectorBullet(camera) {
     let vector = null;
 
     if (this._owner instanceof threeFactory._three.Camera) {
@@ -29,7 +29,7 @@ export default class BulletService {
       vector.unproject(this._owner);
     }
     else {
-      vector = this._owner.position.clone();
+      vector = camera.position.clone();
     }
 
     return vector;

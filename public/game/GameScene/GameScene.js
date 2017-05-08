@@ -9,6 +9,7 @@ import PlayerService from '../Services/PlayerService/PlayerService';
 import playersService from '../Services/PlayersService/PlayersService';
 import BulletService from '../Services/BulletService/BulletService';
 import bulletsService from '../Services/BulletsService/BulletsService';
+import playerStats from '../PlayerStats/PlayerStats';
 
 var map = [ // 1  2  3  4  5  6  7  8  9
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 0
@@ -26,26 +27,14 @@ var map = [ // 1  2  3  4  5  6  7  8  9
 // Semi-constants
 var WIDTH = window.innerWidth,
   HEIGHT = window.innerHeight,
-  ASPECT = WIDTH / HEIGHT,
   UNITSIZE = 250,
   WALLHEIGHT = UNITSIZE / 3,
   MOVESPEED = 100,
-  LOOKSPEED = 0.075,
-  BULLETMOVESPEED = MOVESPEED * 10,
-  NUMAI = 5,
+  BULLETMOVESPEED = MOVESPEED * 30,
   PROJECTILEDAMAGE = 20;
 // Global vars
-var t = THREE;
-var runAnim = true, mouse = {x: 0, y: 0}, kills = 0, health = 100;
+var runAnim = true, kills = 0, health = 100;
 
-
-var ai = [];
-var aiGeo = new t.CubeGeometry(40, 40, 40);
-
-
-var bullets = [];
-var sphereMaterial = new t.MeshBasicMaterial({color: 0x333333});
-var sphereGeo = new t.SphereGeometry(3, 6, 6);
 
 export default class GameScene {
   constructor() {
@@ -230,12 +219,21 @@ export default class GameScene {
       if (this._distance(position.x, position.z, this._camera.position.x, this._camera.position.z) < 25
         && bullet.owner !== this._camera) {
         $('#hurt').fadeIn(75);
-        health -= 10;
-        if (health < 0) health = 0;
-        var val = health < 25 ? '<span style="color: darkRed">' + health + '</span>' : health;
-        $('#health').html(val);
+
+        playerStats.health = playerStats.health - 10;
+
+        if (playerStats.health < 0) {
+          playerStats.health = 0;
+        }
+
+        const health = playerStats.health < 25 ?
+          '<span style="color: darkRed">' + playerStats.health + '</span>' :
+          playerStats.health;
+        $('#health').html(health);
+
         bulletsService.remove(i);
-        this._scene.remove(bullet);
+        this._scene.remove(bullet.object);
+
         $('#hurt').fadeOut(350);
       }
 
@@ -265,9 +263,9 @@ export default class GameScene {
         playersService.remove(i);
 
         this._scene.remove(player.object);
-        ++kills;
+        playerStats.kills = ++playerStats.kills;
 
-        $('#score').html(kills * 100);
+        $('#score').html(playerStats.kills * 100);
         this._addAI();
       }
 
@@ -298,17 +296,17 @@ export default class GameScene {
         this._addAI();
       }
 
-      //   // var cc = this._getMapSector(this._camera.position);
-      //   // if (Date.now() > a.lastShot + 750 && this._distance(c.x, c.z, cc.x, cc.z) < 2) {
-      //   // 	this._createBullet(a);
-      //   // 	a.lastShot = Date.now();
-      //   // }
+      const cameraPosition = this._getMapSector(this._camera.position);
+      if (Date.now() > player.lastShot + 750 && this._distance(sector.x, sector.z, cameraPosition.x, cameraPosition.z) < 2) {
+        this._createBullet(player.object);
+        player.lastShot = Date.now();
+      }
     }
 
     this._renderer.render(this._scene, this._camera); // Repaint
 
     // Death
-    if (health <= 0) {
+    if (playerStats.health <= 0) {
       runAnim = false;
       $(this._renderer.domElement).fadeOut();
       $('#radar, #hud, #credits').fadeOut();
@@ -319,13 +317,18 @@ export default class GameScene {
         $(this._renderer.domElement).fadeIn();
         $('#radar, #hud, #credits').fadeIn();
         $(this).fadeOut();
+
         runAnim = true;
         this._animate();
-        health = 100;
-        $('#health').html(health);
-        kills--;
-        if (kills <= 0) kills = 0;
-        $('#score').html(kills * 100);
+
+        playerStats.health = 100;
+        $('#health').html(playerStats.health);
+
+        if (playerStats.kills <= 0) {
+          playerStats.kills = 0;
+        }
+        $('#score').html(playerStats.kills * 100);
+
         this._camera.translateX(-this._camera.position.x);
         this._camera.translateZ(-this._camera.position.z);
       });
@@ -346,26 +349,7 @@ export default class GameScene {
       object = this._camera;
     }
 
-    const sphere = new Bullet().object;
-    // sphere.position.set(object.position.x, object.position.y * 0.8, object.position.z);
-    //
-    // let vector = null;
-    //
-    // if (object instanceof t.Camera) {
-    //   vector = threeFactory.vector3D(0, 0, 1);
-    //   vector.unproject(object);
-    // }
-    // else {
-    //   vector = this._camera.position.clone();
-    // }
-    //
-    // sphere.ray = threeFactory.ray(
-    //   object.position,
-    //   vector.sub(object.position).normalize()
-    // );
-    // sphere.owner = object;
-
-    const bullet = new BulletService(sphere, object);
+    const bullet = new BulletService(new Bullet().object, object, this._camera);
 
     bulletsService.add(bullet);
     this._scene.add(bullet.object);

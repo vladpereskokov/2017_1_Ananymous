@@ -26,6 +26,10 @@ export default class PlayerService {
     this._lastRandomZ = z;
   }
 
+  set lastShot(date) {
+    this._lastShot = date;
+  }
+
   get health() {
     return this._health;
   }
@@ -44,6 +48,10 @@ export default class PlayerService {
 
   get object() {
     return this._playerObject;
+  }
+
+  get lastShot() {
+    return this._lastShot;
   }
 
   translateX(speed) {
