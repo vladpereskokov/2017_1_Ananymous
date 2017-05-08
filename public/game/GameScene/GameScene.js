@@ -12,6 +12,7 @@ import bulletsService from '../Services/BulletsService/BulletsService';
 import playerStats from '../Tools/PlayerStats/PlayerStats';
 import map from '../Tools/Map/Map';
 import Helper from "../Tools/Helper/Helper";
+import CollisionService from "../Services/CollisionService/CollisionService";
 
 // Semi-constants
 var WIDTH = window.innerWidth,
@@ -162,7 +163,7 @@ export default class GameScene {
       const bullet = bulletsService.getBullet(i);
       const position = bullet.object.position;
 
-      if (Helper.checkWallCollision(position)) {
+      if (CollisionService.collisionBulletWithWall(position)) {
         bulletsService.remove(i);
         this._scene.remove(bullet.object);
 
@@ -170,40 +171,47 @@ export default class GameScene {
       }
 
       // Collide with AI
-      let hit = false;
+      let hit = CollisionService.collisionBulletWithAi(
+        this._scene,
+        playersService,
+        bulletsService,
+        bullet,
+        position,
+        i
+      );
 
-      for (let j in playersService.all) {
-        const player = playersService.getPlayer(j);
-
-        const vertices = player.object.geometry.vertices[0];
-        const playerPosition = player.object.position;
-
-        const x = Math.abs(vertices.x);
-        const z = Math.abs(vertices.z);
-
-        if (position.x < playerPosition.x + x &&
-          position.x > playerPosition.x - x &&
-          position.z < playerPosition.z + z &&
-          position.z > playerPosition.z - z &&
-          bullet.owner !== player.object) {
-
-          bulletsService.remove(i);
-          this._scene.remove(bullet.object);
-          player.health = player.health - PROJECTILEDAMAGE;
-
-          const color = player.object.material.color;
-          const percent = player.health / 100;
-
-          player.object.material.color.setRGB(
-            Math.max(percent, 1) * color.r,
-            percent * color.g,
-            percent * color.b
-          );
-
-          hit = true;
-          break;
-        }
-      }
+      // for (let j in playersService.all) {
+      //   const player = playersService.getPlayer(j);
+      //
+      //   const vertices = player.object.geometry.vertices[0];
+      //   const playerPosition = player.object.position;
+      //
+      //   const x = Math.abs(vertices.x);
+      //   const z = Math.abs(vertices.z);
+      //
+      //   if (position.x < playerPosition.x + x &&
+      //     position.x > playerPosition.x - x &&
+      //     position.z < playerPosition.z + z &&
+      //     position.z > playerPosition.z - z &&
+      //     bullet.owner !== player.object) {
+      //
+      //     bulletsService.remove(i);
+      //     this._scene.remove(bullet.object);
+      //     player.health = player.health - PROJECTILEDAMAGE;
+      //
+      //     const color = player.object.material.color;
+      //     const percent = player.health / 100;
+      //
+      //     player.object.material.color.setRGB(
+      //       Math.max(percent, 1) * color.r,
+      //       percent * color.g,
+      //       percent * color.b
+      //     );
+      //
+      //     hit = true;
+      //     break;
+      //   }
+      // }
 
       // Bullet hits player
       if (Helper.distance(position.x, position.z, this._camera.position.x, this._camera.position.z) < 25
