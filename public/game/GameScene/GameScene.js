@@ -5,6 +5,8 @@ import Floor from "../Three/Objects/Floor/Floor";
 import Walls from "../Three/Objects/Walls/Walls";
 import Player from "../Three/Objects/Player/Player";
 import Bullet from "../Three/Objects/Bullet/Bullet";
+import PlayerService from '../Services/PlayerService/PlayerService';
+import playersService from '../Services/PlayersService/PlayersService';
 
 var map = [ // 1  2  3  4  5  6  7  8  9
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], // 0
@@ -158,7 +160,6 @@ export default class GameScene {
 
   _addAI() {
     const position = this._getMapSector(this._camera.position);
-    const player = new Player().object;
 
     let [x, z] = this._getPosition();
     while (map[x][z] > 0 || (x === position.x && z === position.z)) {
@@ -168,15 +169,11 @@ export default class GameScene {
     x = Math.floor(x - mapW / 2) * UNITSIZE;
     z = Math.floor(z - mapW / 2) * UNITSIZE;
 
-    player.position.set(x, UNITSIZE * 0.15, z);
-    player.health = 100;
-    player.pathPos = 1;
-    player.lastRandomX = Math.random();
-    player.lastRandomZ = Math.random();
-    player.lastShot = Date.now();
+    const playerObject = new Player().object;
+    playerObject.position.set(x, UNITSIZE * 0.15, z);
 
-    ai.push(player);
-    this._scene.add(player);
+    playersService.add(new PlayerService(playerObject, 100));
+    this._scene.add(playerObject);
   }
 
   _updateBullets(delta) {
@@ -192,25 +189,37 @@ export default class GameScene {
       }
 
       // Collide with AI
-      var hit = false;
-      for (let j in ai) {
-        var a = ai[j];
-        var v = a.geometry.vertices[0];
-        var c = a.position;
-        var x = Math.abs(v.x), z = Math.abs(v.z);
-        //console.log(Math.round(p.x), Math.round(p.z), c.x, c.z, x, z);
-        if (position.x < c.x + x && position.x > c.x - x &&
-          position.z < c.z + z && position.z > c.z - z &&
-          bullet.owner !== a) {
+      let hit = false;
+      
+      for (let j in playersService.all) {
+        const player = playersService.getPlayer(j);
+
+        const vertices = player.object.geometry.vertices[0];
+        const playerPosition = player.object.position;
+
+        const x = Math.abs(vertices.x);
+        const z = Math.abs(vertices.z);
+
+        if (position.x < playerPosition.x + x &&
+          position.x > playerPosition.x - x &&
+          position.z < playerPosition.z + z &&
+          position.z > playerPosition.z - z &&
+          bullet.owner !== player.object) {
+
           bullets.splice(i, 1);
+
           this._scene.remove(bullet);
-          a.health -= PROJECTILEDAMAGE;
-          const color = a.material.color, percent = a.health / 100;
-          a.material.color.setRGB(
+          player.health = player.health - PROJECTILEDAMAGE;
+
+          const color = player.object.material.color;
+          const percent = player.health / 100;
+
+          player.object.material.color.setRGB(
             Math.max(percent, 1) * color.r,
             percent * color.g,
             percent * color.b
           );
+
           hit = true;
           break;
         }
@@ -248,41 +257,51 @@ export default class GameScene {
     this._updateBullets(delta);
 
     // Update AI.
-    for (var i = ai.length - 1; i >= 0; i--) {
-      var a = ai[i];
-      if (a.health <= 0) {
-        ai.splice(i, 1);
-        this._scene.remove(a);
-        kills++;
+    for (let i in playersService.all) {
+      let player = playersService.getPlayer(i);
+
+      if (player.health <= 0) {
+        playersService.remove(i);
+
+        this._scene.remove(player.object);
+        ++kills;
+
         $('#score').html(kills * 100);
         this._addAI();
       }
-      // Move AI
-      var r = Math.random();
-      if (r > 0.995) {
-        a.lastRandomX = Math.random() * 2 - 1;
-        a.lastRandomZ = Math.random() * 2 - 1;
-      }
-      a.translateX(aispeed * a.lastRandomX);
-      a.translateZ(aispeed * a.lastRandomZ);
-      var c = this._getMapSector(a.position);
-      if (c.x < 0 || c.x >= mapW || c.y < 0 || c.y >= mapH || this._checkWallCollision(a.position)) {
-        a.translateX(-2 * aispeed * a.lastRandomX);
-        a.translateZ(-2 * aispeed * a.lastRandomZ);
-        a.lastRandomX = Math.random() * 2 - 1;
-        a.lastRandomZ = Math.random() * 2 - 1;
+
+      const step = Math.random();
+
+      if (step > 0.995) {
+        player.x = Math.random() * 2 - 1;
+        player.z = Math.random() * 2 - 1;
       }
 
-      if (c.x < -1 || c.x > mapW || c.z < -1 || c.z > mapH) {
-        ai.splice(i, 1);
-        this._scene.remove(a);
+      player.translateX(aispeed * player.x);
+      player.translateZ(aispeed * player.z);
+
+      const position = player.object.position;
+      const sector = this._getMapSector(position);
+
+      if (sector.x < 0 || sector.x >= mapW || sector.y < 0 || sector.y >= mapH ||
+        this._checkWallCollision(position)) {
+        player.translateX(-2 * aispeed * player.x);
+        player.translateZ(-2 * aispeed * player.z);
+        player.x = Math.random() * 2 - 1;
+        player.z = Math.random() * 2 - 1;
+      }
+
+      if (sector.x < -1 || sector.x > mapW || sector.z < -1 || sector.z > mapH) {
+        playersService.remove(i);
+        this._scene.remove(player.object);
         this._addAI();
       }
-      // var cc = this._getMapSector(this._camera.position);
-      // if (Date.now() > a.lastShot + 750 && this._distance(c.x, c.z, cc.x, cc.z) < 2) {
-      // 	this._createBullet(a);
-      // 	a.lastShot = Date.now();
-      // }
+
+      //   // var cc = this._getMapSector(this._camera.position);
+      //   // if (Date.now() > a.lastShot + 750 && this._distance(c.x, c.z, cc.x, cc.z) < 2) {
+      //   // 	this._createBullet(a);
+      //   // 	a.lastShot = Date.now();
+      //   // }
     }
 
     this._renderer.render(this._scene, this._camera); // Repaint
@@ -300,7 +319,7 @@ export default class GameScene {
         $('#radar, #hud, #credits').fadeIn();
         $(this).fadeOut();
         runAnim = true;
-        animate();
+        this._animate();
         health = 100;
         $('#health').html(health);
         kills--;
